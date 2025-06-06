@@ -1,21 +1,21 @@
-# Name:
+## Name:
 Smart Fridge
 
 ## Team Members:
 | Name          | Email                        | UTORid     |
 |---------------|------------------------------|------------|
 | Jieying Gong  | jieying.gong@mail.utoronto.ca | gongjiey   |
-| Qingchuan Liu | skylar.liu@mail.utoronto.ca   | liuqin66   |·
+| Qingchuan Liu | skylar.liu@mail.utoronto.ca   | liuqin66   |
 
 ## Description:
 Smart Fridge is an AI-powered web tool that helps users generate recipes based on the current contents of their fridge and manage food by expiration dates. By uploading photos of fridge contents, grocery receipts, or manually entering ingredients, users can track what they have and receive personalized recipe suggestions that use only food in their fridge. The system leverages AI image recognition and large language models to extract ingredient data, store it in a PostgreSQL database, and generate recipes that prioritize available and soon-to-expire items.
 
-## Modern frontend framework of choice
+## Modern frontend framework of choice:
 Vue 3
 
 ## Additional feature:
 We chose to use the “Task Queue” additional requirement by processing image uploads (photos of fridge contents and grocery receipts) asynchronously.
-### feature description:  
+### Feature description:  
 When users upload photos of fridge contents or grocery receipts (which may involve a large number of images), the system does not process the images synchronously. Instead, it adds the processing tasks to a background task queue. A separate worker process asynchronously performs image recognition and ingredient extraction, and writes the results into the database upon completion.
 
 ## MileStones:
