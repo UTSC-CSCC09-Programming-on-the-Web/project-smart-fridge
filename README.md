@@ -19,12 +19,11 @@ When users upload photos of fridge contents or grocery receipts (which may invol
 
 ## MileStones:
 ### Alpha Version:
-1. Docker and other environment building & settings
-2. Register and login page
+1. Environment building & settings + project initialization
+2. Basic frontend UI and routing structure (including main page, register and login page)
 3. Design PostgreSQL database
-    -	Main page basic UI design allowing manually input data to database
-    - 	Manually database operation (input, update, delete, sorting…..)
-4. Integrate AI (GPT) API to generate basic recipes based on ingredient data by default
+4. Backend API implementation (CRUD) → achieve a minimal functional version with front-end and back-end connectivity
+5. (Optional in Alpha, leave to Beta if time is tight) Integrate AI (GPT) API to generate basic recipes based on ingredient data by default
 
 ### Beta Version:
 1. Image recognition AI and parse into data to be saved into database (Task queue)
@@ -36,3 +35,4 @@ When users upload photos of fridge contents or grocery receipts (which may invol
 1. Refine UI layout and enhance styling, organize Vue 3 page structure, and add animations and interactive elements
 2. Integration and refinement of AI prompts.
 3. Feature testing
+4. Deployment with Docker to VM
