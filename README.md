@@ -1,11 +1,10 @@
 ## Name:
 Smart Fridge
 
-## Team Members:
+## Team Member:
 | Name          | Email                        | UTORid     |
 |---------------|------------------------------|------------|
 | Jieying Gong  | jieying.gong@mail.utoronto.ca | gongjiey   |
-| Qingchuan Liu | skylar.liu@mail.utoronto.ca   | liuqin66   |
 
 ## Description:
 Smart Fridge is an AI-powered web tool that helps users generate recipes based on the current contents of their fridge and manage food by expiration dates. By uploading photos of fridge contents, grocery receipts, or manually entering ingredients, users can track what they have and receive personalized recipe suggestions that use only food in their fridge. The system leverages AI image recognition and large language models to extract ingredient data, store it in a PostgreSQL database, and generate recipes that prioritize available and soon-to-expire items.
