@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+// ingredient-card.component.ts
+import { Component, Input } from '@angular/core';
+import { Ingredient } from '../../models/ingredient.model';
 
 @Component({
   selector: 'app-ingredient-card',
-  imports: [],
   templateUrl: './ingredient-card.component.html',
-  styleUrl: './ingredient-card.component.scss'
+  styleUrls: ['./ingredient-card.component.css']
 })
 export class IngredientCardComponent {
-
+  @Input() ingredient!: Ingredient;
 }

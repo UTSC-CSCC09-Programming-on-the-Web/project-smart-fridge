@@ -1,0 +1,17 @@
+// generate simple scss for class = ingredient-card and class = ingredient-info
+
+.ingredient-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.ingredient-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
