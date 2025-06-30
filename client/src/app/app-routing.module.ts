@@ -7,17 +7,21 @@ import { MainPageComponent } from './pages/main-page/main-page.component';
 import { IngredientListPageComponent } from './pages/main-page/ingredient-list-page/ingredient-list-page.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route to redirect to login page
   { path: 'login', component: LoginPageComponent },
-  { path: '', component: MainPageComponent, children: [
-    // alpha version implementation
-     { path: '', redirectTo: 'ingredients', pathMatch: 'full' },
-     { path: 'ingredients', component: IngredientListPageComponent } // Default route for main page
-  ]}
+  {
+    path: 'main',
+    component: MainPageComponent,
+    children: [
+      // alpha version implementation
+      { path: '', redirectTo: 'ingredients', pathMatch: 'full' }, // default route for main page
+      { path: 'ingredients', component: IngredientListPageComponent },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
-
