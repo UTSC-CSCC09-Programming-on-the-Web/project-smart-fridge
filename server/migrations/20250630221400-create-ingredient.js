@@ -34,11 +34,6 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
-      added_at: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
-      },
       type: {
         type: Sequelize.STRING,
       },
