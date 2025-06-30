@@ -7,7 +7,8 @@ import { Ingredient } from '../../models/ingredient.model';
 @Component({
   selector: 'app-ingredient-form',
   templateUrl: './ingredient-form.component.html',
-  styleUrls: ['./ingredient-form.component.css']
+  styleUrls: ['./ingredient-form.component.scss'],
+    standalone: false
 })
 
 export class IngredientFormComponent {

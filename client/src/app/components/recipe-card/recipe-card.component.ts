@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [],
   templateUrl: './recipe-card.component.html',
-  styleUrl: './recipe-card.component.scss'
+  styleUrl: './recipe-card.component.scss',
+    standalone: false
 })
 export class RecipeCardComponent {
 
