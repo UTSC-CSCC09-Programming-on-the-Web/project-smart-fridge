@@ -6,7 +6,7 @@ import { Ingredient } from '../../models/ingredient.model';
   selector: 'app-ingredient-card',
   templateUrl: './ingredient-card.component.html',
   styleUrls: ['./ingredient-card.component.scss'],
-    standalone: false
+  standalone: false,
 })
 export class IngredientCardComponent {
   @Input() ingredient!: Ingredient;

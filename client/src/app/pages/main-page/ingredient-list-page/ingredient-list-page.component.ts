@@ -5,7 +5,7 @@ import { Ingredient } from '../../../models/ingredient.model';
   selector: 'app-ingredient-list-page',
   templateUrl: './ingredient-list-page.component.html',
   styleUrl: './ingredient-list-page.component.scss',
-    standalone: false
+  standalone: false,
 })
 export class IngredientListPageComponent {
   ingredients: Ingredient[] = [];
@@ -22,9 +22,11 @@ export class IngredientListPageComponent {
     } as Ingredient;
 
     this.ingredients.unshift(completeIngredient);
-// Sort the ingredients by expire_date in ascending order
-// temporary solution, in real application, it should be sorted by the server
-      this.ingredients.sort(
-        (a, b) => new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime());
+    // Sort the ingredients by expire_date in ascending order
+    // temporary solution, in real application, it should be sorted by the server
+    this.ingredients.sort(
+      (a, b) =>
+        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime(),
+    );
+  }
 }
-} 

@@ -1,9 +1,9 @@
 <!-- ingredient-form.component.html -->
-<form 
-    [formGroup]="ingredientForm" 
-    class="ingredient-form"
-    id="new-ingredent-form"
-    (ngSubmit)="postNewIngredient()"
+<form
+  [formGroup]="ingredientForm"
+  class="ingredient-form"
+  id="new-ingredent-form"
+  (ngSubmit)="postNewIngredient()"
 >
   <div class="ingredient-form-title">Add a new ingredient into your fridge</div>
   <input formControlName="name" placeholder="Ingredient name" />
@@ -12,6 +12,8 @@
   <input formControlName="expire_date" type="date" />
   <input formControlName="type" placeholder="Type (optional)" />
   <!--image url will change to file upload in the futuer -->
-  <input formControlName="image_url" placeholder="Image URL (optional)" /> 
-  <button type="submit" [disabled]="ingredientForm.invalid">Add Ingredient</button>
+  <input formControlName="image_url" placeholder="Image URL (optional)" />
+  <button type="submit" [disabled]="ingredientForm.invalid">
+    Add Ingredient
+  </button>
 </form>

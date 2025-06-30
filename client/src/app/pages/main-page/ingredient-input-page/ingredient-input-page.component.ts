@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-ingredient-input-page',
   templateUrl: './ingredient-input-page.component.html',
   styleUrl: './ingredient-input-page.component.scss',
-    standalone: false
+  standalone: false,
 })
-export class IngredientInputPageComponent {
-
-}
+export class IngredientInputPageComponent {}

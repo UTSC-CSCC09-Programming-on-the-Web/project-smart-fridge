@@ -8,9 +8,8 @@ import { Ingredient } from '../../models/ingredient.model';
   selector: 'app-ingredient-form',
   templateUrl: './ingredient-form.component.html',
   styleUrls: ['./ingredient-form.component.scss'],
-    standalone: false
+  standalone: false,
 })
-
 export class IngredientFormComponent {
   ingredientForm: FormGroup;
 
@@ -23,7 +22,7 @@ export class IngredientFormComponent {
       unit: ['pcs', Validators.required],
       expire_date: ['', Validators.required],
       type: [''],
-      image_url: [''] // placeholder
+      image_url: [''], // placeholder
     });
   }
 
@@ -33,7 +32,7 @@ export class IngredientFormComponent {
     if (this.ingredientForm.valid) {
       this.submitIngredient.emit(this.ingredientForm.value);
       this.ingredientForm.reset();
-    }else {
+    } else {
       console.error('Form is invalid');
     }
   }
