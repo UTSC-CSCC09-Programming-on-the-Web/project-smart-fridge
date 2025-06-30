@@ -1,0 +1,12 @@
+// generate simple scss for class="ingredient-list-page" and class="ingredient-list"
+
+.ingredient-list-page {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
