@@ -47,6 +47,50 @@ export class IngredientListPageComponent {
       });
   }
 
+  handleUpdateIngredient(updatedIngredient: Ingredient) {
+    // if (!updatedIngredient.id) {
+    //   console.error('Missing ingredient ID for update');
+    //   return;
+    // }
+
+    this.ingredientService
+      .updateIngredient(updatedIngredient.id, updatedIngredient)
+      .subscribe({
+        next: (updated) => {
+          const index = this.ingredients.findIndex(
+            (ing) => ing.id === updated.id
+          );
+          if (index !== -1) {
+            this.ingredients[index] = updated;
+            this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to update ingredient', err);
+        },
+      });
+  }
+
+  handleDeleteIngredient(deletedIngredient: Ingredient) {
+    //  if (!deletedIngredient.id) {
+    //   console.error('Missing ingredient ID for delete');
+    //   return;
+    // }
+
+    this.ingredientService
+      .deleteIngredient(deletedIngredient.id)
+      .subscribe({
+      next: () => {
+        this.ingredients = this.ingredients.filter(
+          (ing) => ing.id !== deletedIngredient.id,
+        );
+      },
+      error: (err) => {
+        console.error('Failed to delete ingredient', err);
+      },
+    });
+  }
+
   // temporary solution, in real application, it should be sorted by the server
   /**
    * Sorts ingredients by expire_date in ascending order.
@@ -59,4 +103,6 @@ export class IngredientListPageComponent {
         new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime(),
     );
   }
+
+  // TrackBy function for better performance in ngFor, will implement later
 }

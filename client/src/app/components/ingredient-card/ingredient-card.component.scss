@@ -21,3 +21,9 @@
   height: 100px;
   object-fit: cover;
 }
+
+.ingredient-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}

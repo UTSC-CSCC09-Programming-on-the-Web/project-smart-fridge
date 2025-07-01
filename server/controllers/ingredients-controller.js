@@ -34,12 +34,49 @@ const createIngredient = async (req, res) => {
 
 // PUT /api/ingredients/:id
 const updateIngredient = async (req, res) => {
-  // placeholder
+  const id = req.params.id;
+  if (!id || isNaN(Number(id))) {
+    return res.status(400).json({ error: 'Invalid ingredient ID' });
+  }
+  const updates = req.body;
+    const errors = validateIngredient(updates);
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+
+  try {
+    const ingredient = await Ingredient.findByPk(id);
+    if (!ingredient) {
+      return res.status(404).json({ error: 'Ingredient not found' });
+    }
+
+    await ingredient.update(updates);
+    res.status(200).json(ingredient);
+  } catch (err) {
+    console.error('Error updating ingredient:', err);
+    res.status(400).json({ error: 'Failed to update ingredient' });
+  }
 };
 
 // DELETE /api/ingredients/:id
 const deleteIngredient = async (req, res) => {
-  // placeholder
+  const id = req.params.id;
+  if (!id || isNaN(Number(id))) {
+    return res.status(400).json({ error: 'Invalid ingredient ID' });
+  }
+
+  try {
+    const ingredient = await Ingredient.findByPk(id);
+    if (!ingredient) {
+      return res.status(404).json({ error: 'Ingredient not found' });
+    }
+
+    await ingredient.destroy();
+    res.status(204).send(); 
+  } catch (err) {
+    console.error('Error deleting ingredient:', err);
+    res.status(400).json({ error: 'Failed to delete ingredient' });
+  }
 };
 
 module.exports = {

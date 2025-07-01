@@ -31,7 +31,29 @@ export class IngredientService {
     );
   }
 
-  // update ingredient will be implemented later
-  // delete ingredient will be implemented later
+  /**
+   * Updates an existing ingredient on the server.
+   * @param id The ID of the ingredient to update.
+   * @param updated The updated ingredient data.
+   * @returns An Observable of the updated Ingredient.
+   */
+  updateIngredient(id: number, updated: Partial<Ingredient>): Observable<Ingredient> {
+    return this.http.put<Ingredient>(
+      `${this.endpoint}/api/ingredients/${id}`,
+      updated,
+    );
+  }
+
+  /**
+   * Deletes an ingredient from the server.
+   * @param id The ID of the ingredient to delete.
+   * @returns An Observable that completes when the deletion is successful.
+   */
+  deleteIngredient(id: number): Observable<void> {
+    return this.http.delete<void>(    
+      `${this.endpoint}/api/ingredients/${id}`,
+    );
+  } 
+
   // error handling will be implemented later
 }

@@ -10,7 +10,11 @@
     <p>Expire Date: {{ ingredient.expire_date }}</p>
     <p *ngIf="ingredient.type">Type: {{ ingredient.type }}</p>
     <p [class.expired]="ingredient.is_expired">
-      {{ ingredient.is_expired ? "Expired" : "" }}
+      {{ ingredient.is_expired ? "Expired" : "Fresh" }}
     </p>
+  </div>
+  <div class="ingredient-actions">
+    <button type="button" (click)="onUpdateIngredient()">Update</button>
+    <button type="button" (click)="onDeleteIngredient()">Delete</button>
   </div>
 </div>
