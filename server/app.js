@@ -1,10 +1,13 @@
-import { sequelize } from "./datasource.js";
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
+"use strict";
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const ingredientsRouter = require('./routers/ingredients-router.js');
+const { sequelize } = require('./datasource.js');
 
 const PORT = 3000;
-export const app = express();
+const app = express();
 app.use(bodyParser.json());
 
 
@@ -14,19 +17,24 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-try {
-  await sequelize.authenticate(); // Test the connection to the PostgreSQL database
-  console.log("Connection has been established successfully.");
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+    
+    // add routers here
+
+    app.get("/", (req, res) => {
+      res.send("Backend root route: server is running.");
+    });
+
+    app.listen(PORT, () => {
+      console.log(`HTTP server on http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 }
 
-
-app.get("/", (req, res) => {
-  res.send("Backend root route: server is running.");
-});
-
-app.listen(PORT, (err) => {
-  if (err) console.log(err);
-  else console.log("HTTP server on http://localhost:%s", PORT);
-});
+startServer();
