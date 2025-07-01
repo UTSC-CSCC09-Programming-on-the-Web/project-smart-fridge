@@ -11,9 +11,9 @@ import { IngredientService } from '../../../services/ingredient.service';
 export class IngredientListPageComponent {
   ingredients: Ingredient[] = [];
 
-  constructor(private ingredientService: IngredientService) {} 
+  constructor(private ingredientService: IngredientService) {}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.fetchIngredients();
   }
 
@@ -32,18 +32,18 @@ export class IngredientListPageComponent {
     });
   }
 
-    handleNewIngredient(newIngredient: Partial<Ingredient>) {
-      this.ingredientService
-        .createIngredient(newIngredient as Ingredient)
-        .subscribe({
-          next: (created) => {
-            this.ingredients.unshift(created);
-            this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
-          },
-          error: (err) => {
-            console.error('Failed to create ingredient', err);
-          },
-        });
+  handleNewIngredient(newIngredient: Partial<Ingredient>) {
+    this.ingredientService
+      .createIngredient(newIngredient as Ingredient)
+      .subscribe({
+        next: (created) => {
+          this.ingredients.unshift(created);
+          this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+        },
+        error: (err) => {
+          console.error('Failed to create ingredient', err);
+        },
+      });
   }
 
   // temporary solution, in real application, it should be sorted by the server
@@ -55,7 +55,7 @@ export class IngredientListPageComponent {
   private sortIngredientsByExpireDate(ingredients: Ingredient[]): Ingredient[] {
     return ingredients.sort(
       (a, b) =>
-        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime()
+        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime(),
     );
   }
 }

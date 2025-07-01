@@ -9,8 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class IngredientService {
   endpoint = 'http://localhost:3000'; // will be replaced with environment variable
 
-  constructor(private http: HttpClient) {};
-  
+  constructor(private http: HttpClient) {}
+
   /**
    * Fetches all ingredients from the server.
    * @returns An Observable of an array of Ingredient objects.
@@ -25,7 +25,10 @@ export class IngredientService {
    * @returns An Observable of the created Ingredient.
    */
   createIngredient(ingredient: Ingredient): Observable<Ingredient> {
-    return this.http.post<Ingredient>(`${this.endpoint}/api/ingredients`, ingredient);
+    return this.http.post<Ingredient>(
+      `${this.endpoint}/api/ingredients`,
+      ingredient,
+    );
   }
 
   // update ingredient will be implemented later
