@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Ingredient } from '../../../models/ingredient.model';
+import { IngredientService } from '../../../services/ingredient.service';
 
 @Component({
   selector: 'app-ingredient-list-page',
@@ -9,24 +10,52 @@ import { Ingredient } from '../../../models/ingredient.model';
 })
 export class IngredientListPageComponent {
   ingredients: Ingredient[] = [];
-  // this is a mock data, in real application, it should be fetched from the server
-  handleNewIngredient(newIngredient: Partial<Ingredient>) {
-    const newId = this.ingredients.length + 1;
 
-    const completeIngredient: Ingredient = {
-      ...newIngredient,
-      id: newId,
-      is_expired: false,
-      added_at: new Date().toISOString(),
-      fridge_id: 'mock-fridge-id',
-    } as Ingredient;
+  constructor(private ingredientService: IngredientService) {} 
 
-    this.ingredients.unshift(completeIngredient);
-    // Sort the ingredients by expire_date in ascending order
-    // temporary solution, in real application, it should be sorted by the server
-    this.ingredients.sort(
+   ngOnInit(): void {
+    this.fetchIngredients();
+  }
+
+  // Fetches all ingredients from the server and sorts them by expire_date in ascending order (earliest first).
+  // this method is called when the component is initialized (ngOnInit())
+  fetchIngredients(): void {
+    this.ingredientService.getAllIngredients().subscribe({
+      next: (data) => {
+        // Sort the ingredients by expire_date in ascending order
+        // temporary solution, in real application, it should be sorted by the server
+        this.ingredients = this.sortIngredientsByExpireDate(data);
+      },
+      error: (err) => {
+        console.error('Failed to fetch ingredients', err);
+      },
+    });
+  }
+
+    handleNewIngredient(newIngredient: Partial<Ingredient>) {
+      this.ingredientService
+        .createIngredient(newIngredient as Ingredient)
+        .subscribe({
+          next: (created) => {
+            this.ingredients.unshift(created);
+            this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+          },
+          error: (err) => {
+            console.error('Failed to create ingredient', err);
+          },
+        });
+  }
+
+  // temporary solution, in real application, it should be sorted by the server
+  /**
+   * Sorts ingredients by expire_date in ascending order.
+   * @param ingredients Array of Ingredient objects
+   * @returns Sorted array
+   */
+  private sortIngredientsByExpireDate(ingredients: Ingredient[]): Ingredient[] {
+    return ingredients.sort(
       (a, b) =>
-        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime(),
+        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime()
     );
   }
 }
