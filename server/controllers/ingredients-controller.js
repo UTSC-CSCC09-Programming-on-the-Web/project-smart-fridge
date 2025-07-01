@@ -2,15 +2,54 @@
 
 const { Ingredient } = require("../models/index.js");
 const validateIngredient = require("../utils/validate-ingredient.js");
+const { Op, where, DATE } = require("sequelize");
 
-// GET /api/ingredients
+// for infintie scroll pagination, we use expire date and id as cursors
+// GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getAllIngredients = async (req, res) => {
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const expireCursor = req.query.expireCursor ? new Date(req.query.expireCursor) : null;
+  const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
+
+  const where = {};
+
+  if (expireCursor != null && idCursor != null) {
+    where[Op.or] = [
+      { expire_date: { [Op.gt]: expireCursor } }, // Get ingredients with a later expire date
+      {
+        // Ensure we only get ingredients with a later ID if the expire date is the same
+        expire_date: expireCursor,
+        id: { [Op.gt]: idCursor }, 
+      },
+    ];
+  }
+
   try {
     const ingredients = await Ingredient.findAll({
-      order: [['expire_date', 'ASC']],
-  });
-    res.status(200).json(ingredients);
-  } catch (err) {
+      where,
+      order: [['expire_date', 'ASC'], ['id', 'ASC']],
+      limit,
+    });
+
+   if (ingredients.length === 0) {
+      return res.status(200).json({
+        ingredients: [],
+        nextExpireCursor: null,
+        nextIdCursor: null,
+      });
+    }
+
+    // If we have results, get the last ingredient's ID for cursor
+     const last = ingredients[ingredients.length - 1];
+     const nextExpireCursor = last.expire_date;
+     const nextIdCursor = last.id;
+    res.status(200).json({
+      ingredients,
+      nextExpireCursor,
+      nextIdCursor,
+    });
+
+  }catch (err) {
     console.error("Error fetching all ingredients:", err);
     res.status(500).json({ error: "Failed to fetch ingredients" });
   }
