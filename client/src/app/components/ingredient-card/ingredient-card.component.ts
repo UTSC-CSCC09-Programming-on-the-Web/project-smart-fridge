@@ -14,16 +14,15 @@ export class IngredientCardComponent {
   @Input() ingredient!: Ingredient;
 
   // Event emitters for updating and deleting ingredients
-  @Output() updateIngredient = new EventEmitter<Ingredient>();
+  @Output() editRequest = new EventEmitter<Ingredient>();
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
 
   onUpdateIngredient(): void {
-    // will change to toggle the update form to edit the ingredient
-    // for now, it will emit the ingredient to be updated
-    // this is a placeholder, in real application, it should open a form to edit the ingredient
-    // and then emit the updated ingredient
-    this.updateIngredient.emit(this.ingredient);
-    console.log('Update ingredient:', this.ingredient);
+    // Emit the ingredient to be edited
+    // This will be caught by the parent component to toggle the edit form
+    // and pre-fill it with the ingredient's current data
+    this.editRequest.emit(this.ingredient);
+    console.log('ingredient to edit:', this.ingredient);
   }
 
   constructor(private dialog: MatDialog) {}

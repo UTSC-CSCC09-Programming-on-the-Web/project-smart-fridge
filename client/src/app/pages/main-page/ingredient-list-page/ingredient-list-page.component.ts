@@ -47,14 +47,19 @@ export class IngredientListPageComponent {
       });
   }
 
-  handleUpdateIngredient(updatedIngredient: Ingredient) {
+  handleUpdateIngredient(updatedIngredient: Partial<Ingredient>) {
+    if (!updatedIngredient) {
+      console.error('updatedIngredient is null or undefined');
+      return;
+    }
+    
     if (!updatedIngredient.id) {
       console.error('Missing ingredient ID for update');
       return;
     }
 
     this.ingredientService
-      .updateIngredient(updatedIngredient.id, updatedIngredient)
+      .updateIngredient(updatedIngredient.id, updatedIngredient as Ingredient)
       .subscribe({
         next: (updated) => {
           const index = this.ingredients.findIndex(
@@ -63,6 +68,7 @@ export class IngredientListPageComponent {
           if (index !== -1) {
             this.ingredients[index] = updated;
             this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+            this.cancelEdit(); // close the edit form after update
           }
         },
         error: (err) => {
@@ -89,6 +95,17 @@ export class IngredientListPageComponent {
         console.error('Failed to delete ingredient', err);
       },
     });
+  }
+
+  editingIngredient: Ingredient | null = null;
+
+  toggleEditForm(ingredient: Ingredient) {
+    console.log('Toggling edit form for ingredient:', ingredient);
+    this.editingIngredient = ingredient;
+  }
+
+  cancelEdit() {
+    this.editingIngredient = null;
   }
 
   // temporary solution, in real application, it should be sorted by the server

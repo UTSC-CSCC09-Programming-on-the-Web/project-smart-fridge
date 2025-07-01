@@ -1,12 +1,21 @@
 <div class="ingredient-list-page">
   <app-ingredient-form
+    [mode]="'add'"
     (submitIngredient)="handleNewIngredient($event)"
+  ></app-ingredient-form>
+
+  <app-ingredient-form
+    *ngIf="editingIngredient"
+    [mode]="'edit'"
+    [ingredientToEdit]="editingIngredient"
+    (submitIngredient)="handleUpdateIngredient($event)"
+    (cancelEdit)="cancelEdit()"
   ></app-ingredient-form>
 
   <div class="ingredient-list">
     <app-ingredient-card 
     *ngFor="let ing of ingredients; trackBy: trackById" [ingredient]="ing"
-    (updateIngredient)="handleUpdateIngredient($event)"
+    (editRequest)="toggleEditForm(ing)"
     (deleteIngredient)="handleDeleteIngredient($event)"
     ></app-ingredient-card>
   </div>
