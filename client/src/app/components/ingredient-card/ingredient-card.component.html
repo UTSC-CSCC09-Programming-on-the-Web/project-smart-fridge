@@ -1,0 +1,16 @@
+<!-- ingredient-card.component.html -->
+<div class="ingredient-card">
+  <img
+    [src]="ingredient.image_url || 'assets/default-ingredient.jpg'"
+    alt="{{ ingredient.name }}"
+  />
+  <div class="ingredient-info">
+    <h3>{{ ingredient.name }}</h3>
+    <p>{{ ingredient.quantity }} {{ ingredient.unit }}</p>
+    <p>Expire Date: {{ ingredient.expire_date }}</p>
+    <p *ngIf="ingredient.type">Type: {{ ingredient.type }}</p>
+    <p [class.expired]="ingredient.is_expired">
+      {{ ingredient.is_expired ? "Expired" : "" }}
+    </p>
+  </div>
+</div>

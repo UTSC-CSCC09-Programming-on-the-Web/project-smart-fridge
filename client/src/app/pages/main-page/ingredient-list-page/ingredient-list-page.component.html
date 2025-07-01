@@ -1,0 +1,10 @@
+<div class="ingredient-list-page">
+  <app-ingredient-form
+    (submitIngredient)="handleNewIngredient($event)"
+  ></app-ingredient-form>
+
+  <div class="ingredient-list">
+    <app-ingredient-card *ngFor="let ing of ingredients" [ingredient]="ing">
+    </app-ingredient-card>
+  </div>
+</div>
