@@ -23,6 +23,7 @@ async function startServer() {
     console.log("Connection has been established successfully.");
     
     // add routers here
+    app.use("/api/ingredients", ingredientsRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");
