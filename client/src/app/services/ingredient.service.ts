@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
+
+
+  export interface IngredientPaginationResponse {
+  ingredients: Ingredient[];
+  nextExpireDate: string | null;
+  nextCursorId: number | null;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +23,14 @@ export class IngredientService {
    * Fetches all ingredients from the server.
    * @returns An Observable of an array of Ingredient objects.
    */
-  getAllIngredients(): Observable<Ingredient[]> {
-    return this.http.get<Ingredient[]>(`${this.endpoint}/api/ingredients`);
+  getIngredients( expireDateCursor?: string,
+  idCursor?: number,
+  limit: number = 10): Observable<IngredientPaginationResponse> {
+      let params = new HttpParams().set('limit', limit.toString());
+      if (expireDateCursor) params = params.set('expireDateCursor', expireDateCursor);
+      if (idCursor) params = params.set('idCursor', idCursor.toString());
+      console.log('Fetching ingredients with params:', params.toString());
+    return this.http.get<IngredientPaginationResponse>(`${this.endpoint}/api/ingredients`, { params });
   }
 
   /**
