@@ -48,10 +48,10 @@ export class IngredientListPageComponent {
   }
 
   handleUpdateIngredient(updatedIngredient: Ingredient) {
-    // if (!updatedIngredient.id) {
-    //   console.error('Missing ingredient ID for update');
-    //   return;
-    // }
+    if (!updatedIngredient.id) {
+      console.error('Missing ingredient ID for update');
+      return;
+    }
 
     this.ingredientService
       .updateIngredient(updatedIngredient.id, updatedIngredient)
@@ -72,10 +72,10 @@ export class IngredientListPageComponent {
   }
 
   handleDeleteIngredient(deletedIngredient: Ingredient) {
-    //  if (!deletedIngredient.id) {
-    //   console.error('Missing ingredient ID for delete');
-    //   return;
-    // }
+     if (!deletedIngredient.id) {
+      console.error('Missing ingredient ID for delete');
+      return;
+    }
 
     this.ingredientService
       .deleteIngredient(deletedIngredient.id)
@@ -104,5 +104,8 @@ export class IngredientListPageComponent {
     );
   }
 
-  // TrackBy function for better performance in ngFor, will implement later
+  // TrackBy function for better performance in ngFor
+  trackById(index: number, ingredient: Ingredient): number {
+    return ingredient.id ? ingredient.id : index; 
+  }
 }

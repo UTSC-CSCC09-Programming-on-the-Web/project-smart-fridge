@@ -5,7 +5,7 @@
 
   <div class="ingredient-list">
     <app-ingredient-card 
-    *ngFor="let ing of ingredients" [ingredient]="ing"
+    *ngFor="let ing of ingredients; trackBy: trackById" [ingredient]="ing"
     (updateIngredient)="handleUpdateIngredient($event)"
     (deleteIngredient)="handleDeleteIngredient($event)"
     ></app-ingredient-card>
