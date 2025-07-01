@@ -4,19 +4,22 @@
     (submitIngredient)="handleNewIngredient($event)"
   ></app-ingredient-form>
 
-  <app-ingredient-form
-    *ngIf="editingIngredient"
-    [mode]="'edit'"
-    [ingredientToEdit]="editingIngredient"
-    (submitIngredient)="handleUpdateIngredient($event)"
-    (cancelEdit)="cancelEdit()"
-  ></app-ingredient-form>
-
   <div class="ingredient-list">
-    <app-ingredient-card 
-    *ngFor="let ing of ingredients; trackBy: trackById" [ingredient]="ing"
-    (editRequest)="toggleEditForm(ing)"
-    (deleteIngredient)="handleDeleteIngredient($event)"
+    <ng-container *ngFor="let ing of ingredients; trackBy: trackById">
+    <app-ingredient-card
+      [ingredient]="ing"
+      (editRequest)="toggleEditForm(ing)"
+      (deleteIngredient)="handleDeleteIngredient($event)"
     ></app-ingredient-card>
+    <!-- Show the edit form if the ingredient is being edited -->
+    <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
+    <app-ingredient-form
+      *ngIf="editingIngredient && editingIngredient?.id === ing.id"
+      [mode]="'edit'"
+      [ingredientToEdit]="editingIngredient"
+      (submitIngredient)="handleUpdateIngredient($event)"
+      (cancelEdit)="cancelEdit()"
+    ></app-ingredient-form>
+  </ng-container>
   </div>
 </div>
