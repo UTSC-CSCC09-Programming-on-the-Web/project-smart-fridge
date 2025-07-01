@@ -33,6 +33,7 @@ export class IngredientListPageComponent {
   }
 
   handleNewIngredient(newIngredient: Partial<Ingredient>) {
+    newIngredient.fridge_id = "00000000-0000-0000-0000-000000000001"; // placeholder, should be replaced with actual fridge_id
     this.ingredientService
       .createIngredient(newIngredient as Ingredient)
       .subscribe({
