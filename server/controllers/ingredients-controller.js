@@ -6,7 +6,9 @@ const validateIngredient = require("../utils/validate-ingredient.js");
 // GET /api/ingredients
 const getAllIngredients = async (req, res) => {
   try {
-    const ingredients = await Ingredient.findAll();
+    const ingredients = await Ingredient.findAll({
+      order: [['expire_date', 'ASC']],
+  });
     res.status(200).json(ingredients);
   } catch (err) {
     console.error("Error fetching all ingredients:", err);
