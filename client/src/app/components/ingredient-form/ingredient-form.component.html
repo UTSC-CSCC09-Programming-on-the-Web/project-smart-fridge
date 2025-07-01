@@ -2,10 +2,15 @@
 <form
   [formGroup]="ingredientForm"
   class="ingredient-form"
-  id="new-ingredent-form"
-  (ngSubmit)="postNewIngredient()"
+  id="ingredient-form"
+  (ngSubmit)="postIngredient()"
+  [ngClass]="mode + '-form'"
 >
-  <div class="ingredient-form-title">Add a new ingredient into your fridge</div>
+  <!-- title -->
+  <div class="ingredient-form-title">
+    {{ mode === 'edit' ? 'Edit Ingredient' : 'Add a new ingredient into your fridge' }}
+  </div>
+  <!-- form fields -->
   <input formControlName="name" placeholder="Ingredient name" />
   <input formControlName="quantity" type="number" placeholder="Quantity" />
   <input formControlName="unit" placeholder="Unit (e.g. g/ml/pcs)" />
@@ -13,7 +18,10 @@
   <input formControlName="type" placeholder="Type (optional)" />
   <!--image url will change to file upload in the futuer -->
   <input formControlName="image_url" placeholder="Image URL (optional)" />
-  <button type="submit" [disabled]="ingredientForm.invalid">
-    Add Ingredient
+  <!-- submit button -->
+   <button type="submit" [disabled]="ingredientForm.invalid">
+    {{ mode === 'edit' ? 'Save Changes' : 'Add Ingredient' }}
   </button>
+  <!-- cancel button -->
+  <button type="button" *ngIf="mode === 'edit'" (click)="cancelEdit.emit()">Cancel</button>
 </form>
