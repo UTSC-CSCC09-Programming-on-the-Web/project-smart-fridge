@@ -1,9 +1,11 @@
 // File: server/datasource.js
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+const { Sequelize } = require('sequelize');
+const dotenv = require('dotenv');
 dotenv.config();
 
-export const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
   logging: false,
 });
+
+module.exports = { sequelize };
