@@ -29,20 +29,20 @@ export class IngredientCardComponent {
 
   onDeleteIngredient(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    data: {
-      title: 'Delete Ingredient',
-      message: `Are you sure you want to delete ${this.ingredient.name}? This action cannot be undone.`,
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-    }
-  });
+      data: {
+        title: 'Delete Ingredient',
+        message: `Are you sure you want to delete ${this.ingredient.name}? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      // If the user confirmed the deletion, emit the delete event
-      this.deleteIngredient.emit(this.ingredient);
-      console.log('Confirmed deletion of ingredient:', this.ingredient);
-    }
-  });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // If the user confirmed the deletion, emit the delete event
+        this.deleteIngredient.emit(this.ingredient);
+        console.log('Confirmed deletion of ingredient:', this.ingredient);
+      }
+    });
   }
 }

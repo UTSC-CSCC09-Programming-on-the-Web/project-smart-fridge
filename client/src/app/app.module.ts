@@ -41,7 +41,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatDialogModule,
     MatButtonModule,
-        InfiniteScrollDirective
+    InfiniteScrollDirective,
   ],
   providers: [],
   bootstrap: [AppComponent],

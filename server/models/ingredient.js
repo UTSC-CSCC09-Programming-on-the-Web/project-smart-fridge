@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
       is_expired: {
         type: DataTypes.VIRTUAL,
         get() {
-          const expireDate = new Date(this.getDataValue('expire_date'));
+          const expireDate = new Date(this.getDataValue("expire_date"));
           expireDate.setDate(expireDate.getDate() + 1);
           return new Date() > expireDate;
         },

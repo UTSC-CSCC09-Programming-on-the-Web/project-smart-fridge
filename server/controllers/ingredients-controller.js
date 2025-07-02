@@ -8,7 +8,9 @@ const { Op, where, DATE } = require("sequelize");
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getAllIngredients = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const expireCursor = req.query.expireDateCursor ? new Date(req.query.expireDateCursor) : null;
+  const expireCursor = req.query.expireDateCursor
+    ? new Date(req.query.expireDateCursor)
+    : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
 
   const where = {};
@@ -19,7 +21,7 @@ const getAllIngredients = async (req, res) => {
       {
         // Ensure we only get ingredients with a later ID if the expire date is the same
         expire_date: expireCursor,
-        id: { [Op.gt]: idCursor }, 
+        id: { [Op.gt]: idCursor },
       },
     ];
   }
@@ -27,11 +29,14 @@ const getAllIngredients = async (req, res) => {
   try {
     const ingredients = await Ingredient.findAll({
       where,
-      order: [['expire_date', 'ASC'], ['id', 'ASC']],
+      order: [
+        ["expire_date", "ASC"],
+        ["id", "ASC"],
+      ],
       limit,
     });
 
-   if (ingredients.length === 0) {
+    if (ingredients.length === 0) {
       return res.status(200).json({
         ingredients: [],
         nextExpireCursor: null,
@@ -40,16 +45,15 @@ const getAllIngredients = async (req, res) => {
     }
 
     // If we have results, get the last ingredient's ID for cursor
-     const last = ingredients[ingredients.length - 1];
-     const nextExpireCursor = last.expire_date;
-     const nextIdCursor = last.id;
+    const last = ingredients[ingredients.length - 1];
+    const nextExpireCursor = last.expire_date;
+    const nextIdCursor = last.id;
     res.status(200).json({
       ingredients,
       nextExpireCursor,
       nextIdCursor,
     });
-
-  }catch (err) {
+  } catch (err) {
     console.error("Error fetching all ingredients:", err);
     res.status(500).json({ error: "Failed to fetch ingredients" });
   }
@@ -75,10 +79,10 @@ const createIngredient = async (req, res) => {
 const updateIngredient = async (req, res) => {
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {
-    return res.status(400).json({ error: 'Invalid ingredient ID' });
+    return res.status(400).json({ error: "Invalid ingredient ID" });
   }
   const updates = req.body;
-    const errors = validateIngredient(updates);
+  const errors = validateIngredient(updates);
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
@@ -86,14 +90,14 @@ const updateIngredient = async (req, res) => {
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
-      return res.status(404).json({ error: 'Ingredient not found' });
+      return res.status(404).json({ error: "Ingredient not found" });
     }
 
     await ingredient.update(updates);
     res.status(200).json(ingredient);
   } catch (err) {
-    console.error('Error updating ingredient:', err);
-    res.status(400).json({ error: 'Failed to update ingredient' });
+    console.error("Error updating ingredient:", err);
+    res.status(400).json({ error: "Failed to update ingredient" });
   }
 };
 
@@ -101,20 +105,20 @@ const updateIngredient = async (req, res) => {
 const deleteIngredient = async (req, res) => {
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {
-    return res.status(400).json({ error: 'Invalid ingredient ID' });
+    return res.status(400).json({ error: "Invalid ingredient ID" });
   }
 
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
-      return res.status(404).json({ error: 'Ingredient not found' });
+      return res.status(404).json({ error: "Ingredient not found" });
     }
 
     await ingredient.destroy();
-    res.status(204).send(); 
+    res.status(204).send();
   } catch (err) {
-    console.error('Error deleting ingredient:', err);
-    res.status(400).json({ error: 'Failed to delete ingredient' });
+    console.error("Error deleting ingredient:", err);
+    res.status(400).json({ error: "Failed to delete ingredient" });
   }
 };
 

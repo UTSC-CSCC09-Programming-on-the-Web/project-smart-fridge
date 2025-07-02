@@ -5,39 +5,35 @@
   ></app-ingredient-form>
 
   <div
-  class="ingredient-list"
-  infiniteScroll
-  [infiniteScrollDistance]="2"
-  [infiniteScrollThrottle]="150"
-  (scrolled)="onScrollDown()"
->
+    class="ingredient-list"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    (scrolled)="onScrollDown()"
+  >
     <ng-container *ngFor="let ing of ingredients; trackBy: trackById">
-    <app-ingredient-card
-      [ingredient]="ing"
-      (editRequest)="toggleEditForm(ing)"
-      (deleteIngredient)="handleDeleteIngredient($event)"
-    ></app-ingredient-card>
-    <!-- Show the edit form if the ingredient is being edited -->
-    <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
-    <app-ingredient-form
-      *ngIf="editingIngredient && editingIngredient?.id === ing.id"
-      [mode]="'edit'"
-      [ingredientToEdit]="editingIngredient"
-      (submitIngredient)="handleUpdateIngredient($event)"
-      (cancelEdit)="cancelEdit()"
-    ></app-ingredient-form>
-  </ng-container>
-  
-  <div *ngIf="loading" class="loading-indicator">
-    loading more ingredients...
+      <app-ingredient-card
+        [ingredient]="ing"
+        (editRequest)="toggleEditForm(ing)"
+        (deleteIngredient)="handleDeleteIngredient($event)"
+      ></app-ingredient-card>
+      <!-- Show the edit form if the ingredient is being edited -->
+      <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
+      <app-ingredient-form
+        *ngIf="editingIngredient && editingIngredient?.id === ing.id"
+        [mode]="'edit'"
+        [ingredientToEdit]="editingIngredient"
+        (submitIngredient)="handleUpdateIngredient($event)"
+        (cancelEdit)="cancelEdit()"
+      ></app-ingredient-form>
+    </ng-container>
+
+    <div *ngIf="loading" class="loading-indicator">
+      loading more ingredients...
+    </div>
+    <div *ngIf="!hasMoreData && !loading" class="no-more-data">
+      No more ingredients to load.
+    </div>
+    <button class="scroll-to-top" (click)="scrollToTop()">↑ Top</button>
   </div>
-  <div *ngIf="!hasMoreData && !loading" class="no-more-data">
-    No more ingredients to load.
-  </div>
-  <button 
-  class="scroll-to-top" 
-  (click)="scrollToTop()"
->
-  ↑ Top
-</button>
 </div>

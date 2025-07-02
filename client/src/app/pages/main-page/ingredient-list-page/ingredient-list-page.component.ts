@@ -9,7 +9,7 @@ import { IngredientService } from '../../../services/ingredient.service';
   standalone: false,
 })
 export class IngredientListPageComponent {
-  ingredients: Ingredient[] = []; 
+  ingredients: Ingredient[] = [];
 
   hasMoreData = true; // Indicates if there are more ingredients to load
   loading = false; // Indicates if data is currently being loaded
@@ -31,16 +31,16 @@ export class IngredientListPageComponent {
       next: (data) => {
         console.log('Initial ingredients loaded:', data);
         this.ingredients = this.sortIngredientsByExpireDate(data.ingredients);
-        
+
         this.expireDateCursor = data.nextExpireCursor;
         this.idCursor = data.nextIdCursor;
 
-        this.hasMoreData = !!data.ingredients.length; 
+        this.hasMoreData = !!data.ingredients.length;
         this.loading = false;
         console.log('Initial cursors set:', {
           expireDateCursor: this.expireDateCursor,
           idCursor: this.idCursor,
-        }); 
+        });
       },
       error: (err) => {
         console.error('Failed to load initial ingredients', err);
@@ -57,7 +57,10 @@ export class IngredientListPageComponent {
     this.loading = true;
 
     this.ingredientService
-      .getIngredients(this.expireDateCursor ?? undefined, this.idCursor ?? undefined)
+      .getIngredients(
+        this.expireDateCursor ?? undefined,
+        this.idCursor ?? undefined,
+      )
       .subscribe({
         next: (data) => {
           if (!data.ingredients || data.ingredients.length === 0) {
@@ -65,12 +68,13 @@ export class IngredientListPageComponent {
             return;
           }
           const newItems = data.ingredients.filter(
-            ing => !this.ingredients.some(existing => existing.id === ing.id)
+            (ing) =>
+              !this.ingredients.some((existing) => existing.id === ing.id),
           );
 
           this.ingredients = this.sortIngredientsByExpireDate([
             ...this.ingredients,
-            ...newItems
+            ...newItems,
           ]);
 
           this.expireDateCursor = data.nextExpireCursor;
@@ -79,31 +83,36 @@ export class IngredientListPageComponent {
           console.log('fetch more cursors set:', {
             expireDateCursor: this.expireDateCursor,
             idCursor: this.idCursor,
-          }); 
-          if (data.ingredients.length < 10 || !data.nextExpireCursor || !data.nextIdCursor) {
-            this.hasMoreData = false; 
+          });
+          if (
+            data.ingredients.length < 10 ||
+            !data.nextExpireCursor ||
+            !data.nextIdCursor
+          ) {
+            this.hasMoreData = false;
           }
         },
         error: (err) => {
           console.error('Failed to fetch more ingredients', err);
           this.loading = false;
         },
-    });
+      });
   }
 
   handleNewIngredient(newIngredient: Partial<Ingredient>) {
-    newIngredient.fridge_id = "00000000-0000-0000-0000-000000000001"; // placeholder, should be replaced with actual fridge_id
+    newIngredient.fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
     this.ingredientService
       .createIngredient(newIngredient as Ingredient)
       .subscribe({
         next: (created) => {
-
           if (!this.shouldAppendToCurrentList(created)) {
             console.log('Ingredient not appended to current list:', created);
-            this.ingredients = this.ingredients.filter(ing => ing.id !== created.id);
+            this.ingredients = this.ingredients.filter(
+              (ing) => ing.id !== created.id,
+            );
             return;
           }
-          
+
           this.ingredients.unshift(created);
           this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
         },
@@ -118,7 +127,7 @@ export class IngredientListPageComponent {
       console.error('updatedIngredient is null or undefined');
       return;
     }
-    
+
     if (!updatedIngredient.id) {
       console.error('Missing ingredient ID for update');
       return;
@@ -132,17 +141,21 @@ export class IngredientListPageComponent {
 
           if (!this.shouldAppendToCurrentList(updated)) {
             console.log('Ingredient not appended to current list:', updated);
-            this.ingredients = this.ingredients.filter(ing => ing.id !== updated.id);
+            this.ingredients = this.ingredients.filter(
+              (ing) => ing.id !== updated.id,
+            );
             return;
           }
 
           const index = this.ingredients.findIndex(
-            (ing) => ing.id === updated.id
+            (ing) => ing.id === updated.id,
           );
 
           if (index !== -1) {
             this.ingredients[index] = updated;
-            this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+            this.ingredients = this.sortIngredientsByExpireDate(
+              this.ingredients,
+            );
           }
         },
         error: (err) => {
@@ -152,14 +165,12 @@ export class IngredientListPageComponent {
   }
 
   handleDeleteIngredient(deletedIngredient: Ingredient) {
-     if (!deletedIngredient.id) {
+    if (!deletedIngredient.id) {
       console.error('Missing ingredient ID for delete');
       return;
     }
 
-    this.ingredientService
-      .deleteIngredient(deletedIngredient.id)
-      .subscribe({
+    this.ingredientService.deleteIngredient(deletedIngredient.id).subscribe({
       next: () => {
         this.ingredients = this.ingredients.filter(
           (ing) => ing.id !== deletedIngredient.id,
@@ -184,14 +195,13 @@ export class IngredientListPageComponent {
 
   onScrollDown() {
     if (this.hasMoreData && !this.loading) {
-      this.fetchMoreIngredients(); 
+      this.fetchMoreIngredients();
     }
   }
 
-
-scrollToTop(): void {
-  window.scrollTo({ top: 10, behavior: 'smooth' });
-}
+  scrollToTop(): void {
+    window.scrollTo({ top: 10, behavior: 'smooth' });
+  }
 
   // following functions are helper
 
@@ -202,16 +212,15 @@ scrollToTop(): void {
    * @returns Sorted array
    */
   private sortIngredientsByExpireDate(ingredients: Ingredient[]): Ingredient[] {
-    return ingredients.sort(
-      (a, b) => {
-        const dateDiff = new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime();
-        if (dateDiff !== 0) return dateDiff;
-        if (a.id && b.id) {
-          return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-        }
-        return 0;
+    return ingredients.sort((a, b) => {
+      const dateDiff =
+        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime();
+      if (dateDiff !== 0) return dateDiff;
+      if (a.id && b.id) {
+        return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
       }
-    );
+      return 0;
+    });
   }
 
   shouldAppendToCurrentList(item: Ingredient): boolean {
@@ -228,6 +237,6 @@ scrollToTop(): void {
 
   // TrackBy function for better performance in ngFor
   trackById(index: number, ingredient: Ingredient): number {
-    return ingredient.id ? ingredient.id : index; 
+    return ingredient.id ? ingredient.id : index;
   }
 }

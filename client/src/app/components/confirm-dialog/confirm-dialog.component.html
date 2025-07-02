@@ -4,11 +4,11 @@
   <p>{{ data.message || "are you sure?" }}</p>
 </mat-dialog-content>
 
-<mat-dialog-actions style="justify-content: flex-end; display: flex;">
-    <button mat-button (click)="onCancel()">
-        {{ data.cancelText || 'Cancel' }}
-    </button>
-    <button mat-raised-button color="warn" (click)="onConfirm()">
-        {{ data.confirmText || 'Confirm' }}
-    </button>
+<mat-dialog-actions style="justify-content: flex-end; display: flex">
+  <button mat-button (click)="onCancel()">
+    {{ data.cancelText || "Cancel" }}
+  </button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">
+    {{ data.confirmText || "Confirm" }}
+  </button>
 </mat-dialog-actions>

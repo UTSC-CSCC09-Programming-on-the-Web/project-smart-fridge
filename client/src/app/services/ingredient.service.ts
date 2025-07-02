@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 
-
-  export interface IngredientPaginationResponse {
+export interface IngredientPaginationResponse {
   ingredients: Ingredient[];
   nextExpireCursor: string | null;
   nextIdCursor: number | null;
@@ -23,14 +22,20 @@ export class IngredientService {
    * Fetches all ingredients from the server.
    * @returns An Observable of an array of Ingredient objects.
    */
-  getIngredients( expireDateCursor?: string,
-  idCursor?: number,
-  limit: number = 10): Observable<IngredientPaginationResponse> {
-      let params = new HttpParams().set('limit', limit.toString());
-      if (expireDateCursor) params = params.set('expireDateCursor', expireDateCursor);
-      if (idCursor) params = params.set('idCursor', idCursor.toString());
-      console.log('Fetching ingredients with params:', params.toString());
-    return this.http.get<IngredientPaginationResponse>(`${this.endpoint}/api/ingredients`, { params });
+  getIngredients(
+    expireDateCursor?: string,
+    idCursor?: number,
+    limit: number = 10,
+  ): Observable<IngredientPaginationResponse> {
+    let params = new HttpParams().set('limit', limit.toString());
+    if (expireDateCursor)
+      params = params.set('expireDateCursor', expireDateCursor);
+    if (idCursor) params = params.set('idCursor', idCursor.toString());
+    console.log('Fetching ingredients with params:', params.toString());
+    return this.http.get<IngredientPaginationResponse>(
+      `${this.endpoint}/api/ingredients`,
+      { params },
+    );
   }
 
   /**
@@ -51,7 +56,10 @@ export class IngredientService {
    * @param updated The updated ingredient data.
    * @returns An Observable of the updated Ingredient.
    */
-  updateIngredient(id: number, updated: Partial<Ingredient>): Observable<Ingredient> {
+  updateIngredient(
+    id: number,
+    updated: Partial<Ingredient>,
+  ): Observable<Ingredient> {
     return this.http.put<Ingredient>(
       `${this.endpoint}/api/ingredients/${id}`,
       updated,
@@ -64,10 +72,8 @@ export class IngredientService {
    * @returns An Observable that completes when the deletion is successful.
    */
   deleteIngredient(id: number): Observable<void> {
-    return this.http.delete<void>(    
-      `${this.endpoint}/api/ingredients/${id}`,
-    );
-  } 
+    return this.http.delete<void>(`${this.endpoint}/api/ingredients/${id}`);
+  }
 
   // error handling will be implemented later
 }

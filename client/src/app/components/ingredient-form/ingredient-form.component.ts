@@ -63,21 +63,20 @@ export class IngredientFormComponent {
     if (this.ingredientForm.valid) {
       let output: Partial<Ingredient>;
 
-    if (this.mode === 'edit' && this.ingredientToEdit) {
-      // If in edit mode, merge the existing ingredient with the form values
-      output = {
-        ...this.ingredientToEdit,
-        ...this.ingredientForm.value
-      };
-    } else {
-      output = this.ingredientForm.value;
-    }
-
+      if (this.mode === 'edit' && this.ingredientToEdit) {
+        // If in edit mode, merge the existing ingredient with the form values
+        output = {
+          ...this.ingredientToEdit,
+          ...this.ingredientForm.value,
+        };
+      } else {
+        output = this.ingredientForm.value;
+      }
 
       this.submitIngredient.emit(output);
 
-      if (this.mode === 'add'){
-      this.ingredientForm.reset();
+      if (this.mode === 'add') {
+        this.ingredientForm.reset();
       }
     } else {
       console.error('Form is invalid');
