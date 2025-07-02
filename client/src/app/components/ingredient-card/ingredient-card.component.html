@@ -1,10 +1,18 @@
 <!-- ingredient-card.component.html -->
 <div class="ingredient-card">
+<img
+  *ngIf="ingredient.image_url; else defaultImage"
+  class="ingredient-img"
+  [src]="'http://localhost:3000' + ingredient.image_url"
+  alt="{{ ingredient.name }}"
+/>
+<ng-template #defaultImage>
   <img
     class="ingredient-img"
-    [src]="ingredient.image_url || 'assets/default-ingredient.png'"
+    src="assets/default-ingredient.png"
     alt="{{ ingredient.name }}"
   />
+</ng-template>
   <div class="ingredient-info">
     <h3>{{ ingredient.name }}</h3>
     <p>{{ ingredient.quantity }} {{ ingredient.unit }}</p>

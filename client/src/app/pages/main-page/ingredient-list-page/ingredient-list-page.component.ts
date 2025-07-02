@@ -99,10 +99,11 @@ export class IngredientListPageComponent {
       });
   }
 
-  handleNewIngredient(newIngredient: Partial<Ingredient>) {
-    newIngredient.fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
+  handleNewIngredient(formData: FormData) {
+    const temp_fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
+    formData.append('fridge_id', temp_fridge_id);
     this.ingredientService
-      .createIngredient(newIngredient as Ingredient)
+      .createIngredient(formData as FormData)
       .subscribe({
         next: (created) => {
           if (!this.shouldAppendToCurrentList(created)) {
