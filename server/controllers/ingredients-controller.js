@@ -8,7 +8,7 @@ const { Op, where, DATE } = require("sequelize");
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getAllIngredients = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const expireCursor = req.query.expireCursor ? new Date(req.query.expireCursor) : null;
+  const expireCursor = req.query.expireDateCursor ? new Date(req.query.expireDateCursor) : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
 
   const where = {};
