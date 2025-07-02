@@ -37,10 +37,6 @@ module.exports = {
       type: {
         type: Sequelize.STRING,
       },
-      is_expired: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
       image_url: {
         type: Sequelize.STRING,
       },

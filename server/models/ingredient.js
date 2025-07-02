@@ -34,8 +34,12 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
       },
       is_expired: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        type: DataTypes.VIRTUAL,
+        get() {
+          const expireDate = new Date(this.getDataValue('expire_date'));
+          expireDate.setDate(expireDate.getDate() + 1);
+          return new Date() > expireDate;
+        },
       },
       image_url: {
         type: DataTypes.STRING,
