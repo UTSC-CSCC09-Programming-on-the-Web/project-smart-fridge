@@ -2,6 +2,7 @@
 "use strict";
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 
 // create storage configuration for multer
@@ -39,13 +40,14 @@ function getImageUploadMiddleware({ folder, multiple = false, maxCount = 5, maxS
       }
     }
   });
-
+  console.log(`Image upload middleware configured for folder: ${folder}, multiple: ${multiple}, maxCount: ${maxCount}, maxSizeMB: ${maxSizeMB}`);
   if (multiple) {
     return upload.array('image', maxCount); 
   } else {
+    console.log("Using single image upload middleware");
     return upload.single('image');
   }
 }
 
-module.exports = { getImageUploadMiddleware };
+module.exports = getImageUploadMiddleware;
 

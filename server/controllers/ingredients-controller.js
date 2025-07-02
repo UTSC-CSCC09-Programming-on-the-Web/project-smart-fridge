@@ -61,10 +61,13 @@ const getIngredientsInfiniteScroll = async (req, res) => {
 
 // POST /api/ingredients
 const createIngredient = async (req, res) => {
-  const errors = validateIngredient(req.body);
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
+  // console.log("Creating ingredient with body:", req.body);
+
+  // the req body we get for now are all stings, later we will handle this type and validation problem
+  // const errors = validateIngredient(req.body);
+  // if (errors.length > 0) {
+  //   return res.status(400).json({ errors });
+  // }
 
   try {
 
@@ -76,7 +79,7 @@ const createIngredient = async (req, res) => {
       ...req.body,           
       image_url,             
     });
-    
+
     res.status(201).json(newIngredient);
   } catch (err) {
     console.error("Error creating ingredient:", err);
