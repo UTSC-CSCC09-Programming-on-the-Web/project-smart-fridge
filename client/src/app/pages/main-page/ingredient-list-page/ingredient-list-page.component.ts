@@ -97,6 +97,13 @@ export class IngredientListPageComponent {
       .createIngredient(newIngredient as Ingredient)
       .subscribe({
         next: (created) => {
+
+          if (!this.shouldAppendToCurrentList(created)) {
+            console.log('Ingredient not appended to current list:', created);
+            this.ingredients = this.ingredients.filter(ing => ing.id !== created.id);
+            return;
+          }
+          
           this.ingredients.unshift(created);
           this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
         },
@@ -121,13 +128,21 @@ export class IngredientListPageComponent {
       .updateIngredient(updatedIngredient.id, updatedIngredient as Ingredient)
       .subscribe({
         next: (updated) => {
+          this.cancelEdit();
+
+          if (!this.shouldAppendToCurrentList(updated)) {
+            console.log('Ingredient not appended to current list:', updated);
+            this.ingredients = this.ingredients.filter(ing => ing.id !== updated.id);
+            return;
+          }
+
           const index = this.ingredients.findIndex(
             (ing) => ing.id === updated.id
           );
+
           if (index !== -1) {
             this.ingredients[index] = updated;
             this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
-            this.cancelEdit(); // close the edit form after update
           }
         },
         error: (err) => {
@@ -189,6 +204,17 @@ export class IngredientListPageComponent {
         }
         return 0;
       }
+    );
+  }
+
+  shouldAppendToCurrentList(item: Ingredient): boolean {
+    if (!this.expireDateCursor || !this.idCursor) return true;
+    const itemDate = new Date(item.expire_date).getTime();
+    const cursorDate = new Date(this.expireDateCursor).getTime();
+
+    return (
+      itemDate < cursorDate ||
+      (itemDate === cursorDate && item.id < this.idCursor)
     );
   }
 
