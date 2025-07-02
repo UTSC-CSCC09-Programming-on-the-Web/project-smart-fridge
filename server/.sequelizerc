@@ -4,8 +4,8 @@
 const path = require("path");
 
 module.exports = {
-  "config": path.resolve("config", "config.cjs"), // Path to the Sequelize configuration file which is not default config.json
-  "models-path": path.resolve("models"),
-  "migrations-path": path.resolve("migrations"),
-  "seeders-path": path.resolve("seeders"),
+  'config': path.resolve(__dirname, 'db/config/config.cjs'),
+  'models-path': path.resolve("models"),
+  'seeders-path': path.resolve(__dirname, 'db/seeders'),
+  'migrations-path': path.resolve(__dirname, 'db/migrations'),
 };

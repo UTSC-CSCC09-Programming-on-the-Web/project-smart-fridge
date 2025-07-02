@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const ingredientsRouter = require("./routers/ingredients-router.js");
-const { sequelize } = require("./datasource.js");
+const { sequelize } = require("./db/datasource.js");
 
 const PORT = 3000;
 const app = express();
