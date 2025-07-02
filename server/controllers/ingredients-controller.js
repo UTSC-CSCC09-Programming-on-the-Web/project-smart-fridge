@@ -6,7 +6,7 @@ const { Op, where, DATE } = require("sequelize");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
-const getAllIngredients = async (req, res) => {
+const getIngredientsInfiniteScroll = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
   const expireCursor = req.query.expireDateCursor
     ? new Date(req.query.expireDateCursor)
@@ -67,7 +67,16 @@ const createIngredient = async (req, res) => {
   }
 
   try {
-    const newIngredient = await Ingredient.create(req.body);
+
+    const image_url = req.file
+      ? `/uploads/ingredients/${req.file.filename}`
+      : null; // will change to default image url
+
+    const newIngredient = await Ingredient.create({
+      ...req.body,           
+      image_url,             
+    });
+    
     res.status(201).json(newIngredient);
   } catch (err) {
     console.error("Error creating ingredient:", err);
@@ -123,7 +132,7 @@ const deleteIngredient = async (req, res) => {
 };
 
 module.exports = {
-  getAllIngredients,
+  getIngredientsInfiniteScroll,
   createIngredient,
   updateIngredient,
   deleteIngredient,
