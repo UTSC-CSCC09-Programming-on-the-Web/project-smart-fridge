@@ -64,10 +64,14 @@ export class IngredientListPageComponent {
             this.hasMoreData = false;
             return;
           }
-          this.ingredients = [
-            ...this.ingredients, // Append new ingredients to the existing list
-            ...this.sortIngredientsByExpireDate(data.ingredients),
-          ];
+          const newItems = data.ingredients.filter(
+            ing => !this.ingredients.some(existing => existing.id === ing.id)
+          );
+
+          this.ingredients = this.sortIngredientsByExpireDate([
+            ...this.ingredients,
+            ...newItems
+          ]);
 
           this.expireDateCursor = data.nextExpireCursor;
           this.idCursor = data.nextIdCursor;
