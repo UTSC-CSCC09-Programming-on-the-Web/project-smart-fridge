@@ -208,6 +208,7 @@ export class IngredientListPageComponent {
   }
 
   shouldAppendToCurrentList(item: Ingredient): boolean {
+    if (!this.hasMoreData) return true;
     if (!this.expireDateCursor || !this.idCursor) return true;
     const itemDate = new Date(item.expire_date).getTime();
     const cursorDate = new Date(this.expireDateCursor).getTime();
