@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -29,7 +30,7 @@ import { AppRoutingModule } from './app-routing.module';
     HeaderComponent,
     IngredientFormComponent,
     IngredientCardComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +41,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpClientModule,
     MatDialogModule,
     MatButtonModule,
+        InfiniteScrollDirective
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -7,8 +7,8 @@ import { HttpParams } from '@angular/common/http';
 
   export interface IngredientPaginationResponse {
   ingredients: Ingredient[];
-  nextExpireDate: string | null;
-  nextCursorId: number | null;
+  nextExpireCursor: string | null;
+  nextIdCursor: number | null;
 }
 
 @Injectable({

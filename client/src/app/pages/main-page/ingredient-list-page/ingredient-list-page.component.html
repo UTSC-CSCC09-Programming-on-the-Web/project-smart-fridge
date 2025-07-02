@@ -4,7 +4,13 @@
     (submitIngredient)="handleNewIngredient($event)"
   ></app-ingredient-form>
 
-  <div class="ingredient-list">
+  <div
+  class="ingredient-list"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="150"
+  (scrolled)="onScrollDown()"
+>
     <ng-container *ngFor="let ing of ingredients; trackBy: trackById">
     <app-ingredient-card
       [ingredient]="ing"
@@ -21,5 +27,11 @@
       (cancelEdit)="cancelEdit()"
     ></app-ingredient-form>
   </ng-container>
+  
+  <div *ngIf="loading" class="loading-indicator">
+    loading more ingredients...
+  </div>
+  <div *ngIf="!hasMoreData && !loading" class="no-more-data">
+    No more ingredients to load.
   </div>
 </div>

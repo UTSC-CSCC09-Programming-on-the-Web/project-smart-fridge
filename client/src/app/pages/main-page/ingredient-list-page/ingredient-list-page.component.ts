@@ -9,26 +9,81 @@ import { IngredientService } from '../../../services/ingredient.service';
   standalone: false,
 })
 export class IngredientListPageComponent {
-  ingredients: Ingredient[] = [];
+  ingredients: Ingredient[] = []; 
+
+  hasMoreData = true; // Indicates if there are more ingredients to load
+  loading = false; // Indicates if data is currently being loaded
+
+  // Cursors for pagination
+  expireDateCursor: string | null = null; // Cursor for expire_date
+  idCursor: number | null = null;
 
   constructor(private ingredientService: IngredientService) {}
 
   ngOnInit(): void {
-    this.fetchIngredients();
+    this.loadInitialIngredients();
   }
 
-  // Fetches all ingredients from the server and sorts them by expire_date in ascending order (earliest first).
-  // this method is called when the component is initialized (ngOnInit())
-  fetchIngredients(): void {
-    this.ingredientService.getAllIngredients().subscribe({
+  loadInitialIngredients(): void {
+    console.log('Loading initial ingredients...');
+    this.loading = true;
+    this.ingredientService.getIngredients().subscribe({
       next: (data) => {
-        // Sort the ingredients by expire_date in ascending order
-        // temporary solution, in real application, it should be sorted by the server
-        this.ingredients = this.sortIngredientsByExpireDate(data);
+        console.log('Initial ingredients loaded:', data);
+        this.ingredients = this.sortIngredientsByExpireDate(data.ingredients);
+        
+        this.expireDateCursor = data.nextExpireCursor;
+        this.idCursor = data.nextIdCursor;
+
+        this.hasMoreData = !!data.ingredients.length; 
+        this.loading = false;
+        console.log('Initial cursors set:', {
+          expireDateCursor: this.expireDateCursor,
+          idCursor: this.idCursor,
+        }); 
       },
       error: (err) => {
-        console.error('Failed to fetch ingredients', err);
+        console.error('Failed to load initial ingredients', err);
+        this.loading = false;
       },
+    });
+  }
+
+  fetchMoreIngredients(): void {
+    console.log('Fetching more ingredients... with cursors:', {
+      expireDateCursor: this.expireDateCursor,
+      idCursor: this.idCursor,
+    });
+    this.loading = true;
+
+    this.ingredientService
+      .getIngredients(this.expireDateCursor ?? undefined, this.idCursor ?? undefined)
+      .subscribe({
+        next: (data) => {
+          if (!data.ingredients || data.ingredients.length === 0) {
+            this.hasMoreData = false;
+            return;
+          }
+          this.ingredients = [
+            ...this.ingredients, // Append new ingredients to the existing list
+            ...this.sortIngredientsByExpireDate(data.ingredients),
+          ];
+
+          this.expireDateCursor = data.nextExpireCursor;
+          this.idCursor = data.nextIdCursor;
+          this.loading = false;
+          console.log('fetch more cursors set:', {
+            expireDateCursor: this.expireDateCursor,
+            idCursor: this.idCursor,
+          }); 
+          if (data.ingredients.length < 10 || !data.nextExpireCursor || !data.nextIdCursor) {
+            this.hasMoreData = false; 
+          }
+        },
+        error: (err) => {
+          console.error('Failed to fetch more ingredients', err);
+          this.loading = false;
+        },
     });
   }
 
@@ -108,6 +163,12 @@ export class IngredientListPageComponent {
     this.editingIngredient = null;
   }
 
+  onScrollDown() {
+    if (this.hasMoreData && !this.loading) {
+      this.fetchMoreIngredients(); 
+    }
+  }
+
   // temporary solution, in real application, it should be sorted by the server
   /**
    * Sorts ingredients by expire_date in ascending order.
@@ -116,8 +177,14 @@ export class IngredientListPageComponent {
    */
   private sortIngredientsByExpireDate(ingredients: Ingredient[]): Ingredient[] {
     return ingredients.sort(
-      (a, b) =>
-        new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime(),
+      (a, b) => {
+        const dateDiff = new Date(a.expire_date).getTime() - new Date(b.expire_date).getTime();
+        if (dateDiff !== 0) return dateDiff;
+        if (a.id && b.id) {
+          return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+        }
+        return 0;
+      }
     );
   }
 
