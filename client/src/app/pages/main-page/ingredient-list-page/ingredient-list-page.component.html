@@ -34,4 +34,10 @@
   <div *ngIf="!hasMoreData && !loading" class="no-more-data">
     No more ingredients to load.
   </div>
+  <button 
+  class="scroll-to-top" 
+  (click)="scrollToTop()"
+>
+  ↑ Top
+</button>
 </div>
