@@ -3,10 +3,16 @@
 const { Ingredient } = require("../models/index.js");
 const validateIngredient = require("../utils/validate-ingredient.js");
 const { Op, where, DATE } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config();
+const getImageUrl = require("../utils/image-url.js");
+const { get } = require("http");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
-const getAllIngredients = async (req, res) => {
+const getIngredientsInfiniteScroll = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
   const expireCursor = req.query.expireDateCursor
     ? new Date(req.query.expireDateCursor)
@@ -44,12 +50,18 @@ const getAllIngredients = async (req, res) => {
       });
     }
 
+    const formattedIngredients = ingredients.map((ingredient) => {
+      const json = ingredient.toJSON();
+      json.image_url = getImageUrl(json.image_url);
+      return json;
+    });
+
     // If we have results, get the last ingredient's ID for cursor
     const last = ingredients[ingredients.length - 1];
     const nextExpireCursor = last.expire_date;
     const nextIdCursor = last.id;
     res.status(200).json({
-      ingredients,
+      ingredients: formattedIngredients,
       nextExpireCursor,
       nextIdCursor,
     });
@@ -61,14 +73,30 @@ const getAllIngredients = async (req, res) => {
 
 // POST /api/ingredients
 const createIngredient = async (req, res) => {
-  const errors = validateIngredient(req.body);
-  if (errors.length > 0) {
-    return res.status(400).json({ errors });
-  }
+  // console.log("Creating ingredient with body:", req.body);
+
+  // the req body we get for now are all stings, later we will handle this type and validation problem
+  // const errors = validateIngredient(req.body);
+  // if (errors.length > 0) {
+  //   return res.status(400).json({ errors });
+  // }
 
   try {
-    const newIngredient = await Ingredient.create(req.body);
-    res.status(201).json(newIngredient);
+    const relativePath = req.file ? `ingredients/${req.file.filename}` : null;
+    //  console.log("Image URL:", image_url);
+
+    const newIngredient = await Ingredient.create({
+      ...req.body,
+      image_url: relativePath, // Store the relative path to the image
+    });
+    // console.log("New ingredient created at:", relativePath);
+
+    const ingredientWithImageUrl = {
+      ...newIngredient.toJSON(),
+      image_url: getImageUrl(newIngredient.image_url),
+    };
+    console.log("Ingredient with image URL:", ingredientWithImageUrl.image_url);
+    res.status(201).json(ingredientWithImageUrl);
   } catch (err) {
     console.error("Error creating ingredient:", err);
     res.status(400).json({ error: "Failed to create ingredient" });
@@ -92,8 +120,10 @@ const updateIngredient = async (req, res) => {
     if (!ingredient) {
       return res.status(404).json({ error: "Ingredient not found" });
     }
-
-    await ingredient.update(updates);
+    await ingredient.update(updates, {
+      fields: ["name", "quantity", "unit", "expire_date", "type"],
+    });
+    ingredient.image_url = getImageUrl(ingredient.image_url);
     res.status(200).json(ingredient);
   } catch (err) {
     console.error("Error updating ingredient:", err);
@@ -114,6 +144,22 @@ const deleteIngredient = async (req, res) => {
       return res.status(404).json({ error: "Ingredient not found" });
     }
 
+    if (ingredient.image_url) {
+      const imagePath = path.join(
+        __dirname,
+        "..",
+        "uploads/",
+        ingredient.image_url
+      );
+      console.log("Deleting image at:", imagePath);
+      try {
+        await fs.promises.unlink(imagePath);
+        console.log(`Image deleted: ${imagePath}`);
+      } catch (err) {
+        console.warn(`Warning: Failed to delete image: ${imagePath}`, err);
+      }
+    }
+
     await ingredient.destroy();
     res.status(204).send();
   } catch (err) {
@@ -123,7 +169,7 @@ const deleteIngredient = async (req, res) => {
 };
 
 module.exports = {
-  getAllIngredients,
+  getIngredientsInfiniteScroll,
   createIngredient,
   updateIngredient,
   deleteIngredient,

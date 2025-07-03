@@ -2,16 +2,22 @@
 
 const express = require("express");
 const {
-  getAllIngredients,
+  getIngredientsInfiniteScroll,
   createIngredient,
   updateIngredient,
   deleteIngredient,
 } = require("../controllers/ingredients-controller.js");
+const getImageUploadMiddleware = require("../middlewares/image-upload-multer.js");
 
 const router = express.Router();
 
-router.get("/", getAllIngredients);
-router.post("/", createIngredient);
+router.get("/", getIngredientsInfiniteScroll);
+
+const ingredientImageUpload = getImageUploadMiddleware({
+  folder: "ingredients",
+});
+router.post("/", ingredientImageUpload, createIngredient);
+
 router.put("/:id", updateIngredient);
 router.delete("/:id", deleteIngredient);
 

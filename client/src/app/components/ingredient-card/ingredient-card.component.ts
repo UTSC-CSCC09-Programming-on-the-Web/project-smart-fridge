@@ -17,6 +17,10 @@ export class IngredientCardComponent {
   @Output() editRequest = new EventEmitter<Ingredient>();
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
 
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'assets/default-ingredient.png';
+  }
+
   onUpdateIngredient(): void {
     // Emit the ingredient to be edited
     // This will be caught by the parent component to toggle the edit form

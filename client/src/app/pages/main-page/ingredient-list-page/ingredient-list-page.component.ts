@@ -99,27 +99,26 @@ export class IngredientListPageComponent {
       });
   }
 
-  handleNewIngredient(newIngredient: Partial<Ingredient>) {
-    newIngredient.fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
-    this.ingredientService
-      .createIngredient(newIngredient as Ingredient)
-      .subscribe({
-        next: (created) => {
-          if (!this.shouldAppendToCurrentList(created)) {
-            console.log('Ingredient not appended to current list:', created);
-            this.ingredients = this.ingredients.filter(
-              (ing) => ing.id !== created.id,
-            );
-            return;
-          }
+  handleNewIngredient(formData: FormData) {
+    const temp_fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
+    formData.append('fridge_id', temp_fridge_id);
+    this.ingredientService.createIngredient(formData as FormData).subscribe({
+      next: (created) => {
+        if (!this.shouldAppendToCurrentList(created)) {
+          console.log('Ingredient not appended to current list:', created);
+          this.ingredients = this.ingredients.filter(
+            (ing) => ing.id !== created.id,
+          );
+          return;
+        }
 
-          this.ingredients.unshift(created);
-          this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
-        },
-        error: (err) => {
-          console.error('Failed to create ingredient', err);
-        },
-      });
+        this.ingredients.unshift(created);
+        this.ingredients = this.sortIngredientsByExpireDate(this.ingredients);
+      },
+      error: (err) => {
+        console.error('Failed to create ingredient', err);
+      },
+    });
   }
 
   handleUpdateIngredient(updatedIngredient: Partial<Ingredient>) {

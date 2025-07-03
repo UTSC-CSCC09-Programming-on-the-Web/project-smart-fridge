@@ -43,10 +43,10 @@ export class IngredientService {
    * @param ingredient The ingredient object to create.
    * @returns An Observable of the created Ingredient.
    */
-  createIngredient(ingredient: Ingredient): Observable<Ingredient> {
+  createIngredient(formData: FormData): Observable<Ingredient> {
     return this.http.post<Ingredient>(
       `${this.endpoint}/api/ingredients`,
-      ingredient,
+      formData,
     );
   }
 
