@@ -100,6 +100,7 @@ export class IngredientFormComponent {
         const formData = ingredientToFormData(output, this.selectedImage);
         this.addIngredient.emit(formData);
         this.ingredientForm.reset(); 
+        this.selectedImage = null; 
         return;
       }
 
