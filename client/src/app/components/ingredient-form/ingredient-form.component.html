@@ -21,7 +21,7 @@
   <input formControlName="expire_date" type="date" />
   <input formControlName="type" placeholder="Type (optional)" />
   <!--image url will change to file upload in the futuer -->
-  <input type="file" *ngIf="mode === 'add'" (change)="onFileSelected($event)" accept="image/*" />
+  <input type="file" *ngIf="mode === 'add'" (change)="onFileSelected($event)" accept="image/*" #fileInput />
   <!-- submit button -->
   <button type="submit" [disabled]="ingredientForm.invalid">
     {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}

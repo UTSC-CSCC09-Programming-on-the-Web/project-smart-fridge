@@ -6,6 +6,8 @@ import {
   Output,
   Input,
   SimpleChanges,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Ingredient } from '../../models/ingredient.model';
@@ -39,8 +41,14 @@ export class IngredientFormComponent {
     });
   }
 
+  @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
+
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
+    if (!this.fileInput || !this.fileInput.nativeElement) {
+      console.warn('File input is not available.');
+      return;
+    }
+    const input = this.fileInput.nativeElement;
     if (input.files && input.files.length > 0) {
       const image = input.files[0];
 
@@ -82,6 +90,14 @@ export class IngredientFormComponent {
 
   ngOnInit(): void {}
 
+  clearForm(): void {
+    this.ingredientForm.reset();
+    this.selectedImage = null; 
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
+  }
+
   postIngredient(): void {
     if (this.ingredientForm.valid) {
       let output: Partial<Ingredient>;
@@ -99,8 +115,7 @@ export class IngredientFormComponent {
       if (this.mode === 'add') {
         const formData = ingredientToFormData(output, this.selectedImage);
         this.addIngredient.emit(formData);
-        this.ingredientForm.reset(); 
-        this.selectedImage = null; 
+        this.clearForm();
         return;
       }
 
