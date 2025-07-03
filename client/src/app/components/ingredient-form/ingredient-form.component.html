@@ -1,0 +1,46 @@
+<!-- ingredient-form.component.html -->
+<form
+  [formGroup]="ingredientForm"
+  class="ingredient-form"
+  id="ingredient-form"
+  (ngSubmit)="postIngredient()"
+  [ngClass]="mode + '-form'"
+>
+  <!-- title -->
+  <div class="ingredient-form-title">
+    {{
+      mode === "edit"
+        ? "Edit Ingredient"
+        : "Add a new ingredient into your fridge"
+    }}
+  </div>
+  <!-- form fields -->
+  <input formControlName="name" placeholder="Ingredient name" />
+  <input formControlName="quantity" type="number" placeholder="Quantity" />
+  <input formControlName="unit" placeholder="Unit (e.g. g/ml/pcs)" />
+  <input formControlName="expire_date" type="date" />
+  <input formControlName="type" placeholder="Type (optional)" />
+  <!--image url will change to file upload in the futuer -->
+  <div class="image-container" *ngIf="mode === 'add'">
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      #fileInput
+    />
+    <img
+      class="image-preview"
+      *ngIf="imagePreviewUrl"
+      [src]="imagePreviewUrl"
+      alt="Preview"
+    />
+  </div>
+  <!-- submit button -->
+  <button type="submit" [disabled]="ingredientForm.invalid">
+    {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
+  </button>
+  <!-- cancel button -->
+  <button type="button" *ngIf="mode === 'edit'" (click)="cancelEdit.emit()">
+    Cancel
+  </button>
+</form>

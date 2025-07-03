@@ -1,0 +1,11 @@
+// File: server/.sequelizerc
+// This file is used to configure Sequelize CLI paths for models, migrations, and seeders.
+
+const path = require("path");
+
+module.exports = {
+  'config': path.resolve(__dirname, 'db/config/config.cjs'),
+  'models-path': path.resolve("models"),
+  'seeders-path': path.resolve(__dirname, 'db/seeders'),
+  'migrations-path': path.resolve(__dirname, 'db/migrations'),
+};
