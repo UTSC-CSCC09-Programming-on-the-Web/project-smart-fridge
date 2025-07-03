@@ -4,6 +4,7 @@
   *ngIf="ingredient.image_url; else defaultImage"
   class="ingredient-img"
   [src]="'http://localhost:3000' + ingredient.image_url"
+  (error)="onImageError($event)"
   alt="{{ ingredient.name }}"
 />
 <ng-template #defaultImage>
