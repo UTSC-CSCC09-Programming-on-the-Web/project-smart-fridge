@@ -5,6 +5,8 @@ const validateIngredient = require("../utils/validate-ingredient.js");
 const { Op, where, DATE } = require("sequelize");
 const path = require("path");
 const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config();
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -74,8 +76,9 @@ const createIngredient = async (req, res) => {
   try {
 
     const image_url = req.file
-      ? `/uploads/ingredients/${req.file.filename}`
-      : null; // will change to default image url
+      ? `${process.env.BASE_IMAGE_URL}/ingredients/${req.file.filename}`
+      : null; 
+    //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({
       ...req.body,           
