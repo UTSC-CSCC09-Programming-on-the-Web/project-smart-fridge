@@ -51,9 +51,9 @@ const getIngredientsInfiniteScroll = async (req, res) => {
     }
 
     const formattedIngredients = ingredients.map((ingredient) => {
-       const json = ingredient.toJSON();
-        json.image_url = getImageUrl(json.image_url);  
-        return json;
+      const json = ingredient.toJSON();
+      json.image_url = getImageUrl(json.image_url);
+      return json;
     });
 
     // If we have results, get the last ingredient's ID for cursor
@@ -82,16 +82,12 @@ const createIngredient = async (req, res) => {
   // }
 
   try {
-
-
-    const relativePath = req.file
-      ? `ingredients/${req.file.filename}`
-      : null; 
+    const relativePath = req.file ? `ingredients/${req.file.filename}` : null;
     //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({
-      ...req.body,           
-      image_url: relativePath, // Store the relative path to the image        
+      ...req.body,
+      image_url: relativePath, // Store the relative path to the image
     });
     // console.log("New ingredient created at:", relativePath);
 
@@ -125,9 +121,9 @@ const updateIngredient = async (req, res) => {
       return res.status(404).json({ error: "Ingredient not found" });
     }
     await ingredient.update(updates, {
-      fields: ['name', 'quantity', 'unit', 'expire_date', 'type'] 
+      fields: ["name", "quantity", "unit", "expire_date", "type"],
     });
-    ingredient.image_url = getImageUrl(ingredient.image_url); 
+    ingredient.image_url = getImageUrl(ingredient.image_url);
     res.status(200).json(ingredient);
   } catch (err) {
     console.error("Error updating ingredient:", err);
@@ -149,8 +145,13 @@ const deleteIngredient = async (req, res) => {
     }
 
     if (ingredient.image_url) {
-      const imagePath = path.join(__dirname, '..', 'uploads/', ingredient.image_url);
-      console.log('Deleting image at:', imagePath);
+      const imagePath = path.join(
+        __dirname,
+        "..",
+        "uploads/",
+        ingredient.image_url
+      );
+      console.log("Deleting image at:", imagePath);
       try {
         await fs.promises.unlink(imagePath);
         console.log(`Image deleted: ${imagePath}`);

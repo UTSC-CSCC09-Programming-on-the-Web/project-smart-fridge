@@ -18,8 +18,8 @@ export class IngredientCardComponent {
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
 
   onImageError(event: Event): void {
-  (event.target as HTMLImageElement).src = 'assets/default-ingredient.png';
-}
+    (event.target as HTMLImageElement).src = 'assets/default-ingredient.png';
+  }
 
   onUpdateIngredient(): void {
     // Emit the ingredient to be edited

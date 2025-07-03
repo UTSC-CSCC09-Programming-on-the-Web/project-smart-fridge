@@ -13,7 +13,9 @@ const router = express.Router();
 
 router.get("/", getIngredientsInfiniteScroll);
 
-const ingredientImageUpload = getImageUploadMiddleware({ folder: 'ingredients' });
+const ingredientImageUpload = getImageUploadMiddleware({
+  folder: "ingredients",
+});
 router.post("/", ingredientImageUpload, createIngredient);
 
 router.put("/:id", updateIngredient);

@@ -24,7 +24,7 @@ async function startServer() {
     // temporary for get image upload working, uploads folder are public as static resources
     // in the future, we will move the images under each fridge's own uploads folder
     // and make the uploads folder private, so that only the fridge owner can access it
-    app.use("/uploads", express.static("uploads")); 
+    app.use("/uploads", express.static("uploads"));
 
     // add routers here
     app.use("/api/ingredients", ingredientsRouter);

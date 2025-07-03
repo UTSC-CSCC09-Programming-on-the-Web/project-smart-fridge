@@ -46,7 +46,7 @@ export class IngredientService {
   createIngredient(formData: FormData): Observable<Ingredient> {
     return this.http.post<Ingredient>(
       `${this.endpoint}/api/ingredients`,
-      formData
+      formData,
     );
   }
 

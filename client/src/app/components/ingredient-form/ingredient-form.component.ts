@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Ingredient } from '../../models/ingredient.model';
-import {ingredientToFormData} from '../../utils/form-data.util';
+import { ingredientToFormData } from '../../utils/form-data.util';
 
 @Component({
   selector: 'app-ingredient-form',
@@ -43,7 +43,7 @@ export class IngredientFormComponent {
 
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
-  imagePreviewUrl: string |  null = null;
+  imagePreviewUrl: string | null = null;
 
   onFileSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
@@ -58,12 +58,14 @@ export class IngredientFormComponent {
       const allowedTypes = ['image/png', 'image/jpeg'];
 
       if (image.size > maxSizeMB * 1024 * 1024) {
-        alert("this image is too large, please select an image smaller than 5MB");
+        alert(
+          'this image is too large, please select an image smaller than 5MB',
+        );
         return;
       }
 
       if (!allowedTypes.includes(image.type)) {
-        alert("Invalid file type. Please select a PNG or JPEG image.");
+        alert('Invalid file type. Please select a PNG or JPEG image.');
         return;
       }
 
@@ -100,7 +102,7 @@ export class IngredientFormComponent {
 
   clearForm(): void {
     this.ingredientForm.reset();
-    this.selectedImage = null; 
+    this.selectedImage = null;
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }

@@ -22,8 +22,18 @@
   <input formControlName="type" placeholder="Type (optional)" />
   <!--image url will change to file upload in the futuer -->
   <div class="image-container" *ngIf="mode === 'add'">
-    <input type="file" (change)="onFileSelected($event)" accept="image/*" #fileInput />
-    <img class="image-preview" *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Preview" />
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+      #fileInput
+    />
+    <img
+      class="image-preview"
+      *ngIf="imagePreviewUrl"
+      [src]="imagePreviewUrl"
+      alt="Preview"
+    />
   </div>
   <!-- submit button -->
   <button type="submit" [disabled]="ingredientForm.invalid">
