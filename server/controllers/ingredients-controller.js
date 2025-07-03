@@ -8,6 +8,7 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
 const getImageUrl = require("../utils/image-url.js");
+const { get } = require("http");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -123,8 +124,10 @@ const updateIngredient = async (req, res) => {
     if (!ingredient) {
       return res.status(404).json({ error: "Ingredient not found" });
     }
-
-    await ingredient.update(updates);
+    await ingredient.update(updates, {
+      fields: ['name', 'quantity', 'unit', 'expire_date', 'type'] 
+    });
+    ingredient.image_url = getImageUrl(ingredient.image_url); 
     res.status(200).json(ingredient);
   } catch (err) {
     console.error("Error updating ingredient:", err);
