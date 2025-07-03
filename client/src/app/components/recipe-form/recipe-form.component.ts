@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-recipe-form',
@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './recipe-form.component.scss',
   standalone: false,
 })
-export class RecipeFormComponent {}
+export class RecipeFormComponent {
+
+  @Output() generateRecipe = new EventEmitter<void>();
+
+}
