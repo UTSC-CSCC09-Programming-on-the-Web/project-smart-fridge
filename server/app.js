@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const ingredientsRouter = require("./routers/ingredients-router.js");
+const recipeRouter = require("./routers/recipe-router.js");
 const { sequelize } = require("./db/datasource.js");
 
 const PORT = 3000;
@@ -28,6 +29,7 @@ async function startServer() {
 
     // add routers here
     app.use("/api/ingredients", ingredientsRouter);
+    app.use("/api/recipes", recipeRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");
