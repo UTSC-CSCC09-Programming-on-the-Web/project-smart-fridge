@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RecipeService } from '../../../services/recipe.service';
 
 @Component({
   selector: 'app-recipe-page',
@@ -9,10 +10,20 @@ import { Component } from '@angular/core';
 export class RecipePageComponent {
 
   recipe: any; 
+  constructor(private recipeService: RecipeService) {}
 
   onGenerateRecipe(): void {
     console.log('Recipe generation triggered');
     this.recipe = "Sample Recipe"; // Simulate recipe generation
     console.log('Generated recipe:', this.recipe);
+    this.recipeService.postGenerateRecipe().subscribe({
+      next: (response) => {
+        console.log('Recipe generated successfully:', response);
+        this.recipe = response; 
+      }
+      , error: (error) => {
+        console.error('Error generating recipe:', error);
+      }
+    });
   }
 }
