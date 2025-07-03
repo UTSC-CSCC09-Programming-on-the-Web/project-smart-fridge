@@ -23,3 +23,19 @@
 .edit-form {
   background-color: #fff3e0;
 }
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-top: 10px;
+}
+
+.image-preview {
+  width: 400px;
+  height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  object-fit: contain; 
+  background-color: #f8f8f8; 
+}

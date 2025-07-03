@@ -43,6 +43,8 @@ export class IngredientFormComponent {
 
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
+  imagePreviewUrl: string |  null = null;
+
   onFileSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
       console.warn('File input is not available.');
@@ -66,8 +68,14 @@ export class IngredientFormComponent {
       }
 
       this.selectedImage = image;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(image);
     }
-}
+  }
 
   // This method is called when the component receives new input properties
   // It updates the form values if the mode is 'edit' and ingredientToEdit is provided
@@ -96,6 +104,7 @@ export class IngredientFormComponent {
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
+    this.imagePreviewUrl = null;
   }
 
   postIngredient(): void {
