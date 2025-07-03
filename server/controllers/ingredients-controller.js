@@ -3,6 +3,8 @@
 const { Ingredient } = require("../models/index.js");
 const validateIngredient = require("../utils/validate-ingredient.js");
 const { Op, where, DATE } = require("sequelize");
+const path = require("path");
+const fs = require("fs");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -124,6 +126,17 @@ const deleteIngredient = async (req, res) => {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
       return res.status(404).json({ error: "Ingredient not found" });
+    }
+
+    if (ingredient.image_url) {
+      const imagePath = path.join(__dirname, '..', ingredient.image_url);
+      console.log('Deleting image at:', imagePath);
+      try {
+        await fs.promises.unlink(imagePath);
+        console.log(`Image deleted: ${imagePath}`);
+      } catch (err) {
+        console.warn(`Warning: Failed to delete image: ${imagePath}`, err);
+      }
     }
 
     await ingredient.destroy();
