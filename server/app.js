@@ -3,7 +3,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport');
 const ingredientsRouter = require("./routers/ingredients-router.js");
+const authRouter = require('./routers/auth-router.js');
 const { sequelize } = require("./db/datasource.js");
 
 const PORT = 3000;
@@ -16,10 +20,24 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use(
+  session({
+    secret: process.env.SECRET_KEY || "test",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 async function startServer() {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
+
+
+    app.use('/auth', authRouter);
 
     // temporary for get image upload working, uploads folder are public as static resources
     // in the future, we will move the images under each fridge's own uploads folder
