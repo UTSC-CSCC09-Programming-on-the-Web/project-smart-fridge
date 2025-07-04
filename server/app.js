@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require('express-session');
 const passport = require('passport');
-require('./config/passport');
+require('./config/passport.js'); 
 const ingredientsRouter = require("./routers/ingredients-router.js");
 const authRouter = require('./routers/auth-router.js');
 const { sequelize } = require("./db/datasource.js");
