@@ -32,9 +32,29 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      is_subscribed: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      is_subscribe: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const status = this.getDataValue('subscription_status');
+          return status === 'active';
+        },
+      }, 
+      subscription_status: {
+        type: DataTypes.ENUM(
+          'incomplete',
+          'incomplete_expired',
+          'active',
+          'past_due',
+          'trialing',
+          'canceled',
+          'unpaid',
+          'paused'
+        ),
+        allowNull: true,
+      },
+      stripe_subscription_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       stripe_customer_id: {
         type: DataTypes.STRING,
