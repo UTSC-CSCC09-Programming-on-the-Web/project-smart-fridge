@@ -19,6 +19,7 @@ const createFridge = async (req, res) => {
   try {
     const existingFridges = await user.getFridges();
     if (existingFridges.length > 0) {
+      console.log(`User ${userId} already has a fridge`);
       return res.status(400).json({ success: false, error: "User already has a fridge" });
     }
     const fridge = await Fridge.create({ name, description });
@@ -26,6 +27,10 @@ const createFridge = async (req, res) => {
       return res.status(400).json({ success: false, error: "Failed to create fridge" });
     }
     await fridge.addUser(userId); 
+    console.log(`Fridge created with ID: ${fridge.id}`);
+    // temporarily set is_first_login to false
+    user.is_first_login = false; // Set first login to false
+    await user.save(); // Save the user to update the first login status
     res.status(201).json({ success: true, message: "Fridge created successfully" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -43,6 +48,7 @@ const joinFridge = async (req, res) => {
   try {
     const existingFridges = await user.getFridges();
     if (existingFridges.length > 0) {
+      console.log(`User ${userId} already has a fridge`);
       return res.status(400).json({ success: false, error: "User already has a fridge" });
     }
     const fridge = await Fridge.findByPk(fridge_id);
@@ -50,6 +56,10 @@ const joinFridge = async (req, res) => {
       return res.status(404).json({ success: false, message: "Fridge not found" });
     }
     await fridge.addUser(userId);
+    console.log(`User ${userId} joined fridge with ID: ${fridge_id}`);
+    // temporarily set is_first_login to false
+    user.is_first_login = false; // Set first login to false
+    await user.save(); // Save the user to update the first login status
     res.status(200).json({ success: true, message: "Joined fridge successfully" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

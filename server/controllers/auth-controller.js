@@ -23,9 +23,10 @@ const getCurrentUser = (req, res) => {
   }
 
   let user_status = "active";
-  if (!req.user.is_subscribed) {
-    user_status = "need_subscription";
-  } else if (req.user.is_first_login) {
+  // if (!req.user.is_subscribed) {
+  //   user_status = "need_subscription";
+  // } else 
+  if (req.user.is_first_login) {
     user_status = "first_login";
   }
 

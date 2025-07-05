@@ -64,6 +64,9 @@ export class FristLoginComponent {
       this.fridgeService.joinFridge(fridge_id).subscribe((res) => {
         this.loading = false;
         this.message = res.message || 'Joined fridge successfully!';
+        if (res ?.success) {
+          this.router.navigate(['/main']);
+        }
       });
     }
   }
