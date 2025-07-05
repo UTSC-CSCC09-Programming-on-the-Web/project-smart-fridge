@@ -17,7 +17,7 @@ export class LoginPageComponent {
   }
 
   goToMain(): void {
-    this.router.navigate(['/main']);
+    this.router.navigate(['/first-login']); // use for test 
   }
 
 }

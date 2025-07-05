@@ -14,4 +14,4 @@ router.post("/create", createFridge);
 router.post("/join", joinFridge);
 router.get("/current", getUserFridges);
 
-model.exports = router;
+module.exports = router;

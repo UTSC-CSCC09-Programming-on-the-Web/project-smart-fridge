@@ -26,7 +26,7 @@ const createFridge = async (req, res) => {
       return res.status(400).json({ success: false, error: "Failed to create fridge" });
     }
     await fridge.addUser(userId); 
-    res.status(201).json({ success: true, fridge });
+    res.status(201).json({ success: true, message: "Fridge created successfully" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

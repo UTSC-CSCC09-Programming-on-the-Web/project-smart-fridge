@@ -7,14 +7,16 @@ import { MainPageComponent } from './pages/main-page/main-page.component';
 import { IngredientListPageComponent } from './pages/main-page/ingredient-list-page/ingredient-list-page.component';
 import { GoogleSuccessPageComponent } from './pages/login-page/google-success-page.js/google-success-page.component';
 import { GoogleFailurePageComponent } from './pages/login-page/google-failure-page.js/google-failure-page.component';
+import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
+;
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route to redirect to login page
   { path: 'login', component: LoginPageComponent },
   { path: 'auth/google/success', component: GoogleSuccessPageComponent },
   { path: 'auth/google/failure', component: GoogleFailurePageComponent },
-  {
-    path: 'main',
+  { path: 'first-login', component: FristLoginComponent}, 
+  { path: 'main',
     component: MainPageComponent,
     children: [
       // alpha version implementation

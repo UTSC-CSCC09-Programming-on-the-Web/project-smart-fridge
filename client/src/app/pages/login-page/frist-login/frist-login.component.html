@@ -1,0 +1,24 @@
+<div class="first-login-container">
+  <h2>First Login - Choose an Action</h2>
+
+  <div class="form-toggle">
+    <button (click)="switchForm('create')" [disabled]="currentForm === 'create'">Create</button>
+    <button (click)="switchForm('join')" [disabled]="currentForm === 'join'">Join</button>
+  </div>
+
+  <form *ngIf="currentForm === 'create'" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <label>Fridge Name</label>
+    <input formControlName="name" placeholder="Enter your firdge name!" />
+    <label>Description</label>
+    <input formControlName="description" placeholder="Optional" />
+    <button type="submit" [disabled]="createForm.invalid || loading">Create</button>
+  </form>
+
+  <form *ngIf="currentForm === 'join'" [formGroup]="joinForm" (ngSubmit)="onSubmit()">
+    <label>Fridge ID</label>
+    <input formControlName="fridge_id" placeholder="Enter Fridge ID" />
+    <button type="submit" [disabled]="joinForm.invalid || loading">Join</button>
+  </form>
+
+  <p *ngIf="message">{{ message }}</p>
+</div>
