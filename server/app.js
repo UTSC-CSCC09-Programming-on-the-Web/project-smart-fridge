@@ -12,8 +12,12 @@ const { sequelize } = require("./db/datasource.js");
 const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.js");
 const PORT = 3000;
 const app = express();
+app.use(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhookRouter
+);
 
-app.use("/api/stripe/webhook", stripeWebhookRouter);
 app.use(bodyParser.json());
 
 const corsOptions = {

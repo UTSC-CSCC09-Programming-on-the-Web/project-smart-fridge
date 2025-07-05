@@ -29,10 +29,22 @@ module.exports = {
         allowNull: false,
         defaultValue: true,
       },
-      is_subscribed: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+      subscription_status: {
+        type: Sequelize.ENUM(
+          'incomplete',
+          'incomplete_expired',
+          'active',
+          'past_due',
+          'trialing',
+          'canceled',
+          'unpaid',
+          'paused'
+        ),
+        allowNull: true,
+      },
+      stripe_subscription_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       stripe_customer_id: {
         type: Sequelize.STRING,

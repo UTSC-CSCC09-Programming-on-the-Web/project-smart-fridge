@@ -85,9 +85,11 @@ const handleStripeWebhook = async (req, res) => {
             const userId = session.metadata.user_id;
             const user = await User.findByPk(userId);
             if (user) {
-                user.stripe_subscription_id = session.subscription;
-                user.subscription_status = "active"; 
-                await user.save();
+              console.log(`Updating subscription for user `, user);
+                await user.update({
+                    stripe_subscription_id: session.subscription.id,
+                    subscription_status: "active", // Update to active status
+                });
                 console.log(`User ${userId} subscription updated to active.`);
             } else {
                 console.error(`User with ID ${userId} not found.`);

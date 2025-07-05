@@ -4,7 +4,7 @@
 const express = require("express");
 const router = express.Router();
 const {handleStripeWebhook, handleNewCheckoutSession} = require("../controllers/stripe-controller");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middlewares/auth-middleware");
 const webhookRouter = express.Router(); 
 
 webhookRouter.post("/", 
