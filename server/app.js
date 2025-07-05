@@ -44,6 +44,8 @@ async function startServer() {
     // and make the uploads folder private, so that only the fridge owner can access it
     app.use("/uploads", express.static("uploads"));
 
+    app.use("/api/fridges", require("./routers/fridges-router.js"));
+    
     // add routers here
     app.use("/api/ingredients", ingredientsRouter);
 
