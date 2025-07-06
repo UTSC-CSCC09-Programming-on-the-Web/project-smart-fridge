@@ -12,9 +12,11 @@ import { Fridge } from '../../services/fridge.service';
 })
 export class MainPageComponent {
   currentFridge$: Observable<Fridge | null>;
+  showFridgeInfo: boolean = false;
 
   constructor(private authService: AuthService, private fridgeService: FridgeService) {
-      this.currentFridge$ = this.fridgeService.currentfridge$;
+    this.fridgeService.getUserFridges().subscribe();  
+    this.currentFridge$ = this.fridgeService.currentfridge$;
   }
 
   onLogout(): void {
@@ -30,6 +32,6 @@ export class MainPageComponent {
   }
 
    fetchFridgeInfo(): void {
-    this.fridgeService.getUserFridges().subscribe(); 
+    this.showFridgeInfo = !this.showFridgeInfo;
   }
 }
