@@ -78,6 +78,12 @@ export class FridgeService {
       })
     );
 }
+
+  getCurrentFridgeId(): string | null {
+    return this.fridgeSubject.value?.id || null;
+  }
+
+
 }
 
 

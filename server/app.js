@@ -49,7 +49,7 @@ async function startServer() {
     app.use("/api/fridges", fridgesRouter);
     
     // add routers here
-    app.use("/api/ingredients", ingredientsRouter);
+    app.use("/api/fridges", ingredientsRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");

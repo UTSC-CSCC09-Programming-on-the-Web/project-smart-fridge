@@ -11,14 +11,14 @@ const getImageUploadMiddleware = require("../middlewares/image-upload-multer.js"
 
 const router = express.Router();
 
-router.get("/", getIngredientsInfiniteScroll);
+router.get("/:fridge_id/ingredients", getIngredientsInfiniteScroll);
 
 const ingredientImageUpload = getImageUploadMiddleware({
   folder: "ingredients",
 });
-router.post("/", ingredientImageUpload, createIngredient);
+router.post("/:fridge_id/ingredients", ingredientImageUpload, createIngredient);
 
-router.put("/:id", updateIngredient);
-router.delete("/:id", deleteIngredient);
+router.put("/:fridge_id/ingredients/:id", updateIngredient);
+router.delete("/:fridge_id/ingredients/:id", deleteIngredient);
 
 module.exports = router;
