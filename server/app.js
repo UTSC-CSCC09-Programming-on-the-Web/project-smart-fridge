@@ -8,6 +8,7 @@ const passport = require('passport');
 require('./config/passport.js'); 
 const ingredientsRouter = require("./routers/ingredients-router.js");
 const authRouter = require('./routers/auth-router.js');
+const recipeRouter = require("./routers/recipe-router.js");
 const { sequelize } = require("./db/datasource.js");
 const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.js");
 
@@ -58,6 +59,9 @@ async function startServer() {
     
     // add routers here
     app.use("/api/fridges", ingredientsRouter);
+    app.use("/api/ingredients", ingredientsRouter);
+    app.use("/api/recipes", recipeRouter);
+
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");
