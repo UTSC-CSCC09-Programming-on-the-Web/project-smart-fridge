@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { Ingredient } from '../../../models/ingredient.model';
 import { IngredientService } from '../../../services/ingredient.service';
+import { FridgeService } from '../../../services/fridge.service';
+import { Observable } from 'rxjs';
+import { Fridge } from '../../../services/fridge.service';
 
 @Component({
   selector: 'app-ingredient-list-page',
@@ -14,14 +17,23 @@ export class IngredientListPageComponent {
   hasMoreData = true; // Indicates if there are more ingredients to load
   loading = false; // Indicates if data is currently being loaded
 
+  currentFridge$ : Observable<Fridge | null>;
   // Cursors for pagination
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
-  constructor(private ingredientService: IngredientService) {}
+  
+
+  constructor(private ingredientService: IngredientService, private fridgeService: FridgeService) {
+     this.currentFridge$ = this.fridgeService.currentfridge$;
+  }
 
   ngOnInit(): void {
-    this.loadInitialIngredients();
+     this.currentFridge$.subscribe(fridge => {
+      if (fridge) {
+        this.loadInitialIngredients();
+      }
+    });
   }
 
   loadInitialIngredients(): void {
@@ -29,6 +41,11 @@ export class IngredientListPageComponent {
     this.loading = true;
     this.ingredientService.getIngredients().subscribe({
       next: (data) => {
+        if (!data || !data.ingredients) {
+          console.error('No ingredients data received');
+          this.loading = false;
+          return;
+        }
         console.log('Initial ingredients loaded:', data);
         this.ingredients = this.sortIngredientsByExpireDate(data.ingredients);
 
@@ -63,6 +80,11 @@ export class IngredientListPageComponent {
       )
       .subscribe({
         next: (data) => {
+          if (!data){
+            console.error('No data received while fetching more ingredients');
+            this.loading = false;
+            return;
+          }
           if (!data.ingredients || data.ingredients.length === 0) {
             this.hasMoreData = false;
             return;
@@ -100,10 +122,18 @@ export class IngredientListPageComponent {
   }
 
   handleNewIngredient(formData: FormData) {
-    const temp_fridge_id = '00000000-0000-0000-0000-000000000001'; // placeholder, should be replaced with actual fridge_id
-    formData.append('fridge_id', temp_fridge_id);
+    const fridge_id = this.fridgeService.getCurrentFridgeId();
+    if (!fridge_id) {
+      console.error('Fridge ID is not available');
+      return;
+    }
+    formData.append('fridge_id', fridge_id);
     this.ingredientService.createIngredient(formData as FormData).subscribe({
       next: (created) => {
+        if (!created) {
+          console.error('Created ingredient is null or undefined');
+          return;
+        }
         if (!this.shouldAppendToCurrentList(created)) {
           console.log('Ingredient not appended to current list:', created);
           this.ingredients = this.ingredients.filter(
@@ -137,7 +167,10 @@ export class IngredientListPageComponent {
       .subscribe({
         next: (updated) => {
           this.cancelEdit();
-
+          if (!updated) {
+            console.error('Updated ingredient is null or undefined');
+            return;
+          }
           if (!this.shouldAppendToCurrentList(updated)) {
             console.log('Ingredient not appended to current list:', updated);
             this.ingredients = this.ingredients.filter(

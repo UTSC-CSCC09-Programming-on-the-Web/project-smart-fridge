@@ -17,14 +17,14 @@ export class GoogleSuccessPageComponent implements OnInit {
        console.log('User retrieved successfully:', user);
         if (user.user_status === 'need_subscription') {
             this.router.navigate(['/subscribe']);
-        }else{
-        //   } else if (user.user_status === 'first_login') {
-        //     this.router.navigate(['/first-login']);
-        //   } else {
-        //     this.router.navigate(['/main']);
-        //   }
-          this.router.navigate(['/main']);
-        }
+        }else if (user.user_status === 'first_login') {
+            this.router.navigate(['/first-login']);
+          } else {
+            this.router.navigate(['/main']);
+          }
+        // if (user.user_status === 'need_subscription') {
+        //     this.router.navigate(['/subscribe']);
+        console.log('User status:', user.user_status);
       },
       error: () => {
         this.router.navigate(['/auth/google/failure'], {

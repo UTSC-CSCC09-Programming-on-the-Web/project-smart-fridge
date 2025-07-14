@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { FridgeService } from '../../services/fridge.service';
+import { Observable } from 'rxjs';
+import { Fridge } from '../../services/fridge.service';
 
 @Component({
   selector: 'app-main-page',
@@ -8,8 +11,13 @@ import { AuthService } from '../../services/auth.service';
   standalone: false,
 })
 export class MainPageComponent {
+  currentFridge$: Observable<Fridge | null>;
+  showFridgeInfo: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private fridgeService: FridgeService) {
+    this.fridgeService.getUserFridges().subscribe();  
+    this.currentFridge$ = this.fridgeService.currentfridge$;
+  }
 
   onLogout(): void {
     console.log('User logged out');
@@ -21,5 +29,9 @@ export class MainPageComponent {
         console.error('Logout failed', err);
       },
     });
+  }
+
+   fetchFridgeInfo(): void {
+    this.showFridgeInfo = !this.showFridgeInfo;
   }
 }
