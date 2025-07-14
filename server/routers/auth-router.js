@@ -9,6 +9,7 @@ const {
   handleLogout,
   getCurrentUser,
 } = require('../controllers/auth-controller');
+const authMiddleware = require('../middlewares/auth-middleware');
 
 const router = express.Router();
 
@@ -23,8 +24,8 @@ router.get('/google/callback', passport.authenticate('google', {
 
 router.get('/google/failure', handleGoogleFailure);
 
-router.get('/logout', handleLogout);
+router.get('/logout',authMiddleware, handleLogout);
 
-router.get('/current-user', getCurrentUser);
+router.get('/current-user',authMiddleware, getCurrentUser);
 
 module.exports = router;
