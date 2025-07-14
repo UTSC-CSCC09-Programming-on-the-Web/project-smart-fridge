@@ -1,3 +1,4 @@
+<div *ngIf="currentFridge$ | async as fridge, else noFridge">
 <div class="ingredient-list-page">
   <app-ingredient-form
     [mode]="'add'"
@@ -37,3 +38,9 @@
     <button class="scroll-to-top" (click)="scrollToTop()">↑ Top</button>
   </div>
 </div>
+</div>
+
+<ng-template #noFridge>
+  <div class="no-fridge-message">
+    <p>Waiting for fridge or there is no fridge! </p>
+  </div>

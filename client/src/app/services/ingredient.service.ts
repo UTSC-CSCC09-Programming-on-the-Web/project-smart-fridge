@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
-import { Observable } from 'rxjs';
+import { Observable, of} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
+import { FridgeService } from './fridge.service';
 
 export interface IngredientPaginationResponse {
   ingredients: Ingredient[];
@@ -16,7 +17,15 @@ export interface IngredientPaginationResponse {
 export class IngredientService {
   endpoint = 'http://localhost:3000'; // will be replaced with environment variable
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private fridgeService: FridgeService) {}
+
+  private getFridgeIdOrFallback(): string | null {
+    const fridge_id = this.fridgeService.getCurrentFridgeId();
+    if (!fridge_id) {
+      console.error('[IngredientService] Fridge ID is not available');
+    }
+    return fridge_id;
+  }
 
   /**
    * Fetches all ingredients from the server.
@@ -26,15 +35,17 @@ export class IngredientService {
     expireDateCursor?: string,
     idCursor?: number,
     limit: number = 10,
-  ): Observable<IngredientPaginationResponse> {
+  ): Observable<IngredientPaginationResponse | null> {
+    const fridge_id = this.getFridgeIdOrFallback();
+    if (!fridge_id) return of(null);
     let params = new HttpParams().set('limit', limit.toString());
     if (expireDateCursor)
       params = params.set('expireDateCursor', expireDateCursor);
     if (idCursor) params = params.set('idCursor', idCursor.toString());
     console.log('Fetching ingredients with params:', params.toString());
     return this.http.get<IngredientPaginationResponse>(
-      `${this.endpoint}/api/ingredients`,
-      { params },
+      `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
+      { params,  withCredentials: true },
     );
   }
 
@@ -43,10 +54,12 @@ export class IngredientService {
    * @param ingredient The ingredient object to create.
    * @returns An Observable of the created Ingredient.
    */
-  createIngredient(formData: FormData): Observable<Ingredient> {
+  createIngredient(formData: FormData): Observable<Ingredient | null> {
+    const fridge_id = this.getFridgeIdOrFallback();
+    if (!fridge_id) return of(null);
     return this.http.post<Ingredient>(
-      `${this.endpoint}/api/ingredients`,
-      formData,
+      `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
+      formData,{ withCredentials: true }
     );
   }
 
@@ -59,10 +72,12 @@ export class IngredientService {
   updateIngredient(
     id: number,
     updated: Partial<Ingredient>,
-  ): Observable<Ingredient> {
+  ): Observable<Ingredient | null> {
+    const fridge_id = this.getFridgeIdOrFallback();
+    if (!fridge_id) return of(null);
     return this.http.put<Ingredient>(
-      `${this.endpoint}/api/ingredients/${id}`,
-      updated,
+      `${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`,
+      updated,{ withCredentials: true }
     );
   }
 
@@ -71,8 +86,10 @@ export class IngredientService {
    * @param id The ID of the ingredient to delete.
    * @returns An Observable that completes when the deletion is successful.
    */
-  deleteIngredient(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.endpoint}/api/ingredients/${id}`);
+  deleteIngredient(id: number): Observable<void | null> {
+    const fridge_id = this.getFridgeIdOrFallback();
+    if (!fridge_id) return of(null);
+    return this.http.delete<void>(`${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`, { withCredentials: true });
   }
 
   // error handling will be implemented later

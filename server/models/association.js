@@ -4,21 +4,21 @@
 "use strict";
 
 module.exports = (db) => {
-  const { User, Fridge, Ingredient } = db;
-  // User <> Fridge (1:1)
-  User.hasOne(Fridge, {
-    foreignKey: {
-      name: "user_id",
-      allowNull: false,
-      unique: true,
-    },
-    as: "fridge",
-    onDelete: "CASCADE",
-    hooks: true,
-  });
-  Fridge.belongsTo(User, {
+  const { User, Fridge, Ingredient, UserFridge } = db;
+  // User <> Fridge ( N:N), but for now only supporting N:1 relationship
+  // this means multiple users can have the same fridge, but each user can only have one fridge
+  User.belongsToMany(Fridge, {
+    through: UserFridge,
     foreignKey: "user_id",
-    as: "user",
+    otherKey: "fridge_id",
+    as: "fridges",
+  });
+
+  Fridge.belongsToMany(User, {
+    through: UserFridge,
+    foreignKey: "fridge_id",
+    otherKey: "user_id",
+    as: "users",
   });
 
   // Fridge <> Ingredient (1:N)

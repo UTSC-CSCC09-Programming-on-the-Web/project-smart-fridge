@@ -10,6 +10,8 @@ const ingredientsRouter = require("./routers/ingredients-router.js");
 const authRouter = require('./routers/auth-router.js');
 const { sequelize } = require("./db/datasource.js");
 
+const fridgesRouter = require("./routers/fridges-router.js");
+
 const PORT = 3000;
 const app = express();
 app.use(bodyParser.json());
@@ -44,8 +46,10 @@ async function startServer() {
     // and make the uploads folder private, so that only the fridge owner can access it
     app.use("/uploads", express.static("uploads"));
 
+    app.use("/api/fridges", fridgesRouter);
+    
     // add routers here
-    app.use("/api/ingredients", ingredientsRouter);
+    app.use("/api/fridges", ingredientsRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");

@@ -17,7 +17,6 @@ passport.use(new GoogleStrategy({
         email: profile.emails[0].value,
         name: profile.displayName,
         is_first_login: true,
-        is_subscribed: false,
         stripe_customer_id: null,
       }
     });
