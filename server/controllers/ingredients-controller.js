@@ -11,14 +11,14 @@ const getImageUrl = require("../utils/image-url.js");
 const { get } = require("http");
 
 // for infintie scroll pagination, we use expire date and id as cursors
-// GET /api/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
+// GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getIngredientsInfiniteScroll = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
   const expireCursor = req.query.expireDateCursor
     ? new Date(req.query.expireDateCursor)
     : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
-  const fridgeId = req.params.fridge_id;
+  const fridgeId = req.fridgeId || req.params.fridge_id;
    if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
   }
@@ -74,7 +74,7 @@ const getIngredientsInfiniteScroll = async (req, res) => {
   }
 };
 
-// POST /api/ingredients
+// POST /api/fridges/:fridgeId/Ingredients
 const createIngredient = async (req, res) => {
   // console.log("Creating ingredient with body:", req.body);
 
@@ -83,7 +83,7 @@ const createIngredient = async (req, res) => {
   // if (errors.length > 0) {
   //   return res.status(400).json({ errors });
   // }
-  const fridgeId = req.params.fridge_id;
+  const fridgeId = req.fridgeId || req.params.fridge_id;
    if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
   }
@@ -111,7 +111,7 @@ const createIngredient = async (req, res) => {
   }
 };
 
-// PUT /api/ingredients/:id
+// PUT /api/fridges/:fridgeId/ingredients/:id
 const updateIngredient = async (req, res) => {
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {
@@ -139,7 +139,7 @@ const updateIngredient = async (req, res) => {
   }
 };
 
-// DELETE /api/ingredients/:id
+// DELETE /api/fridges/:fridgeId/ingredients/:id
 const deleteIngredient = async (req, res) => {
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {

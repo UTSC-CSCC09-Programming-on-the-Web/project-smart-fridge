@@ -45,7 +45,7 @@ export class IngredientService {
     console.log('Fetching ingredients with params:', params.toString());
     return this.http.get<IngredientPaginationResponse>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
-      { params },
+      { params,  withCredentials: true },
     );
   }
 
@@ -59,7 +59,7 @@ export class IngredientService {
     if (!fridge_id) return of(null);
     return this.http.post<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
-      formData,
+      formData,{ withCredentials: true }
     );
   }
 
@@ -77,7 +77,7 @@ export class IngredientService {
     if (!fridge_id) return of(null);
     return this.http.put<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`,
-      updated,
+      updated,{ withCredentials: true }
     );
   }
 
@@ -89,7 +89,7 @@ export class IngredientService {
   deleteIngredient(id: number): Observable<void | null> {
     const fridge_id = this.getFridgeIdOrFallback();
     if (!fridge_id) return of(null);
-    return this.http.delete<void>(`${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`);
+    return this.http.delete<void>(`${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`, { withCredentials: true });
   }
 
   // error handling will be implemented later
