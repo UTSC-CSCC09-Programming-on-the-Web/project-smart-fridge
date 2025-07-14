@@ -32,7 +32,7 @@ export class AuthService {
 
   getCurrentUser(): Observable<User | null> {
     return this.http.get<any>(`${this.endpoint}/auth/current-user`,
-    {withCredentials: true,})
+    {withCredentials: true})
     .pipe(
       tap((res) => {
         if (res.success) {
@@ -59,5 +59,12 @@ export class AuthService {
         return of(null);
       })
     );
+  }
+
+    createCheckoutSession(): Observable<{ sessionId: string }> {
+    return this.http.post<{ sessionId: string }>(
+      `${this.endpoint}/api/stripe/create-checkout-session`, {}, {
+     withCredentials: true
+  });
   }
 }

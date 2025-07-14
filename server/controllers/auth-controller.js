@@ -23,10 +23,9 @@ const getCurrentUser = (req, res) => {
   }
 
   let user_status = "active";
-  // if (!req.user.is_subscribed) {
-  //   user_status = "need_subscription";
-  // } else 
-  if (req.user.is_first_login) {
+  if (!req.user.is_subscribe) {
+    user_status = "need_subscription";
+  } else if (req.user.is_first_login) {
     user_status = "first_login";
   }
 
@@ -34,7 +33,7 @@ const getCurrentUser = (req, res) => {
 
   return res.status(200).json({
     success: true,
-    user_status, // active | first_login | need_subscription
+    user_status,
     user: { id, name, email, is_subscribed, is_first_login },
   });
 };
