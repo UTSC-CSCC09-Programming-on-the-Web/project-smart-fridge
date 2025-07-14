@@ -6,7 +6,8 @@ const { getIngredientsForRecipe } = require("../services/ingredient-service.js")
 const postGenerateRecipe = async (req, res) => {
   console.log('Generating recipe in controller...');
   try{
-    const ingredients = await getIngredientsForRecipe();
+    const fridgeId = req.fridgeId || req.body.fridgeId; // for single fridge right now
+    const ingredients = await getIngredientsForRecipe(fridgeId);
     res.status(200).json({
       ingredients: ingredients.map(ingredient => ({
         id: ingredient.id,

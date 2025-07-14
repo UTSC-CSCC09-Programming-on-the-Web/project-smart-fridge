@@ -4,6 +4,7 @@ import { Observable, of} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { FridgeService } from './fridge.service';
+import { getFridgeIdOrFallback } from '../utils/get-fridge-id.util';
 
 export interface IngredientPaginationResponse {
   ingredients: Ingredient[];
@@ -19,14 +20,6 @@ export class IngredientService {
 
   constructor(private http: HttpClient, private fridgeService: FridgeService) {}
 
-  private getFridgeIdOrFallback(): string | null {
-    const fridge_id = this.fridgeService.getCurrentFridgeId();
-    if (!fridge_id) {
-      console.error('[IngredientService] Fridge ID is not available');
-    }
-    return fridge_id;
-  }
-
   /**
    * Fetches all ingredients from the server.
    * @returns An Observable of an array of Ingredient objects.
@@ -36,7 +29,7 @@ export class IngredientService {
     idCursor?: number,
     limit: number = 10,
   ): Observable<IngredientPaginationResponse | null> {
-    const fridge_id = this.getFridgeIdOrFallback();
+    const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
     let params = new HttpParams().set('limit', limit.toString());
     if (expireDateCursor)
@@ -55,7 +48,7 @@ export class IngredientService {
    * @returns An Observable of the created Ingredient.
    */
   createIngredient(formData: FormData): Observable<Ingredient | null> {
-    const fridge_id = this.getFridgeIdOrFallback();
+    const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
     return this.http.post<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
@@ -73,7 +66,7 @@ export class IngredientService {
     id: number,
     updated: Partial<Ingredient>,
   ): Observable<Ingredient | null> {
-    const fridge_id = this.getFridgeIdOrFallback();
+    const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
     return this.http.put<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`,
@@ -87,7 +80,7 @@ export class IngredientService {
    * @returns An Observable that completes when the deletion is successful.
    */
   deleteIngredient(id: number): Observable<void | null> {
-    const fridge_id = this.getFridgeIdOrFallback();
+    const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
     return this.http.delete<void>(`${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`, { withCredentials: true });
   }

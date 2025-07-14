@@ -4,7 +4,7 @@ const UserFridge = require("../models/index.js").UserFridge;
 const User = require("../models/index.js").User;
 
 const fridgeAuthMiddle = async(req, res, next) => {
-    const fridgeId = req.params.fridge_id;
+    const fridgeId = req.params.fridge_id || req.body.fridgeId || req.query.fridgeId;
      const user = req.user;
     console.log("fridgeId:", fridgeId);
     console.log("user:", user);
