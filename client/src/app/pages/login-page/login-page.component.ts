@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,9 +9,15 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class LoginPageComponent {
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  goToMain() {
-    this.router.navigate(['/main']);
+
+  goToGoogleLogin():void{
+    this.authService.loginWithGoogle();
   }
+
+  goToMain(): void {
+    this.router.navigate(['/first-login']); // use for test 
+  }
+
 }

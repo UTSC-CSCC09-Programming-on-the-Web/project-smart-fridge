@@ -1,5 +1,19 @@
 <app-header></app-header>
 
 <div class="main-container">
+  <button (click)="fetchFridgeInfo()">Get current fridge information</button>
+
+  <div *ngIf="showFridgeInfo">
+    <p>Fetching fridge information...</p>
+<div *ngIf="currentFridge$ | async as fridge; else noFridge">
+  <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
+  <p><strong>description:</strong> {{ fridge.description }}</p>
+  <p>Fridge Id: {{ fridge.id }}</p>
+</div>
+  </div>
+<ng-template #noFridge>
+  <p>you can get your fridge information here! </p>
+</ng-template>
+  <button (click)="onLogout()">Logout</button>
   <router-outlet></router-outlet>
 </div>
