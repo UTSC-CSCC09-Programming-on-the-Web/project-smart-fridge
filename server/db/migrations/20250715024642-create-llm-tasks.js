@@ -8,6 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        allowNull: false,
       },
       task_id: {
         type: Sequelize.UUID,
@@ -21,10 +22,22 @@ module.exports = {
       fridge_id: {
         type: Sequelize.UUID,
         allowNull: true,
+        references: {
+          model: 'fridges',
+          key: 'id', 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',   
       },
       user_id: {
         type: Sequelize.UUID,
         allowNull: true,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       status: {
         type: Sequelize.ENUM('pending', 'processing', 'done', 'failed'),

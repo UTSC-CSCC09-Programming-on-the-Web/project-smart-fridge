@@ -43,6 +43,12 @@ module.exports = {
       fridge_id: {
         type: Sequelize.UUID,
         allowNull: false,
+        references: {
+          model: "Fridges",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       created_at: {
         allowNull: false,
