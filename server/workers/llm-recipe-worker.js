@@ -29,6 +29,11 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
             { where: { task_id: job.id, trace_id: traceId} });
 
         // Publish the generated recipe to Redis
+        pubClient.publish(`recipeGenerated`, JSON.stringify({
+            type: 'recipeGenerated',
+            data: generatedRecipe,
+            traceId: traceId,
+        }));
         
         return generatedRecipe;
     }

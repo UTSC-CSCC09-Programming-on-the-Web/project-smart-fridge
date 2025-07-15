@@ -14,6 +14,8 @@ const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.j
 
 const fridgesRouter = require("./routers/fridges-router.js");
 
+const { setupSocket } = require("./sockets/socket.js");
+
 const PORT = 3000;
 const app = express();
 app.use(
@@ -67,7 +69,11 @@ async function startServer() {
       res.send("Backend root route: server is running.");
     });
 
-    app.listen(PORT, () => {
+    const { httpServer, io } = await setupSocket(app);
+    app.set("io", io);
+    app.set("httpServer", httpServer);
+
+    httpServer.listen(PORT, () => {
       console.log(`HTTP server on http://localhost:${PORT}`);
     });
   } catch (error) {

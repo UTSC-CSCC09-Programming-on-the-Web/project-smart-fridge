@@ -2,6 +2,7 @@
 const { Server } = require('socket.io');
 const { createAdapter } = require('@socket.io/redis-adapter');
 const http = require('http');
+const authMiddleware = require('../middlewares/auth');
 
 const { pubClient, subClient, connectSocketRedis }
   = require('../config/redis/redis-socket');
@@ -12,6 +13,8 @@ const setupSocket = async(app) => {
 
   await connectSocketRedis();
   io.adapter(createAdapter(pubClient, subClient));
+
+  // add authen middleware for socket.io implement later
 
   io.on('connection', (socket) => {
     console.log('socket connect to', socket.id);
@@ -25,6 +28,11 @@ const setupSocket = async(app) => {
     });
 
     socket.on('disconnect', () => console.log('socket disconnected', socket.id));
+  });
+
+  subClient.subscribe("recipeGenerated", (msg) => {
+    const data = JSON.parse(msg);
+    io.emit("recipeGenerated", data);
   });
 
   return { httpServer, io };
