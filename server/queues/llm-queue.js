@@ -1,6 +1,6 @@
 const { Queue } = require("bullmq");
-const redisBullmq = require("../config/redis/redis-bullmq");
-const LlmTask = require("../models/llm-task");
+const redisBullmq = require("../redis/redis-bullmq");
+const LlmTask = require("../models/index.js").LlmTask;
 const { randomUUID } = require("crypto");
 
 const llmQueue = new Queue("llmQueue", {

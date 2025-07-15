@@ -1,8 +1,7 @@
 const { Worker } = require("bullmq");
-const { redisBullmq } = require("../config/redis/redis-bullmq");
+const redisBullmq = require("../redis/redis-bullmq");
 const { LlmTask } = require("../models");
-const { pubClient } = require('../config/redis/redis-socket');
-
+const { pubClient } = require('../redis/redis-socket');
 const { LLM_JOB_TYPES } = require("../queues/llm-queue");
 
 
@@ -15,7 +14,8 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
         console.log("Generating recipe with data:", job.data);
-        
+        // Simulate a delay for recipe generation
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         // Simulate recipe generation
         const generatedRecipe = {
         id: job.id,
@@ -29,24 +29,23 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
             { where: { task_id: job.id, trace_id: traceId} });
 
         // Publish the generated recipe to Redis
-        pubClient.publish(`recipeGenerated`, JSON.stringify({
-            type: 'recipeGenerated',
-            data: generatedRecipe,
-            traceId: traceId,
-        }));
-        
         return generatedRecipe;
     }
     }, {
     connection: redisBullmq,
     autorun: true,
-    removeOnComplete: true,
     removeOnFail: true,
+    maxRetries: 3,  
 });
 
 llmRecipeWorker.on("completed", (job, returnvalue) => {
     console.log(`Job ${job.id} completed successfully`);
     const traceId = job.data.traceId;
+     pubClient.publish(`recipeGenerated`, JSON.stringify({
+            type: 'recipeGenerated',
+            data: returnvalue,
+            traceId: traceId,
+        }));
     // later move publish the traceid to Redis right here  
 }); 
 

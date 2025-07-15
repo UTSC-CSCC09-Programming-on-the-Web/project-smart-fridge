@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
     },
     task_id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         unique: true,
         allowNull: false,
     },

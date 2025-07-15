@@ -11,7 +11,7 @@ module.exports = {
         allowNull: false,
       },
       task_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         unique: true,
       },
