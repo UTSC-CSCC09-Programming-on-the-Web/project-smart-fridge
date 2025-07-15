@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
+import { SocketService } from '../../../services/socket.service';
 
 @Component({
   selector: 'app-recipe-page',
@@ -10,7 +11,7 @@ import { RecipeService } from '../../../services/recipe.service';
 export class RecipePageComponent {
 
   recipe: any; 
-  constructor(private recipeService: RecipeService) {}
+  constructor(private recipeService: RecipeService, private socketService: SocketService) {}
 
   onGenerateRecipe(): void {
     console.log('Recipe generation triggered');
@@ -24,6 +25,13 @@ export class RecipePageComponent {
       , error: (error) => {
         console.error('Error generating recipe:', error);
       }
+    });
+  }
+
+  ngOnInit(): void {
+    this.socketService.on('recipeGenerated', (data: any) => {
+      console.log('Recipe generated event received:', data);
+      this.recipe = data; 
     });
   }
 }

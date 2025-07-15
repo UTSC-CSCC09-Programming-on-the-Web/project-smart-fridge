@@ -38,15 +38,14 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     maxRetries: 3,  
 });
 
-llmRecipeWorker.on("completed", (job, returnvalue) => {
+llmRecipeWorker.on("completed", async(job, returnvalue) => {
     console.log(`Job ${job.id} completed successfully`);
     const traceId = job.data.traceId;
-     pubClient.publish(`recipeGenerated`, JSON.stringify({
+    pubClient.publish(`recipeGenerated`, JSON.stringify({
             type: 'recipeGenerated',
             data: returnvalue,
             traceId: traceId,
         }));
-    // later move publish the traceid to Redis right here  
 }); 
 
 module.exports = llmRecipeWorker;

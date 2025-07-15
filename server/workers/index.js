@@ -7,6 +7,10 @@ const { sequelize, LlmTask } = require("../models");
     await sequelize.authenticate();
     console.log("Worker: DB Connected");
 
+    if (!pubClient.isOpen) {
+      await pubClient.connect();
+    }
+
     require("./llm-recipe-worker");
 
   } catch (err) {
