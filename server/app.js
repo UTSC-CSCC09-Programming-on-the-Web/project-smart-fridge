@@ -15,6 +15,7 @@ const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.j
 const fridgesRouter = require("./routers/fridges-router.js");
 
 const { setupSocket } = require("./sockets/socket.js");
+const {sessionMiddleware} = require("./middlewares/session-middleware.js");
 
 const PORT = 3000;
 const app = express();
@@ -32,13 +33,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(
-  session({
-    secret: process.env.SECRET_KEY || "test",
-    resave: false,
-    saveUninitialized: true,
-  }),
-);
+app.use(sessionMiddleware);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
