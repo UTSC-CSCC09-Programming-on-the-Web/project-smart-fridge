@@ -18,5 +18,11 @@ export class RecipeService {
       const fridgeId = getFridgeIdOrFallback(this.fridgeService);
       return this.http.post(`${this.endpoint}/api/recipes/generate`, {fridgeId}, { withCredentials: true });
   }
+
+  // GET /api/recipes/result/:traceId
+  getRecipeResult(traceId: string): Observable<any> {
+      console.log('Fetching recipe result with traceId:', traceId);
+      return this.http.get(`${this.endpoint}/api/recipes/result/${traceId}`, { withCredentials: true });
+  }
 }
 

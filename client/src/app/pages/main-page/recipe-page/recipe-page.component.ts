@@ -29,9 +29,17 @@ export class RecipePageComponent {
   }
 
   ngOnInit(): void {
-    this.socketService.on('recipeGenerated', (data: any) => {
-      console.log('Recipe generated event received:', data);
-      this.recipe = data; 
+    this.socketService.on('recipeGenerated', (traceId: any) => {
+      console.log('Recipe generated event received:', traceId);
+      this.recipeService.getRecipeResult(traceId).subscribe({
+        next: (recipe) => {
+          console.log('Recipe result received:', recipe);
+          this.recipe = recipe;
+        },
+        error: (error) => {
+          console.error('Error fetching recipe result:', error);
+        }
+      });
     });
   }
 }

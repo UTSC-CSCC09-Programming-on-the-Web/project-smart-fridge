@@ -36,7 +36,8 @@ const setupSocket = async(app) => {
 
   subClient.subscribe("recipeGenerated", (msg) => {
     const data = JSON.parse(msg);
-    io.emit("recipeGenerated", data);
+    const traceId = data.traceId;
+    io.emit("recipeGenerated", traceId);
   });
 
   return { httpServer, io };
