@@ -10,9 +10,15 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
+      trace_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        unique: true,
+        defaultValue: Sequelize.UUIDV4,
+      },
       task_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         unique: true,
       },
       job_type: {
@@ -49,10 +55,6 @@ module.exports = {
       },
       error: {
         type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      trace_id: {
-        type: Sequelize.UUID,
         allowNull: true,
       },
       created_at: {

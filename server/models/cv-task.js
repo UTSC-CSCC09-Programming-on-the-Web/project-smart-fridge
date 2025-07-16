@@ -9,10 +9,16 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
     },
+    trace_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
+    },
     task_id: {
         type: DataTypes.INTEGER,
         unique: true,
-        allowNull: false,
+        allowNull: true,
     },
     job_type: {
         type: DataTypes.TEXT,
@@ -29,10 +35,6 @@ module.exports = (sequelize) => {
     status: {
         type: DataTypes.ENUM('pending', 'processing', 'done', 'failed'),
         defaultValue: 'pending',
-    },
-    trace_id: {
-        type: DataTypes.UUID,
-        allowNull: true,
     },
     images_count: {
         type: DataTypes.INTEGER,

@@ -9,10 +9,16 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
     },
+    trace_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        unique: true,
+        defaultValue: DataTypes.UUIDV4,
+    },
     task_id: {
         type: DataTypes.INTEGER,
         unique: true,
-        allowNull: false,
+        allowNull: true,
     },
     job_type: {
         type: DataTypes.TEXT,
@@ -36,10 +42,6 @@ module.exports = (sequelize) => {
     },
     error: {
         type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    trace_id: {
-        type: DataTypes.UUID,
         allowNull: true,
     },
 }, 
