@@ -3,6 +3,7 @@ const redisBullmq = require("../redis/redis-bullmq");
 const CvTask = require("../models/");
 const CvTaskImage = require("../models/cv-task-image.js");
 const { randomUUID } = require("crypto");
+const { id } = require("../workers/cv-ocr-worker.js");
 
 const cvQueue = new Queue("cvQueue", {
   connection: redisBullmq,
@@ -22,6 +23,22 @@ const addCvJob = async (jobType, jobData, options = {}) => {
     }
     
     const traceId = randomUUID();
+    let cvTaskImages = [];
+    if (jobData.images && jobData.images.length > 0) {
+        const rawImages = [...jobData.images];
+        cvTaskImages = rawImages.map(image => ({
+            id: randomUUID(),
+            original_filename: image.original_filename, 
+            image_url: image.image_url, 
+            status: 'pending',
+        }));
+        jobData.images = cvTaskImages.map(image => ({
+            id: image.id,
+            original_filename: image.original_filename,
+            image_url: image.image_url,
+        })); 
+    }    
+
     const fullJobData = {
         ...jobData,
         traceId,
@@ -36,22 +53,18 @@ const addCvJob = async (jobType, jobData, options = {}) => {
         user_id: jobData.user_id || null,
         status: 'pending',
         trace_id: traceId,
-        images_count: 0,
+        images_count: cvTaskImages.length,
         done_images_count: 0,
         failed_images_count: 0,
     });
 
-    if (jobData.images && jobData.images.length > 0) {
-        const cvTaskImages = jobData.images.map(image => ({
+    if (cvTaskImages && cvTaskImages.length > 0) {
+        cvTaskImages = cvTaskImages.map(image => ({
+            ...image,
             cv_task_id: cvTaskRecord.id,
-            original_filename: image.original_filename, 
-            image_url: image.image_url, 
-            status: 'pending',
         }));
         
         await CvTaskImage.bulkCreate(cvTaskImages);
-        cvTaskRecord.images_count = cvTaskImages.length;
-        await cvTaskRecord.save();
     }
 
 

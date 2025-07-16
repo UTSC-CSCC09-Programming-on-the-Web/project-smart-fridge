@@ -5,18 +5,9 @@ module.exports = {
   async up (queryInterface, Sequelize) {
    await queryInterface.createTable('cv_task_images', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      task_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-      job_type: {
-        type: Sequelize.TEXT,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
       },
       cv_task_id: {
@@ -29,7 +20,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      original_file_name: {
+      original_filename: {
         type: Sequelize.TEXT,
         allowNull: false,
       },

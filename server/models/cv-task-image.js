@@ -5,9 +5,9 @@ module.exports = (sequelize) => {
 
   CvTaskImage.init({
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      autoIncrement: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     cv_task_id: {
       type: DataTypes.INTEGER,
