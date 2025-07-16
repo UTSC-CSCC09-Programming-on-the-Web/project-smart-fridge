@@ -9,7 +9,7 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
     console.log(`Processing job ${job.id} of type ${job.name}`);
     const { images, traceId } = job.data;
     const cvTask = await CvTask.findOne({
-        where: { task_id: job.id, trace_id: traceId },
+        where: { trace_id: traceId },
     });
     console.log(`CV Task found: ${cvTask ? cvTask.id : 'not found'}`);
     if (!cvTask) {

@@ -43,10 +43,7 @@ const addCvJob = async (jobType, jobData, options = {}) => {
         traceId,
         createdAt: new Date().toISOString(),
    };
-    
-    const job = await cvQueue.add(jobType, fullJobData, options);
     const cvTaskRecord = await CvTask.create({
-        task_id: job.id,
         job_type: jobType,
         fridge_id: jobData.fridge_id || null,
         user_id: jobData.user_id || null,
@@ -64,7 +61,10 @@ const addCvJob = async (jobType, jobData, options = {}) => {
         }));
         
         await CvTaskImage.bulkCreate(cvTaskImages);
-    }
+    }   
+    const job = await cvQueue.add(jobType, fullJobData, options);
+    cvTaskRecord.task_id = job.id;
+    await cvTaskRecord.save();
 
 
     console.log(`Added job ${job.id} of type ${jobType} to the cv queue`);

@@ -26,15 +26,18 @@ const addLlmJob = async (jobType, jobData, options = {}) => {
         traceId,
         createdAt: new Date().toISOString(),
    };
-    const job = await llmQueue.add(jobType, fullJobData, options);
     const llmTaskRecord = await LlmTask.create({
-        task_id: job.id,
         job_type: jobType,
         fridge_id: jobData.fridge_id || null,
         user_id: jobData.user_id || null,
         status: 'pending',
         trace_id: traceId,
     });
+
+    const job = await llmQueue.add(jobType, fullJobData, options);
+    llmTaskRecord.task_id = job.id;
+    await llmTaskRecord.save();
+
     console.log(`Added job ${job.id} of type ${jobType} to the queue`);
     return { job, llmTaskRecord };
 }

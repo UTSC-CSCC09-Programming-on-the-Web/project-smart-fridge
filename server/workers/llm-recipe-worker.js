@@ -10,7 +10,7 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     const { ingredients, traceId} = job.data;
     
      await LlmTask.update({ status: 'processing'}, 
-            { where: { task_id: job.id, trace_id: traceId} });
+            { where: { trace_id: traceId} });
     
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
         console.log("Generating recipe with data:", job.data);
@@ -26,7 +26,7 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     
         console.log("Generated recipe:", generatedRecipe);
         await LlmTask.update({ status: 'done', result: generatedRecipe }, 
-            { where: { task_id: job.id, trace_id: traceId} });
+            { where: {  trace_id: traceId} });
 
         // Publish the generated recipe to Redis
         return generatedRecipe;
