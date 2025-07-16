@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { from, Observable, share, switchMap} from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 
 @Injectable({
@@ -31,6 +32,28 @@ export class SocketService {
     console.log('Listening for event:', eventName);
     console.log('Socket ID:', this.socket?.id);
     this.socket?.on(eventName, callback);
+  }
+
+  private listenToEvent<T>(eventName: string): Observable<T> {
+    return new Observable((observer) => {
+      const eventHandler = (data: T) => {
+        console.log(`Event received: ${eventName}`, data);
+        observer.next(data);
+      };
+      this.socket?.on(eventName, eventHandler);
+      return () => {
+        console.log(`Unsubscribing from event: ${eventName}`);
+        this.socket?.off(eventName, eventHandler);
+      };
+    });
+  }
+
+    fromSocketEvent<T>(eventName: string): Observable<T> {
+    const event$ = from(this.connectSocket()).pipe(
+      switchMap(() => this.listenToEvent<T>(eventName)),
+      share()
+    );
+    return event$;
   }
 
   emit(eventName: string, data: any) {

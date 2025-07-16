@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { SocketService } from '../../../services/socket.service';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
 
 @Component({
   selector: 'app-recipe-page',
@@ -29,17 +30,21 @@ export class RecipePageComponent {
   }
 
   ngOnInit(): void {
-    this.socketService.on('recipeGenerated', (traceId: any) => {
-      console.log('Recipe generated event received:', traceId);
-      this.recipeService.getRecipeResult(traceId).subscribe({
-        next: (recipe) => {
-          console.log('Recipe result received:', recipe);
-          this.recipe = recipe;
-        },
-        error: (error) => {
-          console.error('Error fetching recipe result:', error);
-        }
-      });
-    });
+    this.socketService.fromSocketEvent<string>('recipeGenerated')
+    .pipe(
+      switchMap((traceId: string) => {
+        console.log('Subscribing to recipe result with traceId:', traceId);
+        return this.recipeService.getRecipeResult(traceId);
+      })
+    )
+    .subscribe({
+      next: (recipe) => {
+        console.log('Recipe received:', recipe);
+        this.recipe = recipe;
+      },
+      error: (err) => {
+        console.error('Error:', err);
+    }
+  });
   }
 }
