@@ -4,7 +4,7 @@
 "use strict";
 
 module.exports = (db) => {
-  const { User, Fridge, Ingredient, UserFridge, LlmTask} = db;
+  const { User, Fridge, Ingredient, UserFridge, LlmTask, CvTask, CvTaskImage } = db;
   // User <> Fridge ( N:N), but for now only supporting N:1 relationship
   // this means multiple users can have the same fridge, but each user can only have one fridge
   User.belongsToMany(Fridge, {
@@ -65,4 +65,47 @@ module.exports = (db) => {
     foreignKey: "fridge_id",
     as: "fridge",
   }); 
+
+  // User <> CvTask (1:N)
+  User.hasMany(CvTask, {
+    foreignKey: {
+      name: "user_id",      
+      allowNull: true,  
+    },
+    as: "cvTasks",
+    onDelete: "SET NULL",
+    hooks: true,
+  });
+  CvTask.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "user",
+  }); 
+  // Fridge <> CvTask (1:N)
+  Fridge.hasMany(CvTask, {    
+    foreignKey: {
+      name: "fridge_id",
+      allowNull: true,
+    },
+    as: "cvTasks",
+    onDelete: "SET NULL",
+    hooks: true,
+  });
+  CvTask.belongsTo(Fridge, {
+    foreignKey: "fridge_id",
+    as: "fridge",
+  }); 
+  // CvTask <> CvTaskImage (1:N)
+  CvTask.hasMany(CvTaskImage, {
+    foreignKey: {
+      name: "cv_task_id",     
+      allowNull: false,
+    },
+    as: "images",
+    onDelete: "CASCADE",
+    hooks: true,
+  });
+  CvTaskImage.belongsTo(CvTask, {
+    foreignKey: "cv_task_id",
+    as: "cvTask",
+  });
 };
