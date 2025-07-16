@@ -6,23 +6,39 @@ import { io, Socket } from 'socket.io-client';
 })
 export class SocketService {
 
-  private socket: Socket;
+  private socket: Socket | null = null;
+  private connectPromise: Promise<void> | null = null;
 
-  constructor() {
-    this.socket = io('http://localhost:3000', {
-      withCredentials: true
-    });
-  }
+  connectSocket(): Promise<void> {
+    if (!this.socket) {
+      this.socket = io('http://localhost:3000', {
+        withCredentials: true,
+      });
 
-  on(eventName: string, callback: (...args: any[]) => void) {
-    this.socket.on(eventName, callback);
+      this.connectPromise = new Promise((resolve) => {
+        this.socket!.on('connect', () => {
+          console.log('Socket connected:', this.socket?.id);
+          resolve(); 
+        });
+      });
+    }
+    return this.connectPromise!;
+ }
+
+
+  async on(eventName: string, callback: (...args: any[]) => void) {
+    await this.connectSocket();
+    console.log('Listening for event:', eventName);
+    console.log('Socket ID:', this.socket?.id);
+    this.socket?.on(eventName, callback);
   }
 
   emit(eventName: string, data: any) {
-    this.socket.emit(eventName, data);
+    this.socket?.emit(eventName, data);
   }
 
   disconnect() {
-    this.socket.disconnect();
+    this.socket?.disconnect();
+    this.socket = null;
   }
 }
