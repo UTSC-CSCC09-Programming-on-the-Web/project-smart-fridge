@@ -48,7 +48,7 @@ function getImageUploadMiddleware({
     `Image upload middleware configured for folder: ${folder}, multiple: ${multiple}, maxCount: ${maxCount}, maxSizeMB: ${maxSizeMB}`
   );
   if (multiple) {
-    return upload.array("image", maxCount);
+    return upload.array("images", maxCount);
   } else {
     console.log("Using single image upload middleware");
     return upload.single("image");

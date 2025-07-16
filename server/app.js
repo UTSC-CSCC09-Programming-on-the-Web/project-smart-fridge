@@ -13,6 +13,7 @@ const { sequelize } = require("./db/datasource.js");
 const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.js");
 
 const fridgesRouter = require("./routers/fridges-router.js");
+const multiIngredientsRouter = require("./routers/add-multi-ingredients-router.js");
 
 const { setupSocket } = require("./sockets/socket.js");
 const {sessionMiddleware} = require("./middlewares/session-middleware.js");
@@ -59,7 +60,7 @@ async function startServer() {
     app.use("/api/fridges", ingredientsRouter);
     app.use("/api/ingredients", ingredientsRouter);
     app.use("/api/recipes", recipeRouter);
-
+    app.use("/api/fridges", multiIngredientsRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");
