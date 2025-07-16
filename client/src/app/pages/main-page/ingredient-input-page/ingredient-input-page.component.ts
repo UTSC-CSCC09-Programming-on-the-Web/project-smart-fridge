@@ -14,11 +14,11 @@ export class IngredientInputPageComponent {
   handleMultiImagesUploaded(images: File[]): void {
     console.log('Ingredient Input Page: Images uploaded:', images);
     const formData = new FormData();
-    images.forEach((image, index) => {
-      formData.append(`image${index}`, image);
+    images.forEach((image) => {
+      formData.append(`images`, image);
     });
     this.addMultiIngredientsService.postImagesToServer(formData).subscribe({
-      next: () => console.log('Images uploaded successfully'),
+      next: (response) => console.log('Images uploaded successfully', response),
       error: (err) => console.error('Error uploading images:', err)
     });
   }

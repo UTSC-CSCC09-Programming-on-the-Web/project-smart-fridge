@@ -13,9 +13,9 @@ export class AddMultiIngredientsService {
 
 
   // POST /api/fridges/:fridgeId/multiIngredients/imagesUpload
-  postImagesToServer(formData: FormData): Observable<void | null> {
+  postImagesToServer(formData: FormData): Observable<any | null> {
     const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
-    return this.http.post<void>(`${this.endpoint}/api/fridges/${fridge_id}/multiIngredients/imagesUpload`, formData, { withCredentials: true });
+    return this.http.post<any>(`${this.endpoint}/api/fridges/${fridge_id}/multiIngredients/imagesUpload`, formData, { withCredentials: true });
   }
 }  

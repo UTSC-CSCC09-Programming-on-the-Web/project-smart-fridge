@@ -12,6 +12,7 @@ export class MultiImageUploadComponent {
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
+  maxCount: number = 5; // Maximum number of images allowed
 
   @Output() multiImagesUploaded = new EventEmitter<File[]>();
 
@@ -30,7 +31,10 @@ export class MultiImageUploadComponent {
           alert(errorMessage);
           continue;
         }
-
+        if (this.selectedImages.length >= this.maxCount) {
+          alert(`You can only upload a maximum of ${this.maxCount} images.`);
+          return;
+        }
         this.selectedImages.push(file);
         readImageAsDataUrl(file)
           .then((dataUrl) => {
