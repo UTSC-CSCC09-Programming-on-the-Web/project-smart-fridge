@@ -46,7 +46,12 @@ const setupSocket = async(app) => {
 
   subClient.subscribe("recipeGenerated", (msg) => {
     const data = JSON.parse(msg);
-    io.emit("recipeGenerated", data);
+    if (!data.userId) {
+      console.error("No userId in message data:", data);
+      return;
+    }
+    console.log(`Publishing recipeGenerated to user:${data.userId}`);
+    io.to(`user:${data.userId}`).emit("recipeGenerated", data);
   });
 
   return { httpServer, io };

@@ -8,7 +8,7 @@ const { LLM_JOB_TYPES } = require("../queues/llm-queue");
 const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     console.log(`Processing job ${job.id} of type ${job.name}`);
     const { ingredients, traceId} = job.data;
-
+    
      await LlmTask.update({ status: 'processing'}, 
             { where: { task_id: job.id, trace_id: traceId} });
     
@@ -41,10 +41,17 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
 llmRecipeWorker.on("completed", async(job, returnvalue) => {
     console.log(`Job ${job.id} completed successfully`);
     const traceId = job.data.traceId;
+    const userId = job.data?.user_id;
+    if (!userId) {
+        console.error("No userId found in job data:", job.data);
+        return;
+    }
+    console.log(`Publishing recipeGenerated to user:${userId}`);
     pubClient.publish(`recipeGenerated`, JSON.stringify({
             type: 'recipeGenerated',
             data: returnvalue,
             traceId: traceId,
+            userId: userId,
         }));
 }); 
 
