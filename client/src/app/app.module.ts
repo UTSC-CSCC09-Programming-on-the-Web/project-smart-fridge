@@ -24,6 +24,7 @@ import { RecipeFormComponent } from './components/recipe-form/recipe-form.compon
 import { IngredientInputPageComponent } from './pages/main-page/ingredient-input-page/ingredient-input-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MultiImageUploadComponent } from './components/multi-image-upload/multi-image-upload.component';
+import { NotificationBarComponent } from './components/notification-bar/notification-bar.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { MultiImageUploadComponent } from './components/multi-image-upload/multi
     RecipeCardComponent,
     RecipeFormComponent,
     IngredientInputPageComponent,
-    MultiImageUploadComponent
+    MultiImageUploadComponent,
+    NotificationBarComponent
   ],
   imports: [
     BrowserModule,

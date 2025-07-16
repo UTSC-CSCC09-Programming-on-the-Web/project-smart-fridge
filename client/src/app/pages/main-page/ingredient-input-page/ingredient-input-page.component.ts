@@ -11,8 +11,12 @@ import { SocketService } from '../../../services/socket.service';
 export class IngredientInputPageComponent {
 
   constructor(private addMultiIngredientsService: AddMultiIngredientsService, private socketService: SocketService) {}
+  
+  notificationMessage: string = '';
+  notificationType: 'success' | 'error' | 'info' = 'info';
 
   handleMultiImagesUploaded(images: File[]): void {
+    this.notificationMessage = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
     const formData = new FormData();
     images.forEach((image) => {
@@ -28,6 +32,8 @@ export class IngredientInputPageComponent {
     console.log('Ingredient Input Page initialized');
     this.socketService.fromSocketEvent<string>('cvTaskProgress').subscribe({
       next: (message: string) => {
+        this.notificationMessage = message;
+        this.notificationType = 'info'; 
         console.log('Received CV Task Progress:', message);
       },
       error: (err) => {

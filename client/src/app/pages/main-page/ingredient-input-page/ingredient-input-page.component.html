@@ -2,4 +2,8 @@
   <app-multi-image-upload
   (multiImagesUploaded)="handleMultiImagesUploaded($event)"
   ></app-multi-image-upload>
+  <app-notification-bar
+  [message]="notificationMessage"
+  [type]="notificationType"
+  ></app-notification-bar>
 </div>
