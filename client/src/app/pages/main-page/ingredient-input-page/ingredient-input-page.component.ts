@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
+import { SocketService } from '../../../services/socket.service';
 
 @Component({
   selector: 'app-ingredient-input-page',
@@ -9,7 +10,7 @@ import { AddMultiIngredientsService } from '../../../services/add-multi-ingredie
 })
 export class IngredientInputPageComponent {
 
-  constructor(private addMultiIngredientsService: AddMultiIngredientsService) {}
+  constructor(private addMultiIngredientsService: AddMultiIngredientsService, private socketService: SocketService) {}
 
   handleMultiImagesUploaded(images: File[]): void {
     console.log('Ingredient Input Page: Images uploaded:', images);
@@ -22,4 +23,16 @@ export class IngredientInputPageComponent {
       error: (err) => console.error('Error uploading images:', err)
     });
   }
-}
+
+  ngOnInit(): void {
+    console.log('Ingredient Input Page initialized');
+    this.socketService.fromSocketEvent<string>('cvTaskProgress').subscribe({
+      next: (message: string) => {
+        console.log('Received CV Task Progress:', message);
+      },
+      error: (err) => {
+        console.error('Error receiving CV Task Progress:', err);
+      }
+    });
+  }
+}  

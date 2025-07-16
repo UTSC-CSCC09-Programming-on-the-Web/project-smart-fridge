@@ -54,9 +54,9 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
             await cvTask.save();
            
      
-            pubClient.publish("cvTaskUpdated", JSON.stringify({
+            pubClient.publish("cvTaskProgress", JSON.stringify({
                 userId: cvTask.user_id,
-                message: "Image processed done for " + image.original_filename + ", total done images: " + images_done + "/" + cvTask.total_images_count,
+                message: "Image processed done for " + image.original_filename + ", total done images: " + images_done + "/" + cvTask.images_count,
             }));
             console.log(`Image ${image.original_filename} processed successfully`);
 
@@ -64,9 +64,9 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
         // check done count and then emit event to notify clients
        cvTask.status = 'done';
        await cvTask.save();
-        pubClient.publish("cvTaskUpdated", JSON.stringify({
+        pubClient.publish("cvTaskProgress", JSON.stringify({
             userId: cvTask.user_id,
-            message: "All " + cvTask.done_images_count + "/total " + cvTask.total_images_count + " images processed done for task " + cvTask.id,
+            message: "Done: All " + cvTask.done_images_count + "/total " + cvTask.images_count + " images processed done for task " + cvTask.id,
         }));
     }
     }, {
