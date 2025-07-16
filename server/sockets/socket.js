@@ -55,6 +55,30 @@ const setupSocket = async(app) => {
     io.to(`user:${data.userId}`).emit("recipeGenerated", traceId);
   });
 
+  subClient.subscribe("cvTaskUpdated", (msg) => {
+    const data = JSON.parse(msg);
+    const message = data.message;
+    if (!data.userId) {
+      console.error("No userId in message data:", data);
+      return;
+    }
+    console.log(`Publishing cvTaskUpdated to user:${data.userId} with message: ${message}`);
+    // change to emit to fridge room later implement
+    io.to(`user:${data.userId}`).emit("cvTaskUpdated", message);
+  });
+
+  subClient.subscribe("cvTaskFinished", (msg) => {
+    const data = JSON.parse(msg);
+    const traceId = data.traceId;
+    if (!data.userId) {
+      console.error("No userId in message data:", data);
+      return;
+    }
+    console.log(`Publishing cvTaskFinished to user:${data.userId} with traceId: ${traceId}`);
+    // change to emit to fridge room later implement
+    io.to(`user:${data.userId}`).emit("cvTaskFinished", traceId);
+  });
+
   return { httpServer, io };
 }
 

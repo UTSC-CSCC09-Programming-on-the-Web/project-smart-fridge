@@ -49,7 +49,6 @@ llmRecipeWorker.on("completed", async(job, returnvalue) => {
     console.log(`Publishing recipeGenerated to user:${userId}`);
     pubClient.publish(`recipeGenerated`, JSON.stringify({
             type: 'recipeGenerated',
-            data: returnvalue,
             traceId: traceId,
             userId: userId,
         }));

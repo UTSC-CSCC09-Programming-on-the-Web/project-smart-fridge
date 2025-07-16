@@ -1,9 +1,7 @@
 const { Queue } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq");
-const CvTask = require("../models/");
-const CvTaskImage = require("../models/cv-task-image.js");
+const {CvTask, CvTaskImage } = require("../models");
 const { randomUUID } = require("crypto");
-const { id } = require("../workers/cv-ocr-worker.js");
 
 const cvQueue = new Queue("cvQueue", {
   connection: redisBullmq,
@@ -37,6 +35,7 @@ const addCvJob = async (jobType, jobData, options = {}) => {
             original_filename: image.original_filename,
             image_url: image.image_url,
         })); 
+        console.log(`Prepared ${cvTaskImages.length} images for CV task with traceId: ${traceId}`);
     }    
 
     const fullJobData = {

@@ -13,6 +13,7 @@ const { pubClient } = require('../redis/redis-socket');
     }
 
     require("./llm-recipe-worker");
+    require("./cv-ocr-worker");
 
   } catch (err) {
     console.error("Worker: DB connection error", err);
