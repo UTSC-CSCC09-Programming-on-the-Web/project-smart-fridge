@@ -7,13 +7,15 @@ const { callGpt } = require("../services/gpt/gpt-service");
 
 
 const llmRecipeWorker = new Worker("llmQueue", async (job) => {
-    console.log(`Processing job ${job.id} of type ${job.name}`);
-    const { ingredients, traceId} = job.data;
     
-     await LlmTask.update({ status: 'processing'}, 
-            { where: { trace_id: traceId} });
-    
+    console.log(`llm worker: Processing job ${job.id} of type ${job.name}`);
+    const { traceId } = job.data;
+
+    await LlmTask.update({ status: 'processing' },
+        { where: { trace_id: traceId } });
+    // refactor to job handler function later
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
+        const { ingredients } = job.data;
         console.log("Generating recipe with data:", job.data);
         // Simulate a delay for recipe generation
         await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -36,6 +38,22 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
         // Publish the generated recipe to Redis
         return result;
     }
+     if (job.name === LLM_JOB_TYPES.OCRextract) {
+        console.log("Processing OCR extraction with data:", job.data);
+        const { fullText } = job.data;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const result = await callGpt({
+            taskType: "ocr_format",
+            data: { fullText: fullText },
+            temperature: 0.1,
+        });
+
+        console.log("Extracted ingredients from OCR:", result);
+        await LlmTask.update({ status: 'done', result: result },
+            { where: { trace_id: traceId } });
+
+        return result;
+    }
     }, {
     connection: redisBullmq,
     autorun: true,
@@ -51,12 +69,14 @@ llmRecipeWorker.on("completed", async(job, returnvalue) => {
         console.error("No userId found in job data:", job.data);
         return;
     }
-    console.log(`Publishing recipeGenerated to user:${userId}`);
-    pubClient.publish(`recipeGenerated`, JSON.stringify({
+    if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
+     console.log(`Publishing recipeGenerated to user:${userId}`);
+      pubClient.publish(`recipeGenerated`, JSON.stringify({
             type: 'recipeGenerated',
             traceId: traceId,
             userId: userId,
         }));
+    }
 }); 
 
 module.exports = llmRecipeWorker;

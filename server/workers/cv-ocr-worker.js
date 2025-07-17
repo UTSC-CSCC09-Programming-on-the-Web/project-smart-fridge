@@ -4,7 +4,7 @@ const { CvTask, CvTaskImage } = require("../models");
 const { pubClient } = require('../redis/redis-socket');
 const { CV_JOB_TYPES } = require("../queues/cv-queue");
 const { extractTextFromImage } = require('../services/gcv-service');
-
+const {onCvOCRJobCompleted} = require("../services/cv-llm-orches-service.js");
 
 const cvOCRWorker = new Worker("cvQueue", async (job) => {
     console.log(`Processing job ${job.id} of type ${job.name}`);
@@ -73,7 +73,7 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
 });
 
 cvOCRWorker.on("completed", async(job, returnvalue) => {
-    console.log(`Job ${job.id} completed successfully`);
+    console.log(`cv OCR Job ${job.id} completed successfully`);
     const traceId = job.data.traceId;
     const userId = job.data?.user_id;
     if (!userId) {
@@ -86,7 +86,16 @@ cvOCRWorker.on("completed", async(job, returnvalue) => {
         traceId: traceId,
         userId: userId,
     }));
-}); 
+    const { llmTaskRecord } = await onCvOCRJobCompleted(traceId);
+    console.log(`LLM Job created successfully for traceId ${traceId}`);
+    pubClient.publish("llmOCRExtractTaskCreated", JSON.stringify({
+        type: 'llmOCRExtractTaskCreated',
+        llmTaskId: llmTaskRecord.id,
+        userId: userId,
+        traceId: traceId,
+        message: "LLM Task created successfully for CV Task with traceId: " + traceId,
+    }));
+});
 
 module.exports = cvOCRWorker;
 

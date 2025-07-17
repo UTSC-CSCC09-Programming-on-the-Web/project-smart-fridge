@@ -2,13 +2,13 @@
 const { cvQueue, addCvJob, CV_JOB_TYPES } = require("../queues/cv-queue.js");
 const { CvTask, CvTaskImage } = require("../models");
 const { randomUUID } = require('crypto');
-
+const { addLlmJob, LLM_JOB_TYPES } = require("../queues/llm-queue.js");
 
 async function startOCRReceiptOrchestrator(cvJobData) {
     const traceId = randomUUID();
     const cvJobType = CV_JOB_TYPES.MultiReceiptsOCR;
     const {job, cvTaskRecord} = await addCvJob(cvJobType, cvJobData, traceId);
-    return job;
+    return { job, cvTaskRecord };
 }
 
 async function onCvOCRJobCompleted(traceId) {
@@ -30,8 +30,8 @@ async function onCvOCRJobCompleted(traceId) {
     };
     const llmJobType = LLM_JOB_TYPES.OCRextract;
     const { job, llmTaskRecord } = await addLlmJob(llmJobType, llmJobData, traceId);
-    console.log(`LLM Job ${job.id} created successfully`);
-    return job;
+    console.log(`cv-llm-orchestrator: LLM Job ${job.id} created successfully`);
+    return { job, llmTaskRecord  };
 }   
 
 module.exports = {
