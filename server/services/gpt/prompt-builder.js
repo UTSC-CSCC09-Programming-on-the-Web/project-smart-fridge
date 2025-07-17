@@ -26,7 +26,8 @@ Please generate a recipe in JSON format with the following fields:
         },
       ];
     }
-    case "ocr_format":
+    case "ocr_format": {
+      const rawText = typeof data.fullText === 'string' ? data.fullText : JSON.stringify(data.fullText);
       return [
         {
           role: "system",
@@ -36,7 +37,7 @@ Please generate a recipe in JSON format with the following fields:
           role: "user",
           content: `The following is the raw OCR text extracted from an image:
 
-"${data.fullText}"
+"${rawText}"
 
 Please extract all ingredient items from the text, and return them in **valid JSON format** as shown below:
 
@@ -52,7 +53,7 @@ Instructions:
 3. Make sure the output is valid JSON that can be parsed with JSON.parse().`,
         },
       ];
-
+    }
     default:
       throw new Error(`Unknown GPT task type: ${taskType}`);
   }

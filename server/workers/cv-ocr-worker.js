@@ -40,8 +40,6 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
 
             cvTaskImage.status = 'done';
             cvTaskImage.result = {
-                job_type: job.name,
-                image_name: image.original_filename,
                 text: ocrResult,
             };
             await cvTaskImage.save();
