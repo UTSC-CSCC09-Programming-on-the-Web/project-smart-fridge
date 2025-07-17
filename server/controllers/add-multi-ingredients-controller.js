@@ -10,7 +10,7 @@ const postMultiIngredientsImages = async (req, res) => {
   }
   const imageData = images.map(image => ({
     original_filename: image.originalname,
-    image_url: image.path ? `ingredients/${image.filename}` : null // this is a relative path
+    image_url: image.path ? `multi-ingredients/${image.filename}` : null // this is a relative path
   }));
 
   const fridgeId = req.fridgeId || req.params.fridgeId; 

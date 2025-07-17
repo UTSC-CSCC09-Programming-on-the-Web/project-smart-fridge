@@ -3,6 +3,7 @@ const redisBullmq = require("../redis/redis-bullmq");
 const { CvTask, CvTaskImage } = require("../models");
 const { pubClient } = require('../redis/redis-socket');
 const { CV_JOB_TYPES } = require("../queues/cv-queue");
+const { extractTextFromImage } = require('../services/gcv-service');
 
 
 const cvOCRWorker = new Worker("cvQueue", async (job) => {
@@ -33,22 +34,19 @@ const cvOCRWorker = new Worker("cvQueue", async (job) => {
             }
             cvTaskImage.status = 'processing';
             await cvTaskImage.save();
-            console.log(`Processing image ${image.original_filename} for CV Task ${cvTask.id}`);
-           
-            // Simulate OCR processing
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            console.log(`Processing image ${image.original_filename} for CV Task ${cvTask.id} with image url ${image.image_url}`);
+            const ocrResult = await extractTextFromImage(image.image_url);
+            console.log(`OCR result for image ${image.original_filename}:`, ocrResult);
 
             cvTaskImage.status = 'done';
             cvTaskImage.result = {
                 job_type: job.name,
                 image_name: image.original_filename,
-                text: 'OCR result', // Simulated OCR result
-                id: image.id,
-                cv_trace_id: traceId,
-                cv_task_id: cvTask.id,
+                text: ocrResult,
             };
             await cvTaskImage.save();
-          
+            console.log(`cvTaskImage ${cvTaskImage.original_filename} result is: ${cvTaskImage.result.text}`);
+
             // update the cvTask done_images_count
             const images_done = cvTask.done_images_count += 1;
             await cvTask.save();
