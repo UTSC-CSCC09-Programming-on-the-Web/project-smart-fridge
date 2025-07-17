@@ -3,6 +3,7 @@ const redisBullmq = require("../redis/redis-bullmq");
 const { LlmTask } = require("../models");
 const { pubClient } = require('../redis/redis-socket');
 const { LLM_JOB_TYPES } = require("../queues/llm-queue");
+const { callGpt } = require("../services/gpt/gpt-service");
 
 
 const llmRecipeWorker = new Worker("llmQueue", async (job) => {
@@ -15,21 +16,25 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
         console.log("Generating recipe with data:", job.data);
         // Simulate a delay for recipe generation
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        const result = await callGpt({
+            taskType: "recipe",
+            data: { ingredients },
+        });
         // Simulate recipe generation
-        const generatedRecipe = {
-        id: job.id,
-        title: "Sample Recipe",
-        ingredients: ingredients,
-        instructions: "Mix ingredients and cook for 20 minutes."
-        };
-    
-        console.log("Generated recipe:", generatedRecipe);
-        await LlmTask.update({ status: 'done', result: generatedRecipe }, 
+        // const generatedRecipe = {
+        // id: job.id,
+        // title: "Sample Recipe",
+        // ingredients: ingredients,
+        // instructions: "Mix ingredients and cook for 20 minutes."
+        // };
+
+        console.log("Generated recipe:", result);
+        await LlmTask.update({ status: 'done', result: result }, 
             { where: {  trace_id: traceId} });
 
         // Publish the generated recipe to Redis
-        return generatedRecipe;
+        return result;
     }
     }, {
     connection: redisBullmq,

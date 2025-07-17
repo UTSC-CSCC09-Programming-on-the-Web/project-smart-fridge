@@ -20,6 +20,7 @@ const postGenerateRecipe = async (req, res) => {
         id: ingredient.id,
         name: ingredient.name,
         quantity: ingredient.quantity,
+        unit: ingredient.unit,
         expire_date: ingredient.expire_date,
       })),
       fridge_id: fridgeId,
