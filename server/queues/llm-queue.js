@@ -13,14 +13,15 @@ const llmQueue = new Queue("llmQueue", {
 
 const LLM_JOB_TYPES = {
   RecipeGenerate: 'recipe_generate',
+  OCRextract: 'ocr_extract',
 };
 
-const addLlmJob = async (jobType, jobData, options = {}) => {
+const addLlmJob = async (jobType, jobData, inputTraceId = null, options = {}) => {
     if (!Object.values(LLM_JOB_TYPES).includes(jobType)) {
         throw new Error(`Invalid job type: ${jobType}`);
     }
-    
-    const traceId = randomUUID();
+
+    const traceId = inputTraceId || randomUUID();
     const fullJobData = {
         ...jobData,
         traceId,

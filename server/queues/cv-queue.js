@@ -15,12 +15,11 @@ const CV_JOB_TYPES = {
   MultiReceiptsOCR: "multi_receipts_ocr",
 };
 
-const addCvJob = async (jobType, jobData, options = {}) => {
+const addCvJob = async (jobType, jobData, inputTraceId = null, options = {}) => {
     if (!Object.values(CV_JOB_TYPES).includes(jobType)) {
         throw new Error(`Invalid job type: ${jobType}`);
     }
-    
-    const traceId = randomUUID();
+    const traceId = inputTraceId || randomUUID();
     let cvTaskImages = [];
     if (jobData.images && jobData.images.length > 0) {
         const rawImages = [...jobData.images];
