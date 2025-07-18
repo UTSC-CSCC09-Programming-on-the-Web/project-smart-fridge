@@ -24,7 +24,7 @@ export class IngredientFormComponent {
   ingredientForm: FormGroup;
 
   @Input() mode: 'add' | 'edit' = 'add';
-  @Input() ingredientToEdit?: Ingredient;
+  @Input() ingredientToEdit?: Partial<Ingredient>;
 
   @Output() addIngredient = new EventEmitter<FormData>();
   @Output() submitIngredient = new EventEmitter<Partial<Ingredient>>();
