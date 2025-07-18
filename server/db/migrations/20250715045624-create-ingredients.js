@@ -73,4 +73,3 @@ module.exports = {
     await queryInterface.dropTable("Ingredients");
   },
 };
-

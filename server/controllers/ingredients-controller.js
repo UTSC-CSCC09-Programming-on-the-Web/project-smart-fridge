@@ -19,10 +19,10 @@ const getIngredientsInfiniteScroll = async (req, res) => {
     : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
   const fridgeId = req.fridgeId || req.params.fridge_id;
-   if (!fridgeId) {
+  if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
   }
-  const where = {fridge_id: fridgeId};
+  const where = { fridge_id: fridgeId };
 
   if (expireCursor != null && idCursor != null) {
     where[Op.or] = [
@@ -84,7 +84,7 @@ const createIngredient = async (req, res) => {
   //   return res.status(400).json({ errors });
   // }
   const fridgeId = req.fridgeId || req.params.fridge_id;
-   if (!fridgeId) {
+  if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
   }
 
@@ -94,7 +94,7 @@ const createIngredient = async (req, res) => {
 
     const newIngredient = await Ingredient.create({
       ...req.body,
-      fridge_id: fridgeId, 
+      fridge_id: fridgeId,
       image_url: relativePath, // Store the relative path to the image
     });
     // console.log("New ingredient created at:", relativePath);

@@ -1,17 +1,20 @@
-'use strict';
+"use strict";
 
 function buildPrompt(taskType, data) {
   switch (taskType) {
-    case "recipe":{
-        const ingredientList = data.ingredients.map(i => {
-            const quantity = i.quantity ?? '';
-            const unit = i.unit ?? '';
-            return `${i.name}${quantity}${unit}`;
-        }).join(", ");  
+    case "recipe": {
+      const ingredientList = data.ingredients
+        .map((i) => {
+          const quantity = i.quantity ?? "";
+          const unit = i.unit ?? "";
+          return `${i.name}${quantity}${unit}`;
+        })
+        .join(", ");
       return [
         {
           role: "system",
-          content: "You are a professional chef. Based on the ingredients available in the fridge, generate a home-style recipe.",
+          content:
+            "You are a professional chef. Based on the ingredients available in the fridge, generate a home-style recipe.",
         },
         {
           role: "user",
@@ -27,11 +30,15 @@ Please generate a recipe in JSON format with the following fields:
       ];
     }
     case "ocr_format": {
-      const rawText = typeof data.fullText === 'string' ? data.fullText : JSON.stringify(data.fullText);
+      const rawText =
+        typeof data.fullText === "string"
+          ? data.fullText
+          : JSON.stringify(data.fullText);
       return [
         {
           role: "system",
-          content: "You are an OCR-to-ingredient extraction assistant. Your task is to parse raw text into a structured list of ingredients.",
+          content:
+            "You are an OCR-to-ingredient extraction assistant. Your task is to parse raw text into a structured list of ingredients.",
         },
         {
           role: "user",

@@ -41,7 +41,7 @@ import { NotificationBarComponent } from './components/notification-bar/notifica
     RecipeFormComponent,
     IngredientInputPageComponent,
     MultiImageUploadComponent,
-    NotificationBarComponent
+    NotificationBarComponent,
   ],
   imports: [
     BrowserModule,

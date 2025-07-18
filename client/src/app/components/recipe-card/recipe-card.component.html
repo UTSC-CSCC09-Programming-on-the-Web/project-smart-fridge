@@ -1,19 +1,19 @@
 <div class="recipe-card">
-<div class="recipe-header">
-  <h2>Recipe Card</h2>
-</div>
-<div class="recipe-message" *ngIf="message">
-  <p>{{ message }}</p>
-</div>
-<div class="recipe-info" *ngIf="recipe">
-  <h3>Title: {{ recipe.title }}</h3>
-  <h4>Ingredients:</h4>
-  <ul>
-    <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
-  </ul>
-  <h4>Steps:</h4>
-  <ol>
-    <li *ngFor="let step of recipe.steps">{{ step }}</li>
-  </ol>
- </div>
+  <div class="recipe-header">
+    <h2>Recipe Card</h2>
+  </div>
+  <div class="recipe-message" *ngIf="message">
+    <p>{{ message }}</p>
+  </div>
+  <div class="recipe-info" *ngIf="recipe">
+    <h3>Title: {{ recipe.title }}</h3>
+    <h4>Ingredients:</h4>
+    <ul>
+      <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
+    </ul>
+    <h4>Steps:</h4>
+    <ol>
+      <li *ngFor="let step of recipe.steps">{{ step }}</li>
+    </ol>
+  </div>
 </div>

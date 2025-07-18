@@ -7,7 +7,5 @@ import { Component, Output, EventEmitter } from '@angular/core';
   standalone: false,
 })
 export class RecipeFormComponent {
-
   @Output() generateRecipe = new EventEmitter<void>();
-
 }

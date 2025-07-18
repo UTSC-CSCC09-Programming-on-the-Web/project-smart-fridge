@@ -17,19 +17,20 @@ export class IngredientListPageComponent {
   hasMoreData = true; // Indicates if there are more ingredients to load
   loading = false; // Indicates if data is currently being loaded
 
-  currentFridge$ : Observable<Fridge | null>;
+  currentFridge$: Observable<Fridge | null>;
   // Cursors for pagination
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
-  
-
-  constructor(private ingredientService: IngredientService, private fridgeService: FridgeService) {
-     this.currentFridge$ = this.fridgeService.currentfridge$;
+  constructor(
+    private ingredientService: IngredientService,
+    private fridgeService: FridgeService,
+  ) {
+    this.currentFridge$ = this.fridgeService.currentfridge$;
   }
 
   ngOnInit(): void {
-     this.currentFridge$.subscribe(fridge => {
+    this.currentFridge$.subscribe((fridge) => {
       if (fridge) {
         this.loadInitialIngredients();
       }
@@ -89,7 +90,7 @@ export class IngredientListPageComponent {
       )
       .subscribe({
         next: (data) => {
-          if (!data){
+          if (!data) {
             console.error('No data received while fetching more ingredients');
             this.loading = false;
             return;

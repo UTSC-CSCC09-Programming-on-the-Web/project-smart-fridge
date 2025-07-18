@@ -1,5 +1,11 @@
-import { Component, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
-import {validateImageFile, readImageAsDataUrl} from '../../utils/image.util';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { validateImageFile, readImageAsDataUrl } from '../../utils/image.util';
 
 @Component({
   selector: 'app-multi-image-upload',
@@ -8,7 +14,6 @@ import {validateImageFile, readImageAsDataUrl} from '../../utils/image.util';
   standalone: false,
 })
 export class MultiImageUploadComponent {
-
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
   selectedImages: File[] = [];
   imagePreviews: string[] = [];
@@ -16,7 +21,7 @@ export class MultiImageUploadComponent {
 
   @Output() multiImagesUploaded = new EventEmitter<File[]>();
 
-  onFilesSelected(event: Event): void {  
+  onFilesSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
       console.warn('File input is not available.');
       return;
@@ -60,7 +65,7 @@ export class MultiImageUploadComponent {
     }
   }
 
-  uploadImages(){
+  uploadImages() {
     if (this.selectedImages.length === 0) {
       alert('No images selected for upload.');
       return;
@@ -68,4 +73,4 @@ export class MultiImageUploadComponent {
     this.multiImagesUploaded.emit(this.selectedImages);
     console.log('Uploading images:', this.selectedImages);
   }
-}  
+}

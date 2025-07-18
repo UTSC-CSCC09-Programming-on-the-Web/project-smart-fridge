@@ -21,4 +21,3 @@ export function readImageAsDataUrl(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
-

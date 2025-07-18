@@ -9,15 +9,16 @@ import { Router } from '@angular/router';
   standalone: false,
 })
 export class LoginPageComponent {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-
-  goToGoogleLogin():void{
+  goToGoogleLogin(): void {
     this.authService.loginWithGoogle();
   }
 
   goToMain(): void {
-    this.router.navigate(['/first-login']); // use for test 
+    this.router.navigate(['/first-login']); // use for test
   }
-
 }

@@ -1,7 +1,8 @@
 <!-- ingredient-card.component.html -->
 <div class="ingredient-card">
   <p *ngIf="mode === 'multi-add'" class="multi-add-label">
-   Temporay Ingredient Result -- Extracted from Image, please review before adding to fridge.
+    Temporay Ingredient Result -- Extracted from Image, please review before
+    adding to fridge.
   </p>
   <img
     *ngIf="mode === 'view' && ingredient.image_url; else defaultImage"
@@ -21,8 +22,12 @@
   <div [ngClass]="['ingredient-info', mode]">
     <h3>{{ ingredientDisplay.name }}</h3>
     <p>{{ ingredientDisplay.quantity }} {{ ingredientDisplay.unit }}</p>
-    <p *ngIf="mode === 'view'">Expire Date: {{ ingredientDisplay.expire_date }}</p>
-    <p *ngIf="mode === 'multi-add'">Default Expire Date: {{ ingredientDisplay.expire_date }}</p>
+    <p *ngIf="mode === 'view'">
+      Expire Date: {{ ingredientDisplay.expire_date }}
+    </p>
+    <p *ngIf="mode === 'multi-add'">
+      Default Expire Date: {{ ingredientDisplay.expire_date }}
+    </p>
     <p *ngIf="ingredientDisplay.type">Type: {{ ingredientDisplay.type }}</p>
     <p *ngIf="mode === 'view'" [class.expired]="ingredientDisplay.is_expired">
       {{ ingredientDisplay.is_expired ? "Expired" : "Fresh" }}

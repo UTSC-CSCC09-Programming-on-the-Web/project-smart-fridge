@@ -8,9 +8,8 @@ describe('FristLoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FristLoginComponent]
-    })
-    .compileComponents();
+      imports: [FristLoginComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FristLoginComponent);
     component = fixture.componentInstance;

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FridgeService } from '../../services/fridge.service';
 import { Observable } from 'rxjs';
@@ -15,8 +15,12 @@ export class MainPageComponent {
   currentFridge$: Observable<Fridge | null>;
   showFridgeInfo: boolean = false;
 
-  constructor(private authService: AuthService, private fridgeService: FridgeService, private socketService: SocketService) {
-    this.fridgeService.getUserFridges().subscribe();  
+  constructor(
+    private authService: AuthService,
+    private fridgeService: FridgeService,
+    private socketService: SocketService,
+  ) {
+    this.fridgeService.getUserFridges().subscribe();
     this.currentFridge$ = this.fridgeService.currentfridge$;
   }
 
@@ -32,11 +36,11 @@ export class MainPageComponent {
     });
   }
 
-   fetchFridgeInfo(): void {
+  fetchFridgeInfo(): void {
     this.showFridgeInfo = !this.showFridgeInfo;
   }
 
-    ngOnInit(): void {
-      this.socketService.connectSocket();
+  ngOnInit(): void {
+    this.socketService.connectSocket();
   }
 }

@@ -1,12 +1,11 @@
-
-const session = require('express-session');
-const redisBullmq = require('../redis/redis-bullmq.js');
-const RedisStore = require('connect-redis')(session);
+const session = require("express-session");
+const redisBullmq = require("../redis/redis-bullmq.js");
+const RedisStore = require("connect-redis")(session);
 
 const redisStore = new RedisStore({
   client: redisBullmq,
-  prefix: 'session:',
-  ttl: 86400, 
+  prefix: "session:",
+  ttl: 86400,
 });
 
 const sessionMiddleware = session({
@@ -16,7 +15,7 @@ const sessionMiddleware = session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: "lax",
     secure: false,
   },
 });

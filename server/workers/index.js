@@ -1,7 +1,6 @@
-
-require('dotenv').config();
+require("dotenv").config();
 const { sequelize, LlmTask } = require("../models");
-const { pubClient } = require('../redis/redis-socket');
+const { pubClient } = require("../redis/redis-socket");
 
 (async () => {
   try {
@@ -14,7 +13,6 @@ const { pubClient } = require('../redis/redis-socket');
 
     require("./llm-worker");
     require("./cv-worker");
-
   } catch (err) {
     console.error("Worker: DB connection error", err);
     process.exit(1);

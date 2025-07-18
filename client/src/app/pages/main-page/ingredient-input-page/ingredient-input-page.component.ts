@@ -18,10 +18,12 @@ interface tempIngredient {
   styleUrl: './ingredient-input-page.component.scss',
   standalone: false,
 })
-
 export class IngredientInputPageComponent {
-
-  constructor(private addMultiIngredientsService: AddMultiIngredientsService, private socketService: SocketService, private ingredientService: IngredientService) {}
+  constructor(
+    private addMultiIngredientsService: AddMultiIngredientsService,
+    private socketService: SocketService,
+    private ingredientService: IngredientService,
+  ) {}
 
   notificationMessage: string = '';
   notificationType: 'success' | 'error' | 'info' = 'info';
@@ -37,49 +39,70 @@ export class IngredientInputPageComponent {
     });
     this.addMultiIngredientsService.postImagesToServer(formData).subscribe({
       next: (response) => console.log('Images uploaded successfully', response),
-      error: (err) => console.error('Error uploading images:', err)
+      error: (err) => console.error('Error uploading images:', err),
     });
   }
 
   ngOnInit(): void {
     console.log('Ingredient Input Page initialized');
-    this.socketService.fromSocketEvent<{ message: string, type: string }>('cvTaskProgress').subscribe({
-      next: (data) => {
-        this.notificationMessage = data.message;
-        if (data.type === 'success' || data.type === 'error' || data.type === 'info') {
-          this.notificationType = data.type as 'success' | 'error' | 'info';
-        } else {
-          this.notificationType = 'info';
-        }
-        console.log(`Received CV Task Progress with type: ${this.notificationType} and message: ${this.notificationMessage}`);
-      },
-      error: (err) => {
-        console.error('Error receiving CV Task Progress:', err);
-      }
-    });
-    this.socketService.fromSocketEvent<{ traceId: string, result: any }>('addMultiIngredientsFinished').subscribe({
-      next: (data) => {
-        console.log(`Received addMultiIngredientsFinished with traceId: ${data.traceId} and result:`, data.result);
-        let clean = data.result.trim();
-        if (clean.startsWith('```json')) {
-          clean = clean.replace(/^```json/, '').replace(/```$/, '').trim();
-        }
-        this.tempIngredients = JSON.parse(clean) as tempIngredient[];
-        this.formalIngredients = this.tempIngredients.map(ing => ({
-          name: ing.name || 'default name', // temporary set
-          quantity: parseFloat(ing.quantity) || 1, // temporary set
-          unit: ing.unit || 'pcs', // temporary set
-          expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]
-        }));
-        console.log('Parsed ingredients:', this.formalIngredients);
-      },
-      error: (err) => {
-        console.error('Error receiving addMultiIngredientsFinished:', err);
-      }
-    });
+    this.socketService
+      .fromSocketEvent<{ message: string; type: string }>('cvTaskProgress')
+      .subscribe({
+        next: (data) => {
+          this.notificationMessage = data.message;
+          if (
+            data.type === 'success' ||
+            data.type === 'error' ||
+            data.type === 'info'
+          ) {
+            this.notificationType = data.type as 'success' | 'error' | 'info';
+          } else {
+            this.notificationType = 'info';
+          }
+          console.log(
+            `Received CV Task Progress with type: ${this.notificationType} and message: ${this.notificationMessage}`,
+          );
+        },
+        error: (err) => {
+          console.error('Error receiving CV Task Progress:', err);
+        },
+      });
+    this.socketService
+      .fromSocketEvent<{
+        traceId: string;
+        result: any;
+      }>('addMultiIngredientsFinished')
+      .subscribe({
+        next: (data) => {
+          console.log(
+            `Received addMultiIngredientsFinished with traceId: ${data.traceId} and result:`,
+            data.result,
+          );
+          let clean = data.result.trim();
+          if (clean.startsWith('```json')) {
+            clean = clean
+              .replace(/^```json/, '')
+              .replace(/```$/, '')
+              .trim();
+          }
+          this.tempIngredients = JSON.parse(clean) as tempIngredient[];
+          this.formalIngredients = this.tempIngredients.map((ing) => ({
+            name: ing.name || 'default name', // temporary set
+            quantity: parseFloat(ing.quantity) || 1, // temporary set
+            unit: ing.unit || 'pcs', // temporary set
+            expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
+              .toISOString()
+              .split('T')[0],
+          }));
+          console.log('Parsed ingredients:', this.formalIngredients);
+        },
+        error: (err) => {
+          console.error('Error receiving addMultiIngredientsFinished:', err);
+        },
+      });
   }
 
-  addAllIngredients(): void { 
+  addAllIngredients(): void {
     const rawIngredients = [...this.formalIngredients];
     const formDataList: FormData[] = [];
     rawIngredients.forEach((ingredient) => {
@@ -88,26 +111,28 @@ export class IngredientInputPageComponent {
     });
     forkJoin(
       // temporary solution to add multiple ingredients
-      formDataList.map(formData => this.ingredientService.createIngredient(formData))
+      formDataList.map((formData) =>
+        this.ingredientService.createIngredient(formData),
+      ),
     ).subscribe({
-      next: (responses) => {  
+      next: (responses) => {
         console.log('All ingredients added successfully:', responses);
         this.notificationMessage = 'All ingredients added successfully!';
         this.notificationType = 'success';
         this.tempIngredients = [];
         this.formalIngredients = [];
-        this.ingredientService.notifyIngredientsUpdated(); 
+        this.ingredientService.notifyIngredientsUpdated();
       },
       error: (err) => {
         console.error('Error adding ingredients:', err);
         this.notificationMessage = 'Failed to add some ingredients.';
         this.notificationType = 'error';
-      }
-    }); 
+      },
+    });
   }
 
   editingTempIngredient: Partial<Ingredient> | null = null;
-  editingTempIngredientsIndex: number | null = null;  
+  editingTempIngredientsIndex: number | null = null;
 
   toggleEditForm(ingredient: Partial<Ingredient>, index: number): void {
     console.log('Toggling edit form for ingredient:', ingredient);
@@ -124,13 +149,15 @@ export class IngredientInputPageComponent {
     if (this.editingTempIngredientsIndex !== null) {
       this.formalIngredients[this.editingTempIngredientsIndex] = {
         ...this.formalIngredients[this.editingTempIngredientsIndex],
-        ...ingredient
+        ...ingredient,
       };
     }
     this.cancelEdit();
   }
 
   deleteTempIngredient(ingredient: Partial<Ingredient>): void {
-    this.formalIngredients = this.formalIngredients.filter(ing => ing !== ingredient);
+    this.formalIngredients = this.formalIngredients.filter(
+      (ing) => ing !== ingredient,
+    );
   }
 }

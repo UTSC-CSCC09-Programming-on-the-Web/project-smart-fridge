@@ -9,16 +9,15 @@ import { GoogleSuccessPageComponent } from './pages/login-page/google-success-pa
 import { GoogleFailurePageComponent } from './pages/login-page/google-failure-page/google-failure-page.component';
 import { SubscribePageComponent } from './pages/login-page/subscribe-page/subscribe-page';
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
-;
-
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route to redirect to login page
   { path: 'login', component: LoginPageComponent },
   { path: 'subscribe', component: SubscribePageComponent },
   { path: 'auth/google/success', component: GoogleSuccessPageComponent },
   { path: 'auth/google/failure', component: GoogleFailurePageComponent },
-  { path: 'first-login', component: FristLoginComponent}, 
-  { path: 'main',
+  { path: 'first-login', component: FristLoginComponent },
+  {
+    path: 'main',
     component: MainPageComponent,
     children: [
       // alpha version implementation

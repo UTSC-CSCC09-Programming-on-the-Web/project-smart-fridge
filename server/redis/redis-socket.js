@@ -14,5 +14,5 @@ async function connectSocketRedis() {
 module.exports = {
   pubClient,
   subClient,
-  connectSocketRedis
+  connectSocketRedis,
 };

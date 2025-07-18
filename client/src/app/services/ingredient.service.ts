@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
-import { Observable, of, Subject} from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { FridgeService } from './fridge.service';
@@ -18,13 +18,16 @@ export interface IngredientPaginationResponse {
 export class IngredientService {
   endpoint = 'http://localhost:3000'; // will be replaced with environment variable
 
-  constructor(private http: HttpClient, private fridgeService: FridgeService) {}
+  constructor(
+    private http: HttpClient,
+    private fridgeService: FridgeService,
+  ) {}
 
   private ingredientUpdatedSource = new Subject<void>();
   ingredientUpdated$ = this.ingredientUpdatedSource.asObservable();
 
   notifyIngredientsUpdated() {
-    this.ingredientUpdatedSource.next(); 
+    this.ingredientUpdatedSource.next();
   }
   /**
    * Fetches all ingredients from the server.
@@ -44,7 +47,7 @@ export class IngredientService {
     console.log('Fetching ingredients with params:', params.toString());
     return this.http.get<IngredientPaginationResponse>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
-      { params,  withCredentials: true },
+      { params, withCredentials: true },
     );
   }
 
@@ -58,7 +61,8 @@ export class IngredientService {
     if (!fridge_id) return of(null);
     return this.http.post<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
-      formData,{ withCredentials: true }
+      formData,
+      { withCredentials: true },
     );
   }
 
@@ -76,7 +80,8 @@ export class IngredientService {
     if (!fridge_id) return of(null);
     return this.http.put<Ingredient>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`,
-      updated,{ withCredentials: true }
+      updated,
+      { withCredentials: true },
     );
   }
 
@@ -88,7 +93,10 @@ export class IngredientService {
   deleteIngredient(id: number): Observable<void | null> {
     const fridge_id = getFridgeIdOrFallback(this.fridgeService);
     if (!fridge_id) return of(null);
-    return this.http.delete<void>(`${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`, { withCredentials: true });
+    return this.http.delete<void>(
+      `${this.endpoint}/api/fridges/${fridge_id}/ingredients/${id}`,
+      { withCredentials: true },
+    );
   }
 
   // error handling will be implemented later

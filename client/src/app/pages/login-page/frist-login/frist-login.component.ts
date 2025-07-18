@@ -9,9 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   selector: 'app-first-login',
   templateUrl: './frist-login.component.html',
   styleUrls: ['./frist-login.component.scss'],
-   imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
 })
-
 export class FristLoginComponent {
   createForm: FormGroup;
   joinForm: FormGroup;
@@ -23,7 +22,7 @@ export class FristLoginComponent {
   constructor(
     private fb: FormBuilder,
     private fridgeService: FridgeService,
-    private router: Router
+    private router: Router,
   ) {
     this.createForm = this.fb.group({
       name: ['', Validators.required],
@@ -46,25 +45,28 @@ export class FristLoginComponent {
 
     if (this.currentForm === 'create' && this.createForm.valid) {
       const { name, description } = this.createForm.value;
-      this.fridgeService.createFridge(name, description).subscribe((res) => {
-        this.loading = false;
-        this.message = res.message || 'Fridge created successfully!';
-        if (res ?.success) {
-          this.router.navigate(['/main']);
-        }
-      }, (err) => {
-        this.loading = false;
-        this.message = err.error?.message || 'Failed to create fridge.';
-        console.error('Error creating fridge:', err); 
-    });
-  }
+      this.fridgeService.createFridge(name, description).subscribe(
+        (res) => {
+          this.loading = false;
+          this.message = res.message || 'Fridge created successfully!';
+          if (res?.success) {
+            this.router.navigate(['/main']);
+          }
+        },
+        (err) => {
+          this.loading = false;
+          this.message = err.error?.message || 'Failed to create fridge.';
+          console.error('Error creating fridge:', err);
+        },
+      );
+    }
 
     if (this.currentForm === 'join' && this.joinForm.valid) {
       const { fridge_id } = this.joinForm.value;
       this.fridgeService.joinFridge(fridge_id).subscribe((res) => {
         this.loading = false;
         this.message = res.message || 'Joined fridge successfully!';
-        if (res ?.success) {
+        if (res?.success) {
           this.router.navigate(['/main']);
         }
       });

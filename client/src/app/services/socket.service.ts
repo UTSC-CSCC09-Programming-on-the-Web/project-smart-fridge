@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, share, switchMap} from 'rxjs';
+import { from, Observable, share, switchMap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketService {
-
   private socket: Socket | null = null;
   private connectPromise: Promise<void> | null = null;
 
@@ -19,13 +18,12 @@ export class SocketService {
       this.connectPromise = new Promise((resolve) => {
         this.socket!.on('connect', () => {
           console.log('Socket connected:', this.socket?.id);
-          resolve(); 
+          resolve();
         });
       });
     }
     return this.connectPromise!;
- }
-
+  }
 
   async on(eventName: string, callback: (...args: any[]) => void) {
     await this.connectSocket();
@@ -48,10 +46,10 @@ export class SocketService {
     });
   }
 
-    fromSocketEvent<T>(eventName: string): Observable<T> {
+  fromSocketEvent<T>(eventName: string): Observable<T> {
     const event$ = from(this.connectSocket()).pipe(
       switchMap(() => this.listenToEvent<T>(eventName)),
-      share()
+      share(),
     );
     return event$;
   }

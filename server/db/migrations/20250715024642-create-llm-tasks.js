@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('llm_tasks', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("llm_tasks", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -29,25 +29,25 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: 'fridges',
-          key: 'id', 
+          model: "fridges",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',   
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       user_id: {
         type: Sequelize.UUID,
         allowNull: true,
         references: {
-          model: 'users',
-          key: 'id',
+          model: "users",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       status: {
-        type: Sequelize.ENUM('pending', 'processing', 'done', 'failed'),
-        defaultValue: 'pending',
+        type: Sequelize.ENUM("pending", "processing", "done", "failed"),
+        defaultValue: "pending",
       },
       result: {
         type: Sequelize.JSONB,
@@ -60,18 +60,20 @@ module.exports = {
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('llm_tasks');
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_llm_tasks_status;');
+    await queryInterface.dropTable("llm_tasks");
+    await queryInterface.sequelize.query(
+      "DROP TYPE IF EXISTS enum_llm_tasks_status;"
+    );
   },
 };

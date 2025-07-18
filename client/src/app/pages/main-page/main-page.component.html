@@ -5,15 +5,15 @@
 
   <div *ngIf="showFridgeInfo">
     <p>Fetching fridge information...</p>
-<div *ngIf="currentFridge$ | async as fridge; else noFridge">
-  <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
-  <p><strong>description:</strong> {{ fridge.description }}</p>
-  <p>Fridge Id: {{ fridge.id }}</p>
-</div>
+    <div *ngIf="currentFridge$ | async as fridge; else noFridge">
+      <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
+      <p><strong>description:</strong> {{ fridge.description }}</p>
+      <p>Fridge Id: {{ fridge.id }}</p>
+    </div>
   </div>
-<ng-template #noFridge>
-  <p>you can get your fridge information here! </p>
-</ng-template>
+  <ng-template #noFridge>
+    <p>you can get your fridge information here!</p>
+  </ng-template>
   <button (click)="onLogout()">Logout</button>
   <app-recipe-page></app-recipe-page>
   <app-ingredient-input-page></app-ingredient-input-page>

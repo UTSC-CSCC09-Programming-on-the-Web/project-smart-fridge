@@ -12,7 +12,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Ingredient } from '../../models/ingredient.model';
 import { ingredientToFormData } from '../../utils/form-data.util';
-import {validateImageFile, readImageAsDataUrl} from '../../utils/image.util';
+import { validateImageFile, readImageAsDataUrl } from '../../utils/image.util';
 
 @Component({
   selector: 'app-ingredient-form',
@@ -62,7 +62,7 @@ export class IngredientFormComponent {
       }
 
       this.selectedImage = image;
-      this.imagePreviewUrl = null; 
+      this.imagePreviewUrl = null;
       readImageAsDataUrl(image)
         .then((dataUrl) => {
           this.imagePreviewUrl = dataUrl;

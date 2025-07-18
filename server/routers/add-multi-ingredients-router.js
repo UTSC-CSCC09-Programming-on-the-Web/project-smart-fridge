@@ -1,6 +1,8 @@
 "use strict";
 
-const { postMultiIngredientsImages } = require("../controllers/add-multi-ingredients-controller.js");
+const {
+  postMultiIngredientsImages,
+} = require("../controllers/add-multi-ingredients-controller.js");
 const express = require("express");
 const fridgeAuthMiddle = require("../middlewares/fridge-author-middleware.js");
 const authMiddleware = require("../middlewares/auth-middleware.js");
@@ -14,6 +16,12 @@ const imageUploadMiddleware = getImageUploadMiddleware({
   maxCount: 5,
   maxSizeMB: 5,
 });
-router.post("/:fridge_id/multiIngredients/imagesUpload", authMiddleware, fridgeAuthMiddle, imageUploadMiddleware, postMultiIngredientsImages);
+router.post(
+  "/:fridge_id/multiIngredients/imagesUpload",
+  authMiddleware,
+  fridgeAuthMiddle,
+  imageUploadMiddleware,
+  postMultiIngredientsImages
+);
 
 module.exports = router;

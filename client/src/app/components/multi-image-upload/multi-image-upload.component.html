@@ -12,16 +12,15 @@
       #fileInput
     />
   </form>
-  <div class="image-previews-list" *ngFor="let image of imagePreviews; let i = index">
+  <div
+    class="image-previews-list"
+    *ngFor="let image of imagePreviews; let i = index"
+  >
     <div class="image-container">
-      <img
-        [src]="image"
-        alt="Image Preview"
-        class="image-preview"
-    />
-    <button (click)="removeImage(i)">Remove</button>
-  </div>
+      <img [src]="image" alt="Image Preview" class="image-preview" />
+      <button (click)="removeImage(i)">Remove</button>
     </div>
+  </div>
   <button (click)="clearAllImages()">Clear All</button>
   <button (click)="uploadImages()">Upload Images</button>
 </div>

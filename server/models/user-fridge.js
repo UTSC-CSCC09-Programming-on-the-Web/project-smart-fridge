@@ -3,7 +3,7 @@ const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
   class UserFridge extends Model {}
-    UserFridge.init(
+  UserFridge.init(
     {
       user_id: {
         type: DataTypes.UUID,
@@ -16,11 +16,12 @@ module.exports = (sequelize) => {
         primaryKey: true,
       },
     },
-    { sequelize,
-      modelName: 'UserFridge',
-      tableName: 'users_fridges',
+    {
+      sequelize,
+      modelName: "UserFridge",
+      tableName: "users_fridges",
       underscored: true,
-      timestamps: true, 
+      timestamps: true,
     }
   );
 

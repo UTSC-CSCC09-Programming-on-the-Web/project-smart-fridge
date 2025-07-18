@@ -35,20 +35,20 @@ module.exports = (sequelize) => {
       is_subscribe: {
         type: DataTypes.VIRTUAL,
         get() {
-          const status = this.getDataValue('subscription_status');
-          return status === 'active';
+          const status = this.getDataValue("subscription_status");
+          return status === "active";
         },
-      }, 
+      },
       subscription_status: {
         type: DataTypes.ENUM(
-          'incomplete',
-          'incomplete_expired',
-          'active',
-          'past_due',
-          'trialing',
-          'canceled',
-          'unpaid',
-          'paused'
+          "incomplete",
+          "incomplete_expired",
+          "active",
+          "past_due",
+          "trialing",
+          "canceled",
+          "unpaid",
+          "paused"
         ),
         allowNull: true,
       },

@@ -9,19 +9,22 @@ import { User } from '../../../services/auth.service';
   template: `<p>Logging in...</p>`,
 })
 export class GoogleSuccessPageComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe({
       next: (user: any) => {
-       console.log('User retrieved successfully:', user);
+        console.log('User retrieved successfully:', user);
         if (user.user_status === 'need_subscription') {
-            this.router.navigate(['/subscribe']);
-        }else if (user.user_status === 'first_login') {
-            this.router.navigate(['/first-login']);
-          } else {
-            this.router.navigate(['/main']);
-          }
+          this.router.navigate(['/subscribe']);
+        } else if (user.user_status === 'first_login') {
+          this.router.navigate(['/first-login']);
+        } else {
+          this.router.navigate(['/main']);
+        }
         // if (user.user_status === 'need_subscription') {
         //     this.router.navigate(['/subscribe']);
         console.log('User status:', user.user_status);

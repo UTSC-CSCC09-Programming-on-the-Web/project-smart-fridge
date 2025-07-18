@@ -12,8 +12,8 @@ import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-
 })
 export class IngredientCardComponent {
   @Input() ingredient!: Ingredient;
-  @Input() mode: 'view' |  'multi-add' = 'view'; 
-  @Input() partialIngredient?: Partial<Ingredient>; 
+  @Input() mode: 'view' | 'multi-add' = 'view';
+  @Input() partialIngredient?: Partial<Ingredient>;
 
   // Event emitters for updating and deleting ingredients
   @Output() editRequest = new EventEmitter<Ingredient>();

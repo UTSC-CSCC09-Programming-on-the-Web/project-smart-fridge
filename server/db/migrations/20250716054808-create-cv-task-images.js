@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-   await queryInterface.createTable('cv_task_images', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("cv_task_images", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -14,11 +14,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'cv_tasks',
-          key: 'id',
+          model: "cv_tasks",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       original_filename: {
         type: Sequelize.TEXT,
@@ -29,8 +29,8 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'processing', 'done', 'failed'),
-        defaultValue: 'pending',
+        type: Sequelize.ENUM("pending", "processing", "done", "failed"),
+        defaultValue: "pending",
       },
       result: {
         type: Sequelize.JSONB,
@@ -43,18 +43,20 @@ module.exports = {
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('cv_task_images');
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_cv_task_images_status;');
+    await queryInterface.dropTable("cv_task_images");
+    await queryInterface.sequelize.query(
+      "DROP TYPE IF EXISTS enum_cv_task_images_status;"
+    );
   },
 };
