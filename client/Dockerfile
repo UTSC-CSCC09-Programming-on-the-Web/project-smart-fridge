@@ -5,9 +5,11 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY . ./
-RUN npm run build
+RUN npm run build -- --configuration production && \
+    echo " Listing /app/dist:" && ls -al /app/dist && \
+    echo " Listing /app/dist/client:" && ls -al /app/dist/client
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
