@@ -18,7 +18,10 @@ export class RecipePageComponent {
     private socketService: SocketService,
   ) {}
 
+  recipeCardDisplay: boolean = false;
+
   onGenerateRecipe(): void {
+    this.recipeCardDisplay = true;
     console.log('Recipe generation triggered');
     console.log('Generated recipe:', this.recipe);
     this.recipeService.postGenerateRecipe().subscribe({

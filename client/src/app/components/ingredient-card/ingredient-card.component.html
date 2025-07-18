@@ -41,10 +41,10 @@
     </p>
   </div>
   <div class="ingredient-actions">
-    <button type="button" (click)="onUpdateIngredient()">Edit</button>
-    <button type="button" (click)="onDeleteIngredient()">Delete</button>
+    <button class="btn" type="button" (click)="onUpdateIngredient()">Edit</button>
+    <button class="btn" type="button" (click)="onDeleteIngredient()">Delete</button>
   </div>
-  <button type="button" *ngIf="mode === 'multi-add'" (click)="addIngredientImage.emit()">
+  <button class="btn" type="button" *ngIf="mode === 'multi-add'" (click)="addIngredientImage.emit()">
     Add an image to the ingredient
   </button>
 </div>

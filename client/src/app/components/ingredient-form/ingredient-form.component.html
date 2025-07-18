@@ -42,11 +42,11 @@
     />
   </div>
   <!-- submit button -->
-  <button type="submit"  *ngIf="mode !== 'image'" [disabled]="ingredientForm.invalid">
+  <button class="btn" type="submit" *ngIf="mode !== 'image'" [disabled]="ingredientForm.invalid">
     {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
   </button>
   <!-- submit button for image mode -->
-  <button
+  <button class="btn"
     type="button"
     *ngIf="mode === 'image'"
     (click)="submitImageFile()"
@@ -54,7 +54,7 @@
     Upload Image
   </button>
   <!-- cancel button -->
-  <button type="button" *ngIf="mode === 'edit'" (click)="cancelEdit.emit()">
+  <button class="btn" type="button" *ngIf="mode === 'edit'" (click)="cancelEdit.emit()">
     Cancel
   </button>
 </form>
