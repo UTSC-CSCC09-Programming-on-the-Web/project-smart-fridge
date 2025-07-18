@@ -11,6 +11,13 @@
     (error)="onImageError($event)"
     alt="{{ ingredient.name }}"
   />
+    <img
+    *ngIf="mode === 'multi-add' && partialIngredient && partialIngredient.image_url"
+    class="ingredient-img"
+    [src]="partialIngredient.image_url"
+    (error)="onImageError($event)"
+    alt="{{ partialIngredient.name }}"
+  />
   <ng-template #defaultImage>
     <img
       *ngIf="mode === 'view'"
@@ -37,4 +44,7 @@
     <button type="button" (click)="onUpdateIngredient()">Edit</button>
     <button type="button" (click)="onDeleteIngredient()">Delete</button>
   </div>
+  <button type="button" *ngIf="mode === 'multi-add'" (click)="addIngredientImage.emit()">
+    Add an image to the ingredient
+  </button>
 </div>

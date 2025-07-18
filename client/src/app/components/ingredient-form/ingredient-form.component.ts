@@ -23,12 +23,13 @@ import { validateImageFile, readImageAsDataUrl } from '../../utils/image.util';
 export class IngredientFormComponent {
   ingredientForm: FormGroup;
 
-  @Input() mode: 'add' | 'edit' = 'add';
+  @Input() mode: 'add' | 'edit' | 'image' = 'add';
   @Input() ingredientToEdit?: Partial<Ingredient>;
 
   @Output() addIngredient = new EventEmitter<FormData>();
   @Output() submitIngredient = new EventEmitter<Partial<Ingredient>>();
   @Output() cancelEdit = new EventEmitter<void>();
+  @Output() submitImage = new EventEmitter<File>();
 
   selectedImage: File | null = null;
 
@@ -128,6 +129,15 @@ export class IngredientFormComponent {
       this.submitIngredient.emit(output);
     } else {
       console.error('Form is invalid');
+    }
+  }
+
+  submitImageFile(): void {
+    if (this.selectedImage) {
+      this.submitImage.emit(this.selectedImage);
+      this.clearForm();
+    } else {
+      console.error('No image selected for upload');
     }
   }
 }

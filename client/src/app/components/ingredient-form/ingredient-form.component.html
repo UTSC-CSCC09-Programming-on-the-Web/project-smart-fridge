@@ -7,21 +7,27 @@
   [ngClass]="mode + '-form'"
 >
   <!-- title -->
-  <div class="ingredient-form-title">
+  <div class="ingredient-form-title" *ngIf="mode !== 'image'">
     {{
       mode === "edit"
         ? "Edit Ingredient"
         : "Add a new ingredient into your fridge"
     }}
   </div>
+   <div class="ingredient-form-title" *ngIf="mode === 'image'">
+    Add an image for the ingredient   
+  </div>
+
   <!-- form fields -->
+   <div class="form-field" *ngIf="mode !== 'image'">
   <input formControlName="name" placeholder="Ingredient name" />
   <input formControlName="quantity" type="number" placeholder="Quantity" />
   <input formControlName="unit" placeholder="Unit (e.g. g/ml/pcs)" />
   <input formControlName="expire_date" type="date" />
   <input formControlName="type" placeholder="Type (optional)" />
+</div>
   <!--image url will change to file upload in the futuer -->
-  <div class="image-container" *ngIf="mode === 'add'">
+  <div class="image-container" *ngIf="mode === 'add' || mode === 'image'">
     <input
       type="file"
       (change)="onFileSelected($event)"
@@ -36,8 +42,16 @@
     />
   </div>
   <!-- submit button -->
-  <button type="submit" [disabled]="ingredientForm.invalid">
+  <button type="submit"  *ngIf="mode !== 'image'" [disabled]="ingredientForm.invalid">
     {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
+  </button>
+  <!-- submit button for image mode -->
+  <button
+    type="button"
+    *ngIf="mode === 'image'"
+    (click)="submitImageFile()"
+  >
+    Upload Image
   </button>
   <!-- cancel button -->
   <button type="button" *ngIf="mode === 'edit'" (click)="cancelEdit.emit()">
