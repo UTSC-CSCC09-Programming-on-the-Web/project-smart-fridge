@@ -8,7 +8,8 @@ on:
       - server/**
 
 env:
-  IMAGE_NAME: smartfridge-server
+  IMAGE_NAME_BACKEND: smartfridge-backend
+  IMAGE_NAME_WORKER: smartfridge-worker
 
 jobs:
   push:
