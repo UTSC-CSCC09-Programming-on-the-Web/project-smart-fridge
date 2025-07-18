@@ -12,10 +12,22 @@ import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-
 })
 export class IngredientCardComponent {
   @Input() ingredient!: Ingredient;
+  @Input() mode: 'view' |  'multi-add' = 'view'; 
+  @Input() partialIngredient?: Partial<Ingredient>; 
 
   // Event emitters for updating and deleting ingredients
   @Output() editRequest = new EventEmitter<Ingredient>();
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
+
+  ingredientDisplay: Partial<Ingredient> = {};
+
+  ngOnInit(): void {
+    if (this.mode === 'multi-add') {
+      this.ingredientDisplay = { ...this.partialIngredient };
+    } else {
+      this.ingredientDisplay = { ...this.ingredient };
+    }
+  }
 
   onImageError(event: Event): void {
     (event.target as HTMLImageElement).src = 'assets/default-ingredient.png';

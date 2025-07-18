@@ -6,4 +6,12 @@
   [message]="notificationMessage"
   [type]="notificationType"
   ></app-notification-bar>
-</div>
+
+  <div class="temp-ingredients-list">
+    <div *ngFor="let partialIngredient of formalIngredients" >
+      <app-ingredient-card
+        [partialIngredient]="partialIngredient"
+        [mode]="'multi-add'"
+      ></app-ingredient-card>
+    </div>
+  </div>

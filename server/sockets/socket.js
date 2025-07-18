@@ -69,7 +69,20 @@ const setupSocket = async(app) => {
       {message: message, type: data?.type || 'info'});
   });
 
-
+  subClient.subscribe("addMultiIngredientsFinished", (msg) => {
+    const data = JSON.parse(msg);
+    const traceId = data.traceId;
+    if (!data.userId) {
+      console.error("No userId in message data:", data);
+      return;
+    }
+    console.log(`Publishing addMultiIngredientsFinished to user:${data.userId}`);
+    io.to(`user:${data.userId}`).emit("addMultiIngredientsFinished", {
+      traceId: traceId,
+      result: data.result,
+    });
+  });
+  
   return { httpServer, io };
 }
 

@@ -72,6 +72,12 @@ llmRecipeWorker.on("completed", async(job, returnvalue) => {
             type: 'success',
             message: "Get ingredients from Recipe or Shopping record task completed successfully! "
         }));
+        pubClient.publish("addMultiIngredientsFinished", JSON.stringify({
+            userId: userId,
+            traceId: traceId,
+            // temp solution to send the result back to the client
+            result: returnvalue,
+        }));
     }
 }); 
 

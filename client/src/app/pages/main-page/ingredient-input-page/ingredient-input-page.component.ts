@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
+import { Ingredient } from '../../../models/ingredient.model';
+
+interface tempIngredient {
+  name: string;
+  quantity: string;
+  unit: string;
+}
 
 @Component({
   selector: 'app-ingredient-input-page',
@@ -8,12 +15,15 @@ import { SocketService } from '../../../services/socket.service';
   styleUrl: './ingredient-input-page.component.scss',
   standalone: false,
 })
+
 export class IngredientInputPageComponent {
 
   constructor(private addMultiIngredientsService: AddMultiIngredientsService, private socketService: SocketService) {}
   
   notificationMessage: string = '';
   notificationType: 'success' | 'error' | 'info' = 'info';
+  tempIngredients: tempIngredient[] = [];
+  formalIngredients: Partial<Ingredient>[] = [];
 
   handleMultiImagesUploaded(images: File[]): void {
     this.notificationMessage = '';
@@ -44,5 +54,25 @@ export class IngredientInputPageComponent {
         console.error('Error receiving CV Task Progress:', err);
       }
     });
+    this.socketService.fromSocketEvent<{ traceId: string, result: any }>('addMultiIngredientsFinished').subscribe({
+      next: (data) => {
+        console.log(`Received addMultiIngredientsFinished with traceId: ${data.traceId} and result:`, data.result);
+        let clean = data.result.trim();
+        if (clean.startsWith('```json')) {
+          clean = clean.replace(/^```json/, '').replace(/```$/, '').trim();
+        }
+        this.tempIngredients = JSON.parse(clean) as tempIngredient[];
+        this.formalIngredients = this.tempIngredients.map(ing => ({
+          name: ing.name,
+          quantity: parseFloat(ing.quantity),
+          unit: ing.unit,
+          expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]
+        }));
+        console.log('Parsed ingredients:', this.formalIngredients);
+      },
+      error: (err) => {
+        console.error('Error receiving addMultiIngredientsFinished:', err);
+      }
+    });
   }
-}  
+}
