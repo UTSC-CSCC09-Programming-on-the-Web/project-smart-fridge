@@ -14,4 +14,9 @@
         [mode]="'multi-add'"
       ></app-ingredient-card>
     </div>
+    <button *ngIf="formalIngredients.length > 0"
+      class="add-all-button"
+      (click)="addAllIngredients()">
+      Add All Ingredients
+    </button>
   </div>

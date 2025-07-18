@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from '../models/ingredient.model';
-import { Observable, of} from 'rxjs';
+import { Observable, of, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { FridgeService } from './fridge.service';
@@ -20,6 +20,12 @@ export class IngredientService {
 
   constructor(private http: HttpClient, private fridgeService: FridgeService) {}
 
+  private ingredientUpdatedSource = new Subject<void>();
+  ingredientUpdated$ = this.ingredientUpdatedSource.asObservable();
+
+  notifyIngredientsUpdated() {
+    this.ingredientUpdatedSource.next(); 
+  }
   /**
    * Fetches all ingredients from the server.
    * @returns An Observable of an array of Ingredient objects.
