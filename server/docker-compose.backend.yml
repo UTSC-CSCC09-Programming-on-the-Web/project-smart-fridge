@@ -12,8 +12,6 @@ services:
     depends_on:
       - db
       - redis
-    volumes:
-     - ./.secret/google-credentials.json:${GCP_DOCKER_CREDENTIALS_PATH}
     env_file:
       - .env
     command: ["node", "server.js"]
@@ -27,8 +25,6 @@ services:
     depends_on:
       - db
       - redis
-    volumes:
-     - ./.secret/google-credentials.json:${GCP_DOCKER_CREDENTIALS_PATH}
     env_file:
       - .env
     command: ["node", "workers/index.js"]
