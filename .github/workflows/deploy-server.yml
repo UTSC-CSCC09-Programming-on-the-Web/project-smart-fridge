@@ -1,4 +1,4 @@
-name: Publish Express Backend to GHCR
+name: Publish Smartfridge Backend to GHCR
 
 on:
   push:
