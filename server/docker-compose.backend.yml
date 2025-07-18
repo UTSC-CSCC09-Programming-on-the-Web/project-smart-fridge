@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: smartfridge-backend
     container_name: smartfridge-backend
     restart: unless-stopped
     ports:
@@ -20,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: smartfridge-worker 
     container_name: smartfridge-worker
     restart: unless-stopped
     depends_on:
