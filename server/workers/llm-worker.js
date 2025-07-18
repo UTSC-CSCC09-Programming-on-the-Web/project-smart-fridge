@@ -3,8 +3,7 @@ const redisBullmq = require("../redis/redis-bullmq");
 const { LlmTask } = require("../models");
 const { pubClient } = require('../redis/redis-socket');
 const { LLM_JOB_TYPES } = require("../queues/llm-queue");
-const { callGpt } = require("../services/gpt/gpt-service");
-
+const {handleRecipeGeneration, handleOCRExtraction} = require("./handlers/llm-job-handler.js");
 
 const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     
@@ -14,46 +13,26 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
     await LlmTask.update({ status: 'processing' },
         { where: { trace_id: traceId } });
     // refactor to job handler function later
+    let result;
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
         const { ingredients } = job.data;
         console.log("Generating recipe with data:", job.data);
-        // Simulate a delay for recipe generation
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        const result = await callGpt({
-            taskType: "recipe",
-            data: { ingredients },
-        });
-        // Simulate recipe generation
-        // const generatedRecipe = {
-        // id: job.id,
-        // title: "Sample Recipe",
-        // ingredients: ingredients,
-        // instructions: "Mix ingredients and cook for 20 minutes."
-        // };
-
-        console.log("Generated recipe:", result);
-        await LlmTask.update({ status: 'done', result: result }, 
-            { where: {  trace_id: traceId} });
-
-        // Publish the generated recipe to Redis
-        return result;
+        result = await handleRecipeGeneration(ingredients);
     }
      if (job.name === LLM_JOB_TYPES.OCRextract) {
         console.log("Processing OCR extraction with data:", job.data);
         const { fullText } = job.data;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const result = await callGpt({
-            taskType: "ocr_format",
-            data: { fullText: fullText },
-            temperature: 0.1,
-        });
-
-        console.log("Extracted ingredients from OCR:", result);
+        result = await handleOCRExtraction(fullText);
+        console.log("OCR extraction result:", result);
+    }
+    if (!result) {
+        console.error(`No result returned for job ${job.id} with traceId ${traceId}`);
+    }
+    console.log(`llm Job ${job.id} completed with result:`, result);
         await LlmTask.update({ status: 'done', result: result },
             { where: { trace_id: traceId } });
 
         return result;
-    }
     }, {
     connection: redisBullmq,
     autorun: true,
