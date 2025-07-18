@@ -32,7 +32,7 @@ app.use(
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "http://localhost:4200",
+  origin: "https://jieying.live", 
   credentials: true,
 };
 
