@@ -8,11 +8,20 @@
   ></app-notification-bar>
 
   <div class="temp-ingredients-list">
-    <div *ngFor="let partialIngredient of formalIngredients" >
+    <div *ngFor="let partialIngredient of formalIngredients; let i = index">
       <app-ingredient-card
         [partialIngredient]="partialIngredient"
         [mode]="'multi-add'"
+        (editTempIngredient)="toggleEditForm(partialIngredient, i)"
+        (deleteTempIngredient)="deleteTempIngredient($event)"
       ></app-ingredient-card>
+       <app-ingredient-form
+        *ngIf="editingTempIngredient && editingTempIngredientsIndex && editingTempIngredientsIndex === i"
+        [mode]="'edit'"
+        [ingredientToEdit]="editingTempIngredient"
+        (submitIngredient)="editTempIngredient($event)"
+        (cancelEdit)="cancelEdit()"
+      ></app-ingredient-form>
     </div>
     <button *ngIf="formalIngredients.length > 0"
       class="add-all-button"

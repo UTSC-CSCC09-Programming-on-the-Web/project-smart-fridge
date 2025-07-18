@@ -105,4 +105,32 @@ export class IngredientInputPageComponent {
       }
     }); 
   }
+
+  editingTempIngredient: Partial<Ingredient> | null = null;
+  editingTempIngredientsIndex: number | null = null;  
+
+  toggleEditForm(ingredient: Partial<Ingredient>, index: number): void {
+    console.log('Toggling edit form for ingredient:', ingredient);
+    this.editingTempIngredient = ingredient;
+    this.editingTempIngredientsIndex = index;
+  }
+
+  cancelEdit() {
+    this.editingTempIngredient = null;
+    this.editingTempIngredientsIndex = null;
+  }
+
+  editTempIngredient(ingredient: Partial<Ingredient>): void {
+    if (this.editingTempIngredientsIndex !== null) {
+      this.formalIngredients[this.editingTempIngredientsIndex] = {
+        ...this.formalIngredients[this.editingTempIngredientsIndex],
+        ...ingredient
+      };
+    }
+    this.cancelEdit();
+  }
+
+  deleteTempIngredient(ingredient: Partial<Ingredient>): void {
+    this.formalIngredients = this.formalIngredients.filter(ing => ing !== ingredient);
+  }
 }

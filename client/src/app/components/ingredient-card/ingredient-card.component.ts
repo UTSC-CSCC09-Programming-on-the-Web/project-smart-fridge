@@ -18,6 +18,8 @@ export class IngredientCardComponent {
   // Event emitters for updating and deleting ingredients
   @Output() editRequest = new EventEmitter<Ingredient>();
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
+  @Output() editTempIngredient = new EventEmitter<Partial<Ingredient>>();
+  @Output() deleteTempIngredient = new EventEmitter<Partial<Ingredient>>();
 
   ingredientDisplay: Partial<Ingredient> = {};
 
@@ -37,7 +39,11 @@ export class IngredientCardComponent {
     // Emit the ingredient to be edited
     // This will be caught by the parent component to toggle the edit form
     // and pre-fill it with the ingredient's current data
-    this.editRequest.emit(this.ingredient);
+    if (this.mode === 'multi-add') {
+      this.editTempIngredient.emit(this.partialIngredient);
+    } else {
+      this.editRequest.emit(this.ingredient);
+    }
     console.log('ingredient to edit:', this.ingredient);
   }
 
@@ -47,7 +53,7 @@ export class IngredientCardComponent {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Delete Ingredient',
-        message: `Are you sure you want to delete ${this.ingredient.name}? This action cannot be undone.`,
+        message: `Are you sure you want to delete ${this.ingredient?.name || this.partialIngredient?.name}? This action cannot be undone.`,
         confirmText: 'Delete',
         cancelText: 'Cancel',
       },
@@ -56,7 +62,11 @@ export class IngredientCardComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // If the user confirmed the deletion, emit the delete event
-        this.deleteIngredient.emit(this.ingredient);
+        if (this.mode === 'multi-add') {
+          this.deleteTempIngredient.emit(this.partialIngredient);
+        } else {
+          this.deleteIngredient.emit(this.ingredient);
+        }
         console.log('Confirmed deletion of ingredient:', this.ingredient);
       }
     });
