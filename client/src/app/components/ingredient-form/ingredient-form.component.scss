@@ -39,3 +39,18 @@
   object-fit: contain;
   background-color: #f8f8f8;
 }
+
+.btn {
+  border: solid 1px #000000;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
+.form-field {
+  margin-bottom: 5px;
+  gap: 3px;
+  display: flex;
+  flex-direction: column;
+}

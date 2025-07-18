@@ -11,4 +11,5 @@ export interface Ingredient {
   is_expired: boolean;
   image_url?: string; // URL to the image of the ingredient, if empty, use a default image
   fridge_id: string; // uuid（FK）
+  image_file?: File; // File object for the image, used when uploading
 }

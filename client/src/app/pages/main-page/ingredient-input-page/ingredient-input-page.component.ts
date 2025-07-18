@@ -5,6 +5,7 @@ import { Ingredient } from '../../../models/ingredient.model';
 import { ingredientToFormData } from '../../../utils/form-data.util';
 import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
+import {readImageAsDataUrl} from '../../../utils/image.util';
 
 interface tempIngredient {
   name: string;
@@ -28,8 +29,8 @@ export class IngredientInputPageComponent {
   notificationMessage: string = '';
   notificationType: 'success' | 'error' | 'info' = 'info';
   tempIngredients: tempIngredient[] = [];
+ // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
   formalIngredients: Partial<Ingredient>[] = [];
-
   handleMultiImagesUploaded(images: File[]): void {
     this.notificationMessage = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
@@ -93,6 +94,7 @@ export class IngredientInputPageComponent {
             expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
               .toISOString()
               .split('T')[0],
+            image_url: "",
           }));
           console.log('Parsed ingredients:', this.formalIngredients);
         },
@@ -106,7 +108,8 @@ export class IngredientInputPageComponent {
     const rawIngredients = [...this.formalIngredients];
     const formDataList: FormData[] = [];
     rawIngredients.forEach((ingredient) => {
-      const formData = ingredientToFormData(ingredient);
+      ingredient.image_url = undefined; 
+      const formData = ingredientToFormData(ingredient, ingredient.image_file);
       formDataList.push(formData);
     });
     forkJoin(
@@ -159,5 +162,30 @@ export class IngredientInputPageComponent {
     this.formalIngredients = this.formalIngredients.filter(
       (ing) => ing !== ingredient,
     );
+  }
+
+  addingTempIngredientImage: boolean = false;
+  addingTempIngredientsIndex: number | null = null;
+  addTempIngredientImage(index: number): void {
+    this.addingTempIngredientImage = true;
+    this.addingTempIngredientsIndex = index;
+  }
+
+async submitTempIngredientImageFile(imageFile: File, i: number): Promise<void> {
+    const file = imageFile;
+    const previewUrl = await readImageAsDataUrl(file);
+    if (this.addingTempIngredientsIndex !== null) {
+      this.formalIngredients[i] = {
+        ...this.formalIngredients[i],
+        image_file: file,
+        image_url: previewUrl,
+      };
+    }
+    this.cancelAddTempIngredientImage();
+  }
+
+  cancelAddTempIngredientImage(): void {
+    this.addingTempIngredientImage = false;
+    this.addingTempIngredientsIndex = null;
   }
 }

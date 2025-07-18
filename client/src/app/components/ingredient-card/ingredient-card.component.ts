@@ -20,6 +20,7 @@ export class IngredientCardComponent {
   @Output() deleteIngredient = new EventEmitter<Ingredient>();
   @Output() editTempIngredient = new EventEmitter<Partial<Ingredient>>();
   @Output() deleteTempIngredient = new EventEmitter<Partial<Ingredient>>();
+  @Output() addIngredientImage = new EventEmitter<void>();
 
   ingredientDisplay: Partial<Ingredient> = {};
 

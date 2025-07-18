@@ -1,6 +1,5 @@
-<p>multi-image-upload works!</p>
 <div class="multi-image-upload">
-  <h2>Upload Multiple Images</h2>
+  <h2>Upload your receipts or any shopping records images to add multiple ingredients: </h2>
   <p>Maximum {{ maxCount }} images can be uploaded.</p>
   <form>
     <label for="fileInput">Select images:</label>
@@ -18,9 +17,9 @@
   >
     <div class="image-container">
       <img [src]="image" alt="Image Preview" class="image-preview" />
-      <button (click)="removeImage(i)">Remove</button>
+      <button class="btn" (click)="removeImage(i)">Remove</button>
     </div>
   </div>
-  <button (click)="clearAllImages()">Clear All</button>
-  <button (click)="uploadImages()">Upload Images</button>
+  <button class="btn" (click)="clearAllImages()">Clear All</button>
+  <button class="btn" (click)="uploadImages()">Upload Images</button>
 </div>
