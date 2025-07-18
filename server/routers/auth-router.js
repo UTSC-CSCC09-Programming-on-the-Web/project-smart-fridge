@@ -24,7 +24,7 @@ router.get('/google/callback', passport.authenticate('google', {
 
 router.get('/google/failure', handleGoogleFailure);
 
-router.get('/logout',authMiddleware, handleLogout);
+router.get('/logout',handleLogout);
 
 router.get('/current-user',authMiddleware, getCurrentUser);
 

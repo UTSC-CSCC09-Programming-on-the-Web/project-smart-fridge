@@ -43,6 +43,12 @@ module.exports = {
       fridge_id: {
         type: Sequelize.UUID,
         allowNull: false,
+        references: {
+          model: "fridges",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       created_at: {
         allowNull: false,
@@ -67,3 +73,4 @@ module.exports = {
     await queryInterface.dropTable("Ingredients");
   },
 };
+

@@ -14,12 +14,17 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { IngredientListPageComponent } from './pages/main-page/ingredient-list-page/ingredient-list-page.component';
+import { RecipePageComponent } from './pages/main-page/recipe-page/recipe-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { IngredientFormComponent } from './components/ingredient-form/ingredient-form.component';
 import { IngredientCardComponent } from './components/ingredient-card/ingredient-card.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-
+import { RecipeCardComponent } from './components/recipe-card/recipe-card.component';
+import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
+import { IngredientInputPageComponent } from './pages/main-page/ingredient-input-page/ingredient-input-page.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MultiImageUploadComponent } from './components/multi-image-upload/multi-image-upload.component';
+import { NotificationBarComponent } from './components/notification-bar/notification-bar.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +36,12 @@ import { AppRoutingModule } from './app-routing.module';
     IngredientFormComponent,
     IngredientCardComponent,
     ConfirmDialogComponent,
+    RecipePageComponent,
+    RecipeCardComponent,
+    RecipeFormComponent,
+    IngredientInputPageComponent,
+    MultiImageUploadComponent,
+    NotificationBarComponent
   ],
   imports: [
     BrowserModule,

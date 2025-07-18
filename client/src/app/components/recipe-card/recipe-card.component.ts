@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Recipe } from '../../models/recipe.model';
 
 @Component({
   selector: 'app-recipe-card',
@@ -6,4 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './recipe-card.component.scss',
   standalone: false,
 })
-export class RecipeCardComponent {}
+export class RecipeCardComponent {
+  @Input() recipe: Recipe | null = null;
+  @Input() message: string = "";
+}

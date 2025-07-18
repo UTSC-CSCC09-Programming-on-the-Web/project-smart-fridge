@@ -1,7 +1,10 @@
 <!-- ingredient-card.component.html -->
 <div class="ingredient-card">
+  <p *ngIf="mode === 'multi-add'" class="multi-add-label">
+   Temporay Ingredient Result -- Extracted from Image, please review before adding to fridge.
+  </p>
   <img
-    *ngIf="ingredient.image_url; else defaultImage"
+    *ngIf="mode === 'view' && ingredient.image_url; else defaultImage"
     class="ingredient-img"
     [src]="ingredient.image_url"
     (error)="onImageError($event)"
@@ -9,18 +12,20 @@
   />
   <ng-template #defaultImage>
     <img
+      *ngIf="mode === 'view'"
       class="ingredient-img"
       src="assets/default-ingredient.png"
-      alt="{{ ingredient.name }}"
+      alt="{{ ingredientDisplay.name }}"
     />
   </ng-template>
-  <div class="ingredient-info">
-    <h3>{{ ingredient.name }}</h3>
-    <p>{{ ingredient.quantity }} {{ ingredient.unit }}</p>
-    <p>Expire Date: {{ ingredient.expire_date }}</p>
-    <p *ngIf="ingredient.type">Type: {{ ingredient.type }}</p>
-    <p [class.expired]="ingredient.is_expired">
-      {{ ingredient.is_expired ? "Expired" : "Fresh" }}
+  <div [ngClass]="['ingredient-info', mode]">
+    <h3>{{ ingredientDisplay.name }}</h3>
+    <p>{{ ingredientDisplay.quantity }} {{ ingredientDisplay.unit }}</p>
+    <p *ngIf="mode === 'view'">Expire Date: {{ ingredientDisplay.expire_date }}</p>
+    <p *ngIf="mode === 'multi-add'">Default Expire Date: {{ ingredientDisplay.expire_date }}</p>
+    <p *ngIf="ingredientDisplay.type">Type: {{ ingredientDisplay.type }}</p>
+    <p *ngIf="mode === 'view'" [class.expired]="ingredientDisplay.is_expired">
+      {{ ingredientDisplay.is_expired ? "Expired" : "Fresh" }}
     </p>
   </div>
   <div class="ingredient-actions">

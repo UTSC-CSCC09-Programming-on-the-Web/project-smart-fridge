@@ -1,1 +1,11 @@
-<p>recipe-page works!</p>
+<div class = "recipe-page">
+  <app-recipe-form
+    (generateRecipe)="onGenerateRecipe()"
+  ></app-recipe-form>
+
+  <app-recipe-card 
+  [message]="message"
+  [recipe]="recipe"
+  ></app-recipe-card>
+  
+</div>

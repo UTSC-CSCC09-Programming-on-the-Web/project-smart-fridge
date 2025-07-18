@@ -10,10 +10,26 @@
   margin-bottom: 16px;
 }
 
+.multi-add {
+  background-color: #fffeef;
+  margin-top: 3px;
+  border: 1px dashed #ffcc00;
+  flex-direction: row;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.multi-add-label {
+  font-weight: bold;
+  color: #ffcc00;
+  margin-bottom: 8px;
+}
+
 .ingredient-info {
   display: flex;
   flex-direction: column;
   margin-top: 8px;
+  padding: 5px;
 }
 
 .ingredient-img {

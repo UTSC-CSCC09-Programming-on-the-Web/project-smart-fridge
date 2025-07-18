@@ -34,6 +34,15 @@ export class IngredientListPageComponent {
         this.loadInitialIngredients();
       }
     });
+    this.ingredientService.ingredientUpdated$.subscribe(() => {
+      console.log('Ingredients updated, reloading...');
+      this.ingredients = [];
+      this.expireDateCursor = null;
+      this.idCursor = null;
+      this.hasMoreData = true;
+      this.loading = false;
+      this.loadInitialIngredients();
+    });
   }
 
   loadInitialIngredients(): void {

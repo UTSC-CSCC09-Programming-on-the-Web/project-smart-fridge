@@ -12,6 +12,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Ingredient } from '../../models/ingredient.model';
 import { ingredientToFormData } from '../../utils/form-data.util';
+import {validateImageFile, readImageAsDataUrl} from '../../utils/image.util';
 
 @Component({
   selector: 'app-ingredient-form',
@@ -54,28 +55,22 @@ export class IngredientFormComponent {
     if (input.files && input.files.length > 0) {
       const image = input.files[0];
 
-      const maxSizeMB = 5;
-      const allowedTypes = ['image/png', 'image/jpeg'];
-
-      if (image.size > maxSizeMB * 1024 * 1024) {
-        alert(
-          'this image is too large, please select an image smaller than 5MB',
-        );
-        return;
-      }
-
-      if (!allowedTypes.includes(image.type)) {
-        alert('Invalid file type. Please select a PNG or JPEG image.');
+      const errorMessage = validateImageFile(image);
+      if (errorMessage) {
+        alert(errorMessage);
         return;
       }
 
       this.selectedImage = image;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(image);
+      this.imagePreviewUrl = null; 
+      readImageAsDataUrl(image)
+        .then((dataUrl) => {
+          this.imagePreviewUrl = dataUrl;
+        })
+        .catch((error) => {
+          console.error('Error reading image file:', error);
+          alert('Failed to read image file.');
+        });
     }
   }
 

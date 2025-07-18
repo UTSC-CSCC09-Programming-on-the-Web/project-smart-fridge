@@ -8,10 +8,15 @@ const passport = require('passport');
 require('./config/passport.js'); 
 const ingredientsRouter = require("./routers/ingredients-router.js");
 const authRouter = require('./routers/auth-router.js');
+const recipeRouter = require("./routers/recipe-router.js");
 const { sequelize } = require("./db/datasource.js");
 const { stripeRouter, stripeWebhookRouter } = require("./routers/stripe-router.js");
 
 const fridgesRouter = require("./routers/fridges-router.js");
+const multiIngredientsRouter = require("./routers/add-multi-ingredients-router.js");
+
+const { setupSocket } = require("./sockets/socket.js");
+const {sessionMiddleware} = require("./middlewares/session-middleware.js");
 
 const PORT = 3000;
 const app = express();
@@ -29,13 +34,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(
-  session({
-    secret: process.env.SECRET_KEY || "test",
-    resave: false,
-    saveUninitialized: true,
-  }),
-);
+app.use(sessionMiddleware);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -58,12 +58,19 @@ async function startServer() {
     
     // add routers here
     app.use("/api/fridges", ingredientsRouter);
+    app.use("/api/ingredients", ingredientsRouter);
+    app.use("/api/recipes", recipeRouter);
+    app.use("/api/fridges", multiIngredientsRouter);
 
     app.get("/", (req, res) => {
       res.send("Backend root route: server is running.");
     });
 
-    app.listen(PORT, () => {
+    const { httpServer, io } = await setupSocket(app);
+    app.set("io", io);
+    app.set("httpServer", httpServer);
+
+    httpServer.listen(PORT, () => {
       console.log(`HTTP server on http://localhost:${PORT}`);
     });
   } catch (error) {
