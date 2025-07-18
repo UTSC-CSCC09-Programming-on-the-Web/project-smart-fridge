@@ -46,21 +46,14 @@ cvOCRWorker.on("completed", async(job, returnvalue) => {
         console.error("No userId found in job data:", job.data);
         return;
     }
-    console.log(`Publishing cvTaskFinished to user:${userId}`);
-    pubClient.publish("cvTaskFinished", JSON.stringify({
-        type: 'cvTaskFinished',
-        traceId: traceId,
+    pubClient.publish("cvTaskProgress", JSON.stringify({
         userId: userId,
+        message: `CV Task: OCR text detection completed successfully`,
+        type: 'success',
     }));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const { llmTaskRecord } = await onCvOCRJobCompleted(traceId);
     console.log(`LLM Job created successfully for traceId ${traceId}`);
-    pubClient.publish("llmOCRExtractTaskCreated", JSON.stringify({
-        type: 'llmOCRExtractTaskCreated',
-        llmTaskId: llmTaskRecord.id,
-        userId: userId,
-        traceId: traceId,
-        message: "LLM Task created successfully for CV Task with traceId: " + traceId,
-    }));
 });
 
 module.exports = cvOCRWorker;

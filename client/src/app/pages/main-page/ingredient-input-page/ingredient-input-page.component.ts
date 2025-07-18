@@ -30,11 +30,15 @@ export class IngredientInputPageComponent {
 
   ngOnInit(): void {
     console.log('Ingredient Input Page initialized');
-    this.socketService.fromSocketEvent<string>('cvTaskProgress').subscribe({
-      next: (message: string) => {
-        this.notificationMessage = message;
-        this.notificationType = 'info'; 
-        console.log('Received CV Task Progress:', message);
+    this.socketService.fromSocketEvent<{ message: string, type: string }>('cvTaskProgress').subscribe({
+      next: (data) => {
+        this.notificationMessage = data.message;
+        if (data.type === 'success' || data.type === 'error' || data.type === 'info') {
+          this.notificationType = data.type as 'success' | 'error' | 'info';
+        } else {
+          this.notificationType = 'info';
+        }
+        console.log(`Received CV Task Progress with type: ${this.notificationType} and message: ${this.notificationMessage}`);
       },
       error: (err) => {
         console.error('Error receiving CV Task Progress:', err);

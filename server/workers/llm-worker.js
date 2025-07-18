@@ -12,27 +12,36 @@ const llmRecipeWorker = new Worker("llmQueue", async (job) => {
 
     await LlmTask.update({ status: 'processing' },
         { where: { trace_id: traceId } });
-    // refactor to job handler function later
+    const userId = job.data?.user_id;
     let result;
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
         const { ingredients } = job.data;
         console.log("Generating recipe with data:", job.data);
         result = await handleRecipeGeneration(ingredients);
     }
+
      if (job.name === LLM_JOB_TYPES.OCRextract) {
-        console.log("Processing OCR extraction with data:", job.data);
+        pubClient.publish("cvTaskProgress", JSON.stringify({
+            userId: userId,
+            message: "LLM Formatting started to get ingredients from text"
+        }));
         const { fullText } = job.data;
         result = await handleOCRExtraction(fullText);
-        console.log("OCR extraction result:", result);
+        pubClient.publish("cvTaskProgress", JSON.stringify({
+            userId: userId,
+            message: "LLM Formatting job done with result: " + result,
+        }));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
     }
+
     if (!result) {
         console.error(`No result returned for job ${job.id} with traceId ${traceId}`);
     }
-    console.log(`llm Job ${job.id} completed with result:`, result);
-        await LlmTask.update({ status: 'done', result: result },
+  
+    await LlmTask.update({ status: 'done', result: result },
             { where: { trace_id: traceId } });
 
-        return result;
+    return result;
     }, {
     connection: redisBullmq,
     autorun: true,
@@ -54,6 +63,14 @@ llmRecipeWorker.on("completed", async(job, returnvalue) => {
             type: 'recipeGenerated',
             traceId: traceId,
             userId: userId,
+        }));
+    }
+    if (job.name === LLM_JOB_TYPES.OCRextract) {
+        console.log(`Publishing llmOCRExtractTaskCreated to user:${userId}`);
+        pubClient.publish("cvTaskProgress", JSON.stringify({
+            userId: userId,
+            type: 'success',
+            message: "Get ingredients from Recipe or Shopping record task completed successfully! "
         }));
     }
 }); 
