@@ -29,14 +29,7 @@ const postGenerateRecipe = async (req, res) => {
     const { job, llmTaskRecord } = await addLlmJob(jobType, jobData);
     console.log(`Job ${job.id} added to the queue for recipe generation`);
     console.log(`LlmTask record created with ID: ${llmTaskRecord.id}`);
-    res.status(202).json({
-      ingredients: ingredients.map(ingredient => ({
-        id: ingredient.id,
-        name: ingredient.name,
-        quantity: ingredient.quantity,
-        expire_date: ingredient.expire_date,
-      })),
-      recipe:  "Accepted! Generating recipe..."});  
+    res.status(202).json({ message: 'Recipe generation in progress...Waiting...' });
   } catch (error) {
       console.error('Error generating recipe:', error);
       res.status(500).json({ error: 'Failed to generate recipe' });

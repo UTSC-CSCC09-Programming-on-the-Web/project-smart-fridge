@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Recipe } from '../../models/recipe.model';
 
 @Component({
   selector: 'app-recipe-card',
@@ -7,5 +8,6 @@ import { Component, Input } from '@angular/core';
   standalone: false,
 })
 export class RecipeCardComponent {
-  @Input() recipe: any;
+  @Input() recipe: Recipe | null = null;
+  @Input() message: string = "";
 }

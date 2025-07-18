@@ -2,8 +2,10 @@
   <app-recipe-form
     (generateRecipe)="onGenerateRecipe()"
   ></app-recipe-form>
-  
-  <app-recipe-card [recipe]="recipe"
+
+  <app-recipe-card 
+  [message]="message"
+  [recipe]="recipe"
   ></app-recipe-card>
   
 </div>
