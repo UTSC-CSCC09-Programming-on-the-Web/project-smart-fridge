@@ -43,6 +43,7 @@ import { NotificationBarComponent } from './components/notification-bar/notifica
     MultiImageUploadComponent,
     NotificationBarComponent,
   ],
+  
   imports: [
     BrowserModule,
     AppRoutingModule,
