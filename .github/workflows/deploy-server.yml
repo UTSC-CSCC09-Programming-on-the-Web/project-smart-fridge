@@ -22,9 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build backend image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
-
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.SF_KEY }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
