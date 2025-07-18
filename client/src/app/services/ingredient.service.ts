@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { FridgeService } from './fridge.service';
 import { getFridgeIdOrFallback } from '../utils/get-fridge-id.util';
+import { environment } from '../../environments/environment';
 
 export interface IngredientPaginationResponse {
   ingredients: Ingredient[];
@@ -16,7 +17,7 @@ export interface IngredientPaginationResponse {
   providedIn: 'root',
 })
 export class IngredientService {
-  endpoint = 'http://localhost:3000'; // will be replaced with environment variable
+  endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   constructor(
     private http: HttpClient,

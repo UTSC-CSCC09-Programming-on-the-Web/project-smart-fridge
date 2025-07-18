@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';  
 
 export interface Fridge {
   id: string;
@@ -19,7 +20,8 @@ interface FridgeResponse {
   providedIn: 'root',
 })
 export class FridgeService {
-  endpoint = 'http://localhost:3000';
+ // endpoint = 'http://localhost:3000';
+  endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   private fridgeSubject = new BehaviorSubject<Fridge | null>(null);
   public currentfridge$ = this.fridgeSubject.asObservable();

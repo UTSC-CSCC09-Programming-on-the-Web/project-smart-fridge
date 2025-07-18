@@ -5,6 +5,8 @@ import { HttpParams } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+
 
 export interface User {
   id: string;
@@ -18,7 +20,8 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
-  endpoint = 'http://localhost:3000';
+  //endpoint = 'http://localhost:3000';
+  endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   private userSubject = new BehaviorSubject<User | null>(null);
   public user$ = this.userSubject.asObservable();

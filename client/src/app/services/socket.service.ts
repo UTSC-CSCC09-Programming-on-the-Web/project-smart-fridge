@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, share, switchMap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +9,10 @@ import { io, Socket } from 'socket.io-client';
 export class SocketService {
   private socket: Socket | null = null;
   private connectPromise: Promise<void> | null = null;
-
+  endpoint = environment.apiEndpoint || 'http://localhost:3000';
   connectSocket(): Promise<void> {
     if (!this.socket) {
-      this.socket = io('http://localhost:3000', {
+      this.socket = io(this.endpoint, {
         withCredentials: true,
       });
 
