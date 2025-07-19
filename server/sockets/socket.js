@@ -16,6 +16,7 @@ const corsOptions = {
 };
 
 const setupSocket = async (app) => {
+  console.log("Setting up set up Socket...");
   const httpServer = http.createServer(app);
   const io = new Server(httpServer, { cors: corsOptions });
 
@@ -29,7 +30,8 @@ const setupSocket = async (app) => {
   io.adapter(createAdapter(pubClient, subClient));
 
   // add authen middleware for socket.io implement later
-
+  console.log("Socket.io connected to Redis");
+  
   io.on("connection", (socket) => {
     console.log("socket connect to", socket.id);
     console.log("Headers:", socket.handshake.headers);

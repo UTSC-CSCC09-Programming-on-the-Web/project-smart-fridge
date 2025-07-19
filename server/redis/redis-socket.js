@@ -7,6 +7,7 @@ const pubClient = createClient(redisUrl);
 const subClient = pubClient.duplicate();
 
 async function connectSocketRedis() {
+  console.log("Connecting to Redis at", redisUrl);
   await pubClient.connect();
   await subClient.connect();
 }
