@@ -9,7 +9,8 @@ RUN npm ci
 COPY . ./
 RUN npm run build -- --configuration production && \
     echo " Listing /app/dist:" && ls -al /app/dist && \
-    echo " Listing /app/dist/client:" && ls -al /app/dist/client
+    echo " Listing /app/dist/client:" && ls -al /app/dist/client && \
+    echo " Listing /app/dist/client/browser:" && cat /app/dist/client/browser
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
