@@ -14,7 +14,7 @@ RUN npm run build -- --configuration production && \
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
-COPY --from=build /app/dist/client /usr/share/nginx/html
+COPY --from=build /app/dist/client/browser /usr/share/nginx/html
 RUN ls -al /usr/share/nginx/html && cat /usr/share/nginx/html/index.html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
