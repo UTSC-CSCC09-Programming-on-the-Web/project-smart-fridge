@@ -33,8 +33,8 @@ const createCheckoutSession = async (user) => {
         quantity: 1,
       },
     ],
-    success_url: `${process.env.CLIENT_URL}/#/auth/google/success`,
-    cancel_url: `${process.env.CLIENT_URL}/#/subscribe`,
+    success_url: `${process.env.CLIENT_URL}/auth/google/success`,
+    cancel_url: `${process.env.CLIENT_URL}/subscribe`,
     metadata: {
       user_id: user.id,
     },
