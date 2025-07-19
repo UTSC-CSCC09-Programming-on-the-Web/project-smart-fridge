@@ -15,7 +15,6 @@ services:
       - redis
     env_file:
       - .env
-    command: ["node", "server.js"]
 
   worker:
     build:
@@ -29,7 +28,6 @@ services:
       - redis
     env_file:
       - .env
-    command: ["node", "workers/index.js"]
 
   db:
     image: postgres:14
