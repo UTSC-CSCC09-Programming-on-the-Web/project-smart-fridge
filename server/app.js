@@ -46,7 +46,7 @@ app.use(passport.session());
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
+    console.log("app.js: [sequelize] Connection has been established successfully.");
 
     app.use("/auth", authRouter);
     app.use("/api/stripe", stripeRouter);
@@ -72,11 +72,11 @@ async function startServer() {
     app.set("io", io);
     app.set("httpServer", httpServer);
 
-    httpServer.listen(PORT, () => {
-      console.log(`HTTP server on http://localhost:${PORT}`);
+    httpServer.listen(PORT,"0.0.0.0", () => {
+      console.log(`app.js: HTTP server on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error("Unable to connect to the database:", error);
+    console.error("app.js: Unable to connect to the database:", error);
   }
 }
 

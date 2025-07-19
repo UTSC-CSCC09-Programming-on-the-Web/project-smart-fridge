@@ -11,7 +11,7 @@ const {
 } = require("../redis/redis-socket");
 
 const corsOptions = {
-  origin: "http://localhost:4200",
+  origin: "https://jieying.live",
   credentials: true,
 };
 
@@ -94,7 +94,7 @@ const setupSocket = async (app) => {
       result: data.result,
     });
   });
-
+  console.log("Socket.io setup complete");
   return { httpServer, io };
 };
 
