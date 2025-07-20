@@ -7,7 +7,7 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm ci
 COPY . ./
-RUN npm run build -- --configuration production && \
+RUN npm run build && \
     echo " Listing /app/dist:" && ls -al /app/dist && \
     echo " Listing /app/dist/client:" && ls -al /app/dist/client && \
     echo " Listing /app/dist/client/browser:" && ls -al /app/dist/client/browser
