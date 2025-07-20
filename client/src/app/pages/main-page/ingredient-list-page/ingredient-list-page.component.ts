@@ -96,6 +96,8 @@ export class IngredientListPageComponent {
             return;
           }
           if (!data.ingredients || data.ingredients.length === 0) {
+            console.log('No more ingredients to load');
+            this.loading = false;
             this.hasMoreData = false;
             return;
           }
