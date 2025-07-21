@@ -43,6 +43,9 @@ services:
     restart: always
     expose:
       - 3000
+    depends_on:
+      - db
+      - redis
     environment:
       - VIRTUAL_PORT=3000
       - VIRTUAL_HOST=api.jieying.live
@@ -53,6 +56,9 @@ services:
       - .env
     container_name: worker
     restart: always
+    depends_on:
+      - db
+      - redis
     environment: []
     command: ["node", "workers/index.js"]
   db:

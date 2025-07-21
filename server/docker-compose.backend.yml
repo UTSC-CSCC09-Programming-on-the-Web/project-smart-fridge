@@ -8,8 +8,6 @@ services:
     image: smartfridge-backend
     container_name: smartfridge-backend
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     env_file:
       - .env
 
