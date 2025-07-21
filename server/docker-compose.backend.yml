@@ -10,9 +10,6 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-      - redis
     env_file:
       - .env
 
@@ -23,34 +20,6 @@ services:
     image: smartfridge-worker 
     container_name: smartfridge-worker
     restart: unless-stopped
-    depends_on:
-      - db
-      - redis
     env_file:
       - .env
-
-  db:
-    image: postgres:14
-    container_name: smartfridge-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_DB: smartfridge
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7
-    container_name: smartfridge-redis
-    restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisdata:/data
-
-volumes:
-  pgdata:
-  redisdata:
+  
