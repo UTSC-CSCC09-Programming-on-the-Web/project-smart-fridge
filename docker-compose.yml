@@ -63,8 +63,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: yourpassword
       POSTGRES_DB: smartfridge_v1
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -72,8 +70,6 @@ services:
     image: redis:7
     container_name: smartfridge-redis
     restart: always
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/data
 
