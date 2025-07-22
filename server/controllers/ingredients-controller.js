@@ -8,7 +8,6 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
 const getImageUrl = require("../utils/image-url.js");
-const { get } = require("http");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
