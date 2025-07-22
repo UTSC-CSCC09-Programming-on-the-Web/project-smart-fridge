@@ -7,7 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
-const getImageUrl = require("../utils/image-url.js");
+const { getImageUrl } = require("../utils/image-url.js");
 const { deleteFileFromGCS } = require("../services/gcs-storage-service.js");
 
 // for infintie scroll pagination, we use expire date and id as cursors
@@ -89,7 +89,7 @@ const createIngredient = async (req, res) => {
   }
 
   try {
-    const relativePath = req.uploadFileResults ? req.uploadFileResults[0] : null;
+    const relativePath = req.file ? req.file.relativePath : null;
     //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({

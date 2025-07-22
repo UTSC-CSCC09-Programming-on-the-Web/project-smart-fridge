@@ -10,7 +10,6 @@ const {
 const fridgeAuthMiddle = require("../middlewares/fridge-author-middleware.js");
 const authMiddleware = require("../middlewares/auth-middleware");
 const { getGCSImageUploadMiddleware } = require("../middlewares/image-upload-multer.js");
-const uploadToGCSMiddlewar = require("../middlewares/gcs-upload-middleware.js");
 const uploadToGCSMiddleware = require("../middlewares/gcs-upload-middleware.js");
 
 const router = express.Router();

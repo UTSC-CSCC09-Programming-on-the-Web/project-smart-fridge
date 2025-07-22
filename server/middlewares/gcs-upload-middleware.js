@@ -10,9 +10,11 @@ const uploadToGCSMiddleware = async (req, res, next) => {
     console.log("[uploadToGCSMiddleware] check files:", files);
     try {
         const uploadResults = await Promise.all(files.map(
-            file => uploadSingleToGCS(req.uploadFolderName, file)
+            async(file) => {
+                const relativePath = await uploadSingleToGCS(req.uploadFolderName, file);
+                file.relativePath = relativePath;
+            }
         ));
-        req.uploadFileResults = uploadResults;
         return next();
     }catch(err){
         if(err){
