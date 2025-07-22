@@ -3,6 +3,7 @@ const { createAdapter } = require("@socket.io/redis-adapter");
 const http = require("http");
 const { sessionMiddleware } = require("../middlewares/session-middleware.js");
 const sharedSession = require("express-socket.io-session");
+const  userFridgeAccessChecker  = require("../utils/userfridge-access-checker.js");
 
 const {
   pubClient,
@@ -28,8 +29,6 @@ const setupSocket = async (app) => {
   await connectSocketRedis();
   io.adapter(createAdapter(pubClient, subClient));
 
-  // add authen middleware for socket.io implement later
-
   io.on("connection", (socket) => {
     console.log("socket connect to", socket.id);
     console.log("Headers:", socket.handshake.headers);
@@ -41,13 +40,33 @@ const setupSocket = async (app) => {
       console.log("No user ID found in session");
     }
 
-    socket.on("joinFridgeRoom", (fridgeId) => {
+    socket.on("joinFridgeRoom", async (fridgeId) => {
+      const hasAccess = await userFridgeAccessChecker(userId, fridgeId);
+      if (!hasAccess) {
+        console.error(`User ${userId} does not have access to fridge ${fridgeId}`);
+        return socket.emit("error", "You do not have access to this fridge");
+      }
+      console.log(`User ${userId} joining fridge room: fridge:${fridgeId}`);
       socket.join(`fridge:${fridgeId}`);
+    });
+
+    socket.on("leaveFridgeRoom", (fridgeId) => {
+      console.log(`User ${userId} leaving fridge room: fridge:${fridgeId}`);
+      socket.leave(`fridge:${fridgeId}`);
     });
 
     socket.on("disconnect", () =>
       console.log("socket disconnected", socket.id)
     );
+  });
+
+  subClient.subscribe("recipeGenerated", (msg) => {
+    const data = JSON.parse(msg);
+    const traceId = data.traceId;
+    if (!data.userId) {
+      console.error("No userId in message data:", data);
+      return;
+    }
   });
 
   subClient.subscribe("recipeGenerated", (msg) => {
