@@ -7,9 +7,10 @@ const {
   updateIngredient,
   deleteIngredient,
 } = require("../controllers/ingredients-controller.js");
-const getImageUploadMiddleware = require("../middlewares/image-upload-multer.js");
 const fridgeAuthMiddle = require("../middlewares/fridge-author-middleware.js");
 const authMiddleware = require("../middlewares/auth-middleware");
+const { getGCSImageUploadMiddleware } = require("../middlewares/image-upload-multer.js");
+const uploadToGCSMiddleware = require("../middlewares/gcs-upload-middleware.js");
 
 const router = express.Router();
 
@@ -20,14 +21,15 @@ router.get(
   getIngredientsInfiniteScroll
 );
 
-const ingredientImageUpload = getImageUploadMiddleware({
-  folder: "ingredients",
+const ingredientImageUpload = getGCSImageUploadMiddleware({
+  folderName: "ingredients",
 });
 router.post(
   "/:fridge_id/ingredients",
   authMiddleware,
   fridgeAuthMiddle,
   ingredientImageUpload,
+  uploadToGCSMiddleware,
   createIngredient
 );
 
