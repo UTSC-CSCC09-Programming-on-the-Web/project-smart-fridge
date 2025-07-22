@@ -88,7 +88,7 @@ const createIngredient = async (req, res) => {
   }
 
   try {
-    const relativePath = req.file ? `ingredients/${req.file.filename}` : null;
+    const relativePath = req.uploadFileResults ? req.uploadFileResults[0] : null;
     //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({

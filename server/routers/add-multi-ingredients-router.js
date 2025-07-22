@@ -6,11 +6,11 @@ const {
 const express = require("express");
 const fridgeAuthMiddle = require("../middlewares/fridge-author-middleware.js");
 const authMiddleware = require("../middlewares/auth-middleware.js");
-const getImageUploadMiddleware = require("../middlewares/image-upload-multer.js");
+const {getDiskImageUploadMiddleware} = require("../middlewares/image-upload-multer.js");
 
 const router = express.Router();
 
-const imageUploadMiddleware = getImageUploadMiddleware({
+const imageUploadMiddleware = getDiskImageUploadMiddleware({
   folder: "multi-ingredients",
   multiple: true,
   maxCount: 5,

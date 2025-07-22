@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const getImageUrl = (relativePath) => {
   if (!relativePath) {
     return null;

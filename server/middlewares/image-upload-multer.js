@@ -25,7 +25,7 @@ function createStorage(folder) {
   });
 }
 
-function getImageUploadMiddleware({
+function getDiskImageUploadMiddleware({
   folder,
   multiple = false,
   maxCount = 5,
@@ -55,4 +55,45 @@ function getImageUploadMiddleware({
   }
 }
 
-module.exports = getImageUploadMiddleware;
+
+function getGCSImageUploadMiddleware({
+  folderName,
+  multiple = false,   
+  maxCount = 5,
+  maxSizeMB = 5,
+}) {
+  const storage = multer.memoryStorage();
+  const upload = multer({
+    storage,
+    limits: { fileSize: maxSizeMB * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Unsupported image type"), false);
+      }
+    },
+  });
+
+  const handler = multiple ? upload.array("images", maxCount) : upload.single("image");
+
+  return (req, res, next) => {
+    handler(req, res, (err) => {
+      if (err) {
+        console.error("Multer error:", err);
+        return res.status(400).json({ error: err.message });
+      }
+      console.log("[gcs multer] Uploaded file(s):", req.file || req.files);
+      req.uploadFolderName = folderName;
+      console.log("[gcs multer] upload foldername:", req.uploadFolderName);
+      next();
+    });
+  };
+}
+
+
+module.exports = {
+  getDiskImageUploadMiddleware,
+  getGCSImageUploadMiddleware,
+}
