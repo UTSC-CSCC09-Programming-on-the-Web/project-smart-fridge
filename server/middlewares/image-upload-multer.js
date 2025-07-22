@@ -3,6 +3,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { fileNameFormatter } = require("../utils/file-formatter.js");
 
 // create storage configuration for multer
 function createStorage(folder) {
@@ -18,9 +19,7 @@ function createStorage(folder) {
       cb(null, targetPath);
     },
     filename: function (req, file, cb) {
-      const ext = path.extname(file.originalname);
-      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, `${unique}${ext}`);
+      cb(null, fileNameFormatter(file));
     },
   });
 }
