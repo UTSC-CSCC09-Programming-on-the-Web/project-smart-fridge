@@ -8,6 +8,7 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
 const getImageUrl = require("../utils/image-url.js");
+const { deleteFileFromGCS } = require("../services/gcs-storage-service.js");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -152,15 +153,10 @@ const deleteIngredient = async (req, res) => {
     }
 
     if (ingredient.image_url) {
-      const imagePath = path.join(
-        __dirname,
-        "..",
-        "uploads/",
-        ingredient.image_url
-      );
+      const imagePath = ingredient.image_url;
       console.log("Deleting image at:", imagePath);
       try {
-        await fs.promises.unlink(imagePath);
+        await deleteFileFromGCS(imagePath);
         console.log(`Image deleted: ${imagePath}`);
       } catch (err) {
         console.warn(`Warning: Failed to delete image: ${imagePath}`, err);
