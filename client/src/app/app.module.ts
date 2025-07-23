@@ -25,11 +25,14 @@ import { IngredientInputPageComponent } from './pages/main-page/ingredient-input
 import { AppRoutingModule } from './app-routing.module';
 import { MultiImageUploadComponent } from './components/multi-image-upload/multi-image-upload.component';
 import { NotificationBarComponent } from './components/notification-bar/notification-bar.component';
+import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-form.component';
+import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
+    FristLoginComponent,
     MainPageComponent,
     IngredientListPageComponent,
     HeaderComponent,
@@ -42,6 +45,7 @@ import { NotificationBarComponent } from './components/notification-bar/notifica
     IngredientInputPageComponent,
     MultiImageUploadComponent,
     NotificationBarComponent,
+    NewFridgeFormComponent,
   ],
   imports: [
     BrowserModule,

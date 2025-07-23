@@ -34,6 +34,11 @@
     <p>you can get your fridge information here!</p>
   </ng-template>
 
+  <button class="btn" (click)="addNewFridge()">Create or Join a Fridge</button>
+  <div *ngIf="showNewFridgeForm">
+    <app-new-fridge-form (submitForm)="onSubmitNewFridgeForm()"></app-new-fridge-form>
+  </div>
+
   <button class="btn" (click)="onLogout()">Logout</button>
   <app-recipe-page></app-recipe-page>
   <app-ingredient-input-page></app-ingredient-input-page>

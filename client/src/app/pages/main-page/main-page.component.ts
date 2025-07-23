@@ -17,6 +17,7 @@ export class MainPageComponent {
   currentUser$: Observable<User | null>;
   showFridgeInfo: boolean = false;
   showUserInfo: boolean = false;
+  showNewFridgeForm: boolean = false; 
   private previousFridgeId: string | null = null;
 
   constructor(
@@ -51,6 +52,14 @@ export class MainPageComponent {
 
   fetchUserInfo(): void {
     this.showUserInfo = !this.showUserInfo;
+  }
+
+  addNewFridge(): void {
+    this.showNewFridgeForm = !this.showNewFridgeForm;
+  }
+
+  onSubmitNewFridgeForm(): void {
+    this.showNewFridgeForm = false;
   }
 
   ngOnInit(): void {
