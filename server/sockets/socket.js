@@ -16,9 +16,11 @@ const corsOptions = {
   credentials: true,
 };
 
+let io;
+
 const setupSocket = async (app) => {
   const httpServer = http.createServer(app);
-  const io = new Server(httpServer, { cors: corsOptions });
+  io = new Server(httpServer, { cors: corsOptions });
 
   io.use(
     sharedSession(sessionMiddleware, {
@@ -117,4 +119,12 @@ const setupSocket = async (app) => {
   return { httpServer, io };
 };
 
-module.exports = { setupSocket };
+const getIO = () => {
+  if (!io) {
+    console.error("Socket.io not initialized. Call setupSocket first.");
+    throw new Error("Socket.io not initialized. Call setupSocket first.");
+  }
+  return io;
+};
+
+module.exports = { setupSocket, getIO };
