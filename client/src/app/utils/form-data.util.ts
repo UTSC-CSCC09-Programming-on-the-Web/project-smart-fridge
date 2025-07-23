@@ -27,3 +27,26 @@ export function ingredientToFormData(
 
   return formData;
 }
+
+export function appendIngredientToFormDataWithIndex(
+  formData: FormData,
+  ingredient: Partial<Ingredient>,
+  imageFile?: File | null,
+  index: number = 0,
+): FormData {
+  
+  const keys = Object.keys(ingredient) as (keyof Ingredient)[];
+  for (const key of keys) {
+    const value = ingredient[key];
+    if (value !== undefined && value !== null) {
+      formData.append(`index[${index}]:${key}`, String(value));
+    }
+  }
+
+  if (imageFile) {
+    formData.append(`index[${index}]:image`, imageFile);
+  }
+
+  return formData;
+}
+

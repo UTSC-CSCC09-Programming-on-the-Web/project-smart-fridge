@@ -6,6 +6,7 @@ const {
   createIngredient,
   updateIngredient,
   deleteIngredient,
+  createMultiIngredients,
 } = require("../controllers/ingredients-controller.js");
 const fridgeAuthMiddle = require("../middlewares/fridge-author-middleware.js");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -33,6 +34,20 @@ router.post(
   ingredientImageUpload,
   uploadToGCSMiddleware,
   createIngredient
+);
+
+const multiIngredientImageUpload = getGCSImageUploadMiddleware({
+  folderName: "ingredients",
+  any: true,
+});
+router.post(
+  "/:fridge_id/ingredients/multi",
+  authMiddleware,
+  fridgeAuthMiddle,
+  tryAcquireFridgeLockMiddleware,
+  multiIngredientImageUpload,
+  uploadToGCSMiddleware,
+  createMultiIngredients
 );
 
 router.put(
