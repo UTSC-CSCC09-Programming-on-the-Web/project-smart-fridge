@@ -26,7 +26,7 @@ export class IngredientListPageComponent {
     private ingredientService: IngredientService,
     private fridgeService: FridgeService,
   ) {
-    this.currentFridge$ = this.fridgeService.currentfridge$;
+    this.currentFridge$ = this.fridgeService.currentFridge$;
   }
 
   ngOnInit(): void {

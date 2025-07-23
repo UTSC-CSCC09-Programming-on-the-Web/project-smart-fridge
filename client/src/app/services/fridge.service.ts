@@ -15,9 +15,10 @@ interface FridgeResponse {
 })
 export class FridgeService {
   endpoint = 'http://localhost:3000';
-
-  private fridgeSubject = new BehaviorSubject<Fridge | null>(null);
-  public currentfridge$ = this.fridgeSubject.asObservable();
+  private fridgesListSubject = new BehaviorSubject<Fridge[]>([]);
+  public fridgesList$ = this.fridgesListSubject.asObservable();
+  private currentFridgeSubject = new BehaviorSubject<Fridge | null>(null);
+  public currentFridge$ = this.currentFridgeSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -76,8 +77,12 @@ export class FridgeService {
             console.error('Failed to retrieve user fridges:', res);
             return;
           }
-          this.fridgeSubject.next(res.fridges[0] || null);
-          console.log('User fridges retrieved:', res.fridges);
+          const fridges = res.fridges || [];
+          this.fridgesListSubject.next(fridges);
+          if (fridges.length > 0 && !this.currentFridgeSubject.value) {
+            this.currentFridgeSubject.next(fridges[0]); 
+          }
+          console.log('User fridges retrieved:', fridges);
         }),
         catchError((err) => {
           console.error('Error retrieving user fridges:', err);
@@ -87,6 +92,15 @@ export class FridgeService {
   }
 
   getCurrentFridgeId(): string | null {
-    return this.fridgeSubject.value?.id || null;
+    return this.currentFridgeSubject.value?.id || null;
+  }
+
+  setCurrentFridge(fridge: Fridge | null): void {
+    this.currentFridgeSubject.next(fridge);
+    if (fridge) {
+      console.log('Current fridge set:', fridge);
+    } else {
+      console.log('Current fridge cleared');
+    }
   }
 }
