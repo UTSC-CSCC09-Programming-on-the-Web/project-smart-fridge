@@ -15,7 +15,6 @@ import { User } from '../../models/user.model';
 export class MainPageComponent {
   currentFridge$: Observable<Fridge | null>;
   currentUser$: Observable<User | null>;
-  fridgesList$: Observable<Fridge[] | []>;
   showFridgeInfo: boolean = false;
   showUserInfo: boolean = false;
   showNewFridgeForm: boolean = false;
@@ -30,7 +29,6 @@ export class MainPageComponent {
     this.fridgeService.getUserFridges().subscribe();
     this.authService.getCurrentUser().subscribe();
     this.currentFridge$ = this.fridgeService.currentFridge$;
-    this.fridgesList$ = this.fridgeService.fridgesList$;
     this.currentUser$ = this.authService.user$;
   }
 
@@ -48,11 +46,7 @@ export class MainPageComponent {
       },
     });
   }
-
-  fetchFridgeInfo(): void {
-    this.showFridgeInfo = !this.showFridgeInfo;
-  }
-
+  
   fetchUserInfo(): void {
     this.showUserInfo = !this.showUserInfo;
   }

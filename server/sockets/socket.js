@@ -94,7 +94,6 @@ const setupSocket = async (app) => {
     console.log(
       `Publishing cvTaskProgress to user:${data.userId} with message: ${message}`
     );
-    // change to emit to fridge room later implement
 
     io.to(`user:${data.userId}`).emit("cvTaskProgress", {
       message: message,

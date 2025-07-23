@@ -28,6 +28,7 @@ import { NotificationBarComponent } from './components/notification-bar/notifica
 import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-form.component';
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
 import { FridgeSelectorComponent } from './components/fridge-selector/fridge-selector.component';
+import { CurrFridgeInfoCenterComponent } from './components/curr-fridge-info-center/curr-fridge-info-center.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { FridgeSelectorComponent } from './components/fridge-selector/fridge-sel
     NotificationBarComponent,
     NewFridgeFormComponent,
     FridgeSelectorComponent,
+    CurrFridgeInfoCenterComponent,
   ],
   imports: [
     BrowserModule,

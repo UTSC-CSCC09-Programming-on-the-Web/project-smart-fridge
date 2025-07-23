@@ -101,6 +101,7 @@ export class FridgeService {
       (!this.currentFridgeSubject.value ||
         fridge.id !== this.currentFridgeSubject.value.id)
     ) {
+      console.log('Setting next current fridge:', fridge);
       this.currentFridgeSubject.next(fridge);
     }
     if (fridge) {
