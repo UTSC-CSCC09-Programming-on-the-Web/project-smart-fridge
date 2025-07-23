@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Notification } from '../../models/notification.model';
 
 @Component({
   selector: 'app-notification-bar',
@@ -7,13 +8,12 @@ import { Component, Input } from '@angular/core';
   standalone: false,
 })
 export class NotificationBarComponent {
-  @Input() message: string = '';
-  @Input() type: 'success' | 'error' | 'info' = 'info';
+  @Input() notification: Notification = { message: '', type: 'info' };
 
   constructor() {}
 
   getNotificationClass(): string {
-    switch (this.type) {
+    switch (this.notification.type) {
       case 'success':
         return 'notification-success';
       case 'error':
@@ -25,6 +25,6 @@ export class NotificationBarComponent {
     }
   }
   closeNotification(): void {
-    this.message = '';
+    this.notification.message = '';
   }
 }

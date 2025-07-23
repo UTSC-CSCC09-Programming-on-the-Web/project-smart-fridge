@@ -9,6 +9,7 @@ import {
 import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
 import { readImageAsDataUrl } from '../../../utils/image.util';
+import { Notification } from '../../../models/notification.model';
 
 interface tempIngredient {
   name: string;
@@ -29,13 +30,12 @@ export class IngredientInputPageComponent {
     private ingredientService: IngredientService,
   ) {}
 
-  notificationMessage: string = '';
-  notificationType: 'success' | 'error' | 'info' = 'info';
+  notification: Notification = {type: 'info', message: ''};
   tempIngredients: tempIngredient[] = [];
   // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
   formalIngredients: Partial<Ingredient>[] = [];
   handleMultiImagesUploaded(images: File[]): void {
-    this.notificationMessage = '';
+    this.notification.message = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
     const formData = new FormData();
     images.forEach((image) => {
@@ -53,18 +53,18 @@ export class IngredientInputPageComponent {
       .fromSocketEvent<{ message: string; type: string }>('cvTaskProgress')
       .subscribe({
         next: (data) => {
-          this.notificationMessage = data.message;
+          this.notification.message = data.message;
           if (
             data.type === 'success' ||
             data.type === 'error' ||
             data.type === 'info'
           ) {
-            this.notificationType = data.type as 'success' | 'error' | 'info';
+            this.notification.type = data.type as 'success' | 'error' | 'info';
           } else {
-            this.notificationType = 'info';
+            this.notification.type = 'info';
           }
           console.log(
-            `Received CV Task Progress with type: ${this.notificationType} and message: ${this.notificationMessage}`,
+            `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
           );
         },
         error: (err) => {
@@ -122,16 +122,16 @@ export class IngredientInputPageComponent {
     this.ingredientService.createMultiIngredients(allFormData).subscribe({
       next: (responses) => {
         console.log('All ingredients added successfully:', responses);
-        this.notificationMessage = 'All ingredients added successfully!';
-        this.notificationType = 'success';
+        this.notification.message = 'All ingredients added successfully!';
+        this.notification.type = 'success';
         this.tempIngredients = [];
         this.formalIngredients = [];
         this.ingredientService.notifyIngredientsUpdated();
       },
       error: (err) => {
         console.error('Error adding ingredients:', err);
-        this.notificationMessage = 'Failed to add some ingredients.';
-        this.notificationType = 'error';
+        this.notification.message = 'Failed to add some ingredients.';
+        this.notification.type = 'error';
         this.formalIngredients = this.formalIngredients.map((ing) => ({
           ...ing,
           image_file: undefined, // Reset image file and url after submission even if it fails
