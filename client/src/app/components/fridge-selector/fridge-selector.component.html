@@ -1,0 +1,9 @@
+<ul class="fridge-list">
+  <li
+    *ngFor="let fridge of fridges"
+    [class.selected]="fridge.id === currentFridge?.id"
+    (click)="onFridgeSelect(fridge)"
+  >
+    {{ fridge.name }}
+  </li>
+</ul>

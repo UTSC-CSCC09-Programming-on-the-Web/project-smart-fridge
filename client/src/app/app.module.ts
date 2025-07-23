@@ -27,6 +27,7 @@ import { MultiImageUploadComponent } from './components/multi-image-upload/multi
 import { NotificationBarComponent } from './components/notification-bar/notification-bar.component';
 import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-form.component';
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
+import { FridgeSelectorComponent } from './components/fridge-selector/fridge-selector.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.
     MultiImageUploadComponent,
     NotificationBarComponent,
     NewFridgeFormComponent,
+    FridgeSelectorComponent
   ],
   imports: [
     BrowserModule,

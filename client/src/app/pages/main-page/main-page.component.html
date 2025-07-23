@@ -4,7 +4,6 @@
 
   <button class="btn" (click)="fetchUserInfo()">Get current User information</button>
    <div *ngIf="showUserInfo">
-    <p>Fetching user information...</p>
     <div *ngIf="currentUser$ | async as user; else noUser">
       <p><strong>User Name:</strong> {{ user.name }}</p>
       <p>User Fridges:</p>
@@ -14,7 +13,7 @@
     </div>
     </div>
     <ng-template #noUser>
-      <p>You can get your user information here!</p>
+      <p>No user information available. Please log in.</p>
     </ng-template>
 
     <li *ngIf="fridgesList$ | async as fridges ; else noFridgeList">
@@ -31,6 +30,10 @@
         </li>
       </ul>
     </li>
+    <button class="btn" (click)="switchFridgeList()">Click to switch Fridge</button>
+    <div *ngIf="showFridgeSelector">
+      <app-fridge-selector></app-fridge-selector>
+    </div>
 
       <ng-template #noFridgeList>
         <p>No fridges available.</p>
@@ -38,7 +41,6 @@
 
   <button class="btn" (click)="fetchFridgeInfo()">Get current fridge information</button>
   <div *ngIf="showFridgeInfo">
-    <p>Fetching fridge information...</p>
     <div *ngIf="currentFridge$ | async as fridge; else noFridge">
       <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
       <p><strong>description:</strong> {{ fridge.description }}</p>

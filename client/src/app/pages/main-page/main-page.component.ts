@@ -18,7 +18,8 @@ export class MainPageComponent {
   fridgesList$: Observable<Fridge[] | []>;
   showFridgeInfo: boolean = false;
   showUserInfo: boolean = false;
-  showNewFridgeForm: boolean = false; 
+  showNewFridgeForm: boolean = false;
+  showFridgeSelector: boolean = false;
   private previousFridgeId: string | null = null;
 
   constructor(
@@ -27,7 +28,6 @@ export class MainPageComponent {
     private socketService: SocketService,
   ) {
     this.fridgeService.getUserFridges().subscribe();
-    this.authService.getCurrentUser().subscribe();
     this.currentFridge$ = this.fridgeService.currentFridge$;
     this.fridgesList$ = this.fridgeService.fridgesList$;
     this.currentUser$ = this.authService.user$;
@@ -62,6 +62,10 @@ export class MainPageComponent {
 
   onSubmitNewFridgeForm(): void {
     this.showNewFridgeForm = false;
+  }
+
+  switchFridgeList(): void {
+    this.showFridgeSelector = !this.showFridgeSelector;
   }
 
   ngOnInit(): void {
