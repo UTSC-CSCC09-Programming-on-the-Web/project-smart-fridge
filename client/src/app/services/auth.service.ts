@@ -5,14 +5,7 @@ import { HttpParams } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 
 import { Router } from '@angular/router';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  is_subscribed: boolean;
-  is_first_login: boolean;
-}
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',

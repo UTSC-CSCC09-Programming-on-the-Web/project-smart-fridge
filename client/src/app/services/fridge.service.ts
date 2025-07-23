@@ -3,12 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
-
-export interface Fridge {
-  id: string;
-  name: string;
-  description: string;
-}
+import { Fridge } from '../models/fridge.model';
 
 interface FridgeResponse {
   success: boolean;

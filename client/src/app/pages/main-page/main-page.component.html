@@ -1,19 +1,39 @@
 <app-header></app-header>
 
 <div class="main-container">
-  <button class="btn" (click)="fetchFridgeInfo()">Get current fridge information</button>
 
+  <button class="btn" (click)="fetchUserInfo()">Get current User information</button>
+   <div *ngIf="showUserInfo">
+    <p>Fetching user information...</p>
+    <div *ngIf="currentUser$ | async as user; else noUser">
+      <p><strong>User Name:</strong> {{ user.name }}</p>
+      <p>User Fridges:</p>
+      <ul>
+        <li *ngFor="let fridge of user.fridges">{{ fridge.name }} (ID: {{ fridge.id }})</li>
+      </ul>
+    </div>
+    </div>
+    <ng-template #noUser>
+      <p>You can get your user information here!</p>
+    </ng-template>
+
+  <button class="btn" (click)="fetchFridgeInfo()">Get current fridge information</button>
   <div *ngIf="showFridgeInfo">
     <p>Fetching fridge information...</p>
     <div *ngIf="currentFridge$ | async as fridge; else noFridge">
       <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
       <p><strong>description:</strong> {{ fridge.description }}</p>
       <p>Fridge Id: {{ fridge.id }}</p>
+      <p>Fridge Users:</p>
+      <ul>
+        <li *ngFor="let user of fridge.users">{{ user.name }}</li>
+      </ul>
     </div>
   </div>
-  <ng-template #noFridge>
+    <ng-template #noFridge>
     <p>you can get your fridge information here!</p>
   </ng-template>
+
   <button class="btn" (click)="onLogout()">Logout</button>
   <app-recipe-page></app-recipe-page>
   <app-ingredient-input-page></app-ingredient-input-page>

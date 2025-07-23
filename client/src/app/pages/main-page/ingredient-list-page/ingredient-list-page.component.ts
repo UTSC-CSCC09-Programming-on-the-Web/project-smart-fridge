@@ -3,7 +3,7 @@ import { Ingredient } from '../../../models/ingredient.model';
 import { IngredientService } from '../../../services/ingredient.service';
 import { FridgeService } from '../../../services/fridge.service';
 import { Observable } from 'rxjs';
-import { Fridge } from '../../../services/fridge.service';
+import { Fridge } from '../../../models/fridge.model';
 
 @Component({
   selector: 'app-ingredient-list-page',

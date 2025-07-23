@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FridgeService } from '../../services/fridge.service';
 import { Observable, distinctUntilChanged, from, switchMap } from 'rxjs';
-import { Fridge } from '../../services/fridge.service';
+import { Fridge } from '../../models/fridge.model';
 import { SocketService } from '../../services/socket.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-main-page',
@@ -13,7 +14,9 @@ import { SocketService } from '../../services/socket.service';
 })
 export class MainPageComponent {
   currentFridge$: Observable<Fridge | null>;
+  currentUser$: Observable<User | null>;
   showFridgeInfo: boolean = false;
+  showUserInfo: boolean = false;
   private previousFridgeId: string | null = null;
 
   constructor(
@@ -22,7 +25,9 @@ export class MainPageComponent {
     private socketService: SocketService,
   ) {
     this.fridgeService.getUserFridges().subscribe();
+    this.authService.getCurrentUser().subscribe();
     this.currentFridge$ = this.fridgeService.currentfridge$;
+    this.currentUser$ = this.authService.user$;
   }
 
   onLogout(): void {
@@ -42,6 +47,10 @@ export class MainPageComponent {
 
   fetchFridgeInfo(): void {
     this.showFridgeInfo = !this.showFridgeInfo;
+  }
+
+  fetchUserInfo(): void {
+    this.showUserInfo = !this.showUserInfo;
   }
 
   ngOnInit(): void {
