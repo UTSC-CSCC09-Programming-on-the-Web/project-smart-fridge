@@ -31,7 +31,7 @@ export class IngredientCardComponent {
       this.ingredientDisplay = { ...this.ingredient };
     }
   }
-  
+
   ngOnInit(): void {
     this.updateIngredientDisplay();
   }

@@ -28,7 +28,11 @@
         (cancelEdit)="cancelEdit()"
       ></app-ingredient-form>
       <app-ingredient-form
-        *ngIf="addingTempIngredientImage && addingTempIngredientsIndex !== null && addingTempIngredientsIndex === i"
+        *ngIf="
+          addingTempIngredientImage &&
+          addingTempIngredientsIndex !== null &&
+          addingTempIngredientsIndex === i
+        "
         [mode]="'image'"
         (submitImage)="submitTempIngredientImageFile($event, i)"
         (cancelEdit)="cancelAddTempIngredientImage()"

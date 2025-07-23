@@ -56,8 +56,8 @@ const joinFridge = async (req, res) => {
     const existingFridges = await UserFridge.findAll({
       where: {
         user_id: userId,
-        fridge_id: fridge_id
-      }
+        fridge_id: fridge_id,
+      },
     });
     if (existingFridges.length > 0) {
       console.log(`User ${userId} already in this fridge`);
@@ -92,12 +92,14 @@ const getUserFridges = async (req, res) => {
 
   try {
     const fridges = await user.getFridges({
-      include: [{
-        model: User,
-        as: 'users',
-        attributes: ['id', 'name'],
-        through: { attributes: [] }
-      }]
+      include: [
+        {
+          model: User,
+          as: "users",
+          attributes: ["id", "name"],
+          through: { attributes: [] },
+        },
+      ],
     });
     if (!fridges || fridges.length === 0) {
       return res

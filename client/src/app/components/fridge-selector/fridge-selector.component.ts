@@ -7,7 +7,7 @@ import { FridgeService } from '../../services/fridge.service';
   selector: 'app-fridge-selector',
   standalone: false,
   templateUrl: './fridge-selector.component.html',
-  styleUrl: './fridge-selector.component.scss'
+  styleUrl: './fridge-selector.component.scss',
 })
 export class FridgeSelectorComponent {
   fridges: Fridge[] = [];

@@ -36,8 +36,8 @@ export class MainPageComponent {
 
   onLogout(): void {
     console.log('User logged out');
-    this.previousFridgeId = null; 
-    this.showFridgeInfo = false; 
+    this.previousFridgeId = null;
+    this.showFridgeInfo = false;
     this.socketService.disconnect();
     this.authService.logout().subscribe({
       next: () => {
@@ -77,7 +77,7 @@ export class MainPageComponent {
       },
       error: (err) => {
         console.error('Error refreshing user data:', err);
-      }
+      },
     });
   }
 
@@ -87,26 +87,30 @@ export class MainPageComponent {
 
   ngOnInit(): void {
     this.fridgeService.currentFridge$
-    .pipe(distinctUntilChanged((a, b) => a?.id === b?.id),
-          switchMap((fridge) => {
-              const ops : Promise<void>[] = [];
-              if (this.previousFridgeId) {
-                ops.push(this.socketService.emit('leaveFridgeRoom', this.previousFridgeId));
-              }
-              if (fridge && fridge.id && this.previousFridgeId !== fridge.id) {
-                console.log(`Start switching/joining to fridge room: ${fridge.id}`);
-                ops.push(this.socketService.emit('joinFridgeRoom', fridge.id));
-                this.previousFridgeId = fridge.id;
-              }
-              return from(Promise.all(ops));
-            }))
-    .subscribe({
-      next: () => {
-        console.log('Socket to fridge room completed successfully');
-      },
-      error: (err) => {
-        console.error('Error during switch fridge room:', err);
-    }
-    });
+      .pipe(
+        distinctUntilChanged((a, b) => a?.id === b?.id),
+        switchMap((fridge) => {
+          const ops: Promise<void>[] = [];
+          if (this.previousFridgeId) {
+            ops.push(
+              this.socketService.emit('leaveFridgeRoom', this.previousFridgeId),
+            );
+          }
+          if (fridge && fridge.id && this.previousFridgeId !== fridge.id) {
+            console.log(`Start switching/joining to fridge room: ${fridge.id}`);
+            ops.push(this.socketService.emit('joinFridgeRoom', fridge.id));
+            this.previousFridgeId = fridge.id;
+          }
+          return from(Promise.all(ops));
+        }),
+      )
+      .subscribe({
+        next: () => {
+          console.log('Socket to fridge room completed successfully');
+        },
+        error: (err) => {
+          console.error('Error during switch fridge room:', err);
+        },
+      });
   }
 }

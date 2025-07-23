@@ -3,7 +3,7 @@ const { createAdapter } = require("@socket.io/redis-adapter");
 const http = require("http");
 const { sessionMiddleware } = require("../middlewares/session-middleware.js");
 const sharedSession = require("express-socket.io-session");
-const  userFridgeAccessChecker  = require("../utils/userfridge-access-checker.js");
+const userFridgeAccessChecker = require("../utils/userfridge-access-checker.js");
 
 const {
   pubClient,
@@ -45,7 +45,9 @@ const setupSocket = async (app) => {
     socket.on("joinFridgeRoom", async (fridgeId) => {
       const hasAccess = await userFridgeAccessChecker(userId, fridgeId);
       if (!hasAccess) {
-        console.error(`User ${userId} does not have access to fridge ${fridgeId}`);
+        console.error(
+          `User ${userId} does not have access to fridge ${fridgeId}`
+        );
         return socket.emit("error", "You do not have access to this fridge");
       }
       console.log(`User ${userId} joining fridge room: fridge:${fridgeId}`);

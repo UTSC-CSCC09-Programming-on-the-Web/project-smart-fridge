@@ -47,7 +47,7 @@ import { FridgeSelectorComponent } from './components/fridge-selector/fridge-sel
     MultiImageUploadComponent,
     NotificationBarComponent,
     NewFridgeFormComponent,
-    FridgeSelectorComponent
+    FridgeSelectorComponent,
   ],
   imports: [
     BrowserModule,

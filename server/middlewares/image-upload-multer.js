@@ -54,10 +54,9 @@ function getDiskImageUploadMiddleware({
   }
 }
 
-
 function getGCSImageUploadMiddleware({
   folderName,
-  multiple = false,   
+  multiple = false,
   maxCount = 5,
   maxSizeMB = 5,
   any = false, // if true, use multer.any() to handle multiple files
@@ -79,11 +78,9 @@ function getGCSImageUploadMiddleware({
   let handler;
   if (any) {
     handler = upload.any();
-  }
-  else if (multiple) {
+  } else if (multiple) {
     handler = upload.array("images", maxCount);
-  }
-  else {
+  } else {
     handler = upload.single("image");
   }
 
@@ -101,8 +98,7 @@ function getGCSImageUploadMiddleware({
   };
 }
 
-
 module.exports = {
   getDiskImageUploadMiddleware,
   getGCSImageUploadMiddleware,
-}
+};

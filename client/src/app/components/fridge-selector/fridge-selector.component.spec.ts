@@ -8,9 +8,8 @@ describe('FridgeSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FridgeSelectorComponent]
-    })
-    .compileComponents();
+      imports: [FridgeSelectorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FridgeSelectorComponent);
     component = fixture.componentInstance;

@@ -34,7 +34,6 @@ export function appendIngredientToFormDataWithIndex(
   imageFile?: File | null,
   index: number = 0,
 ): FormData {
-  
   const keys = Object.keys(ingredient) as (keyof Ingredient)[];
   for (const key of keys) {
     const value = ingredient[key];
@@ -49,4 +48,3 @@ export function appendIngredientToFormDataWithIndex(
 
   return formData;
 }
-

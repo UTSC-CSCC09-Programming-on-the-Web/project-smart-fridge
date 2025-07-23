@@ -7,7 +7,7 @@ import { FridgeService } from '../../services/fridge.service';
   selector: 'app-new-fridge-form',
   standalone: false,
   templateUrl: './new-fridge-form.component.html',
-  styleUrl: './new-fridge-form.component.scss'
+  styleUrl: './new-fridge-form.component.scss',
 })
 export class NewFridgeFormComponent {
   createForm: FormGroup;
@@ -72,5 +72,4 @@ export class NewFridgeFormComponent {
       });
     }
   }
-
 }

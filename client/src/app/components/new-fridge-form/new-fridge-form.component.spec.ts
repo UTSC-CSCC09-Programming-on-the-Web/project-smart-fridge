@@ -8,9 +8,8 @@ describe('NewFridgeFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewFridgeFormComponent]
-    })
-    .compileComponents();
+      imports: [NewFridgeFormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NewFridgeFormComponent);
     component = fixture.componentInstance;

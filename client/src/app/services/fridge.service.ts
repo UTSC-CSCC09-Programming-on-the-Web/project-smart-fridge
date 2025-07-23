@@ -80,7 +80,7 @@ export class FridgeService {
           const fridges = res.fridges || [];
           this.fridgesListSubject.next(fridges);
           if (fridges.length > 0 && !this.currentFridgeSubject.value) {
-            this.currentFridgeSubject.next(fridges[0]); 
+            this.currentFridgeSubject.next(fridges[0]);
           }
           console.log('User fridges retrieved:', fridges);
         }),
@@ -98,7 +98,8 @@ export class FridgeService {
   setCurrentFridge(fridge: Fridge | null): void {
     if (
       fridge &&
-      (!this.currentFridgeSubject.value || fridge.id !== this.currentFridgeSubject.value.id)
+      (!this.currentFridgeSubject.value ||
+        fridge.id !== this.currentFridgeSubject.value.id)
     ) {
       this.currentFridgeSubject.next(fridge);
     }

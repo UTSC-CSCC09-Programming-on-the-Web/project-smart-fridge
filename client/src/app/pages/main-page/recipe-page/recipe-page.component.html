@@ -1,5 +1,9 @@
 <div class="recipe-page">
   <app-recipe-form (generateRecipe)="onGenerateRecipe()"></app-recipe-form>
 
-  <app-recipe-card *ngIf="recipeCardDisplay" [message]="message" [recipe]="recipe"></app-recipe-card>
+  <app-recipe-card
+    *ngIf="recipeCardDisplay"
+    [message]="message"
+    [recipe]="recipe"
+  ></app-recipe-card>
 </div>

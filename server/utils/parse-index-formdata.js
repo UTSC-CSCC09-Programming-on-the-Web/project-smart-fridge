@@ -23,7 +23,7 @@ function parseIndexedFormData(req) {
 
   return Object.keys(resultMap)
     .sort((a, b) => Number(a) - Number(b))
-    .map(index => resultMap[index]);
+    .map((index) => resultMap[index]);
 }
 
 module.exports = parseIndexedFormData;

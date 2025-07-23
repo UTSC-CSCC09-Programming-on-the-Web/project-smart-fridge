@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
 import { Ingredient } from '../../../models/ingredient.model';
-import { ingredientToFormData, appendIngredientToFormDataWithIndex } from '../../../utils/form-data.util';
+import {
+  ingredientToFormData,
+  appendIngredientToFormDataWithIndex,
+} from '../../../utils/form-data.util';
 import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
-import {readImageAsDataUrl} from '../../../utils/image.util';
+import { readImageAsDataUrl } from '../../../utils/image.util';
 
 interface tempIngredient {
   name: string;
@@ -29,7 +32,7 @@ export class IngredientInputPageComponent {
   notificationMessage: string = '';
   notificationType: 'success' | 'error' | 'info' = 'info';
   tempIngredients: tempIngredient[] = [];
- // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
+  // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
   formalIngredients: Partial<Ingredient>[] = [];
   handleMultiImagesUploaded(images: File[]): void {
     this.notificationMessage = '';
@@ -94,7 +97,7 @@ export class IngredientInputPageComponent {
             expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
               .toISOString()
               .split('T')[0],
-            image_url: "",
+            image_url: '',
           }));
           console.log('Parsed ingredients:', this.formalIngredients);
         },
@@ -109,7 +112,12 @@ export class IngredientInputPageComponent {
     const allFormData = new FormData();
     rawIngredients.forEach((ingredient, index) => {
       ingredient.image_url = undefined;
-      appendIngredientToFormDataWithIndex(allFormData, ingredient, ingredient.image_file, index);
+      appendIngredientToFormDataWithIndex(
+        allFormData,
+        ingredient,
+        ingredient.image_file,
+        index,
+      );
     });
     this.ingredientService.createMultiIngredients(allFormData).subscribe({
       next: (responses) => {
@@ -170,7 +178,10 @@ export class IngredientInputPageComponent {
     this.addingTempIngredientsIndex = index;
   }
 
-async submitTempIngredientImageFile(imageFile: File, i: number): Promise<void> {
+  async submitTempIngredientImageFile(
+    imageFile: File,
+    i: number,
+  ): Promise<void> {
     const file = imageFile;
     const previewUrl = await readImageAsDataUrl(file);
     if (this.addingTempIngredientsIndex !== null) {
