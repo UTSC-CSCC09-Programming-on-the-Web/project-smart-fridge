@@ -28,6 +28,7 @@ export class MainPageComponent {
     private socketService: SocketService,
   ) {
     this.fridgeService.getUserFridges().subscribe();
+    this.authService.getCurrentUser().subscribe();
     this.currentFridge$ = this.fridgeService.currentFridge$;
     this.fridgesList$ = this.fridgeService.fridgesList$;
     this.currentUser$ = this.authService.user$;
@@ -62,6 +63,22 @@ export class MainPageComponent {
 
   onSubmitNewFridgeForm(): void {
     this.showNewFridgeForm = false;
+    this.fridgeService.getUserFridges().subscribe({
+      next: () => {
+        console.log('New fridge added successfully');
+      },
+      error: (err) => {
+        console.error('Error adding new fridge:', err);
+      },
+    });
+    this.authService.getCurrentUser().subscribe({
+      next: () => {
+        console.log('User data refreshed after adding new fridge');
+      },
+      error: (err) => {
+        console.error('Error refreshing user data:', err);
+      }
+    });
   }
 
   switchFridgeList(): void {

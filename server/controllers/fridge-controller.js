@@ -1,5 +1,7 @@
 "use strict";
 
+const { where } = require("sequelize");
+
 const Fridge = require("../models/index.js").Fridge;
 const User = require("../models/index.js").User;
 const UserFridge = require("../models/index.js").UserFridge;
@@ -16,13 +18,13 @@ const createFridge = async (req, res) => {
     return res.status(400).json({ success: false, error: "Name required" });
   }
   try {
-    const existingFridges = await user.getFridges();
-    if (existingFridges.length > 0) {
-      console.log(`User ${userId} already has a fridge`);
-      return res
-        .status(400)
-        .json({ success: false, error: "User already has a fridge" });
-    }
+    // const existingFridges = await user.getFridges();
+    // if (existingFridges.length > 0) {
+    //   console.log(`User ${userId} already has a fridge`);
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, error: "User already has a fridge" });
+    // }
     const fridge = await Fridge.create({ name, description });
     if (!fridge) {
       return res
@@ -51,12 +53,17 @@ const joinFridge = async (req, res) => {
   const { fridge_id } = req.body;
 
   try {
-    const existingFridges = await user.getFridges();
+    const existingFridges = await UserFridge.findAll({
+      where: {
+        user_id: userId,
+        fridge_id: fridge_id
+      }
+    });
     if (existingFridges.length > 0) {
-      console.log(`User ${userId} already has a fridge`);
+      console.log(`User ${userId} already in this fridge`);
       return res
         .status(400)
-        .json({ success: false, error: "User already has a fridge" });
+        .json({ success: false, error: "User already in this fridge" });
     }
     const fridge = await Fridge.findByPk(fridge_id);
     if (!fridge) {
