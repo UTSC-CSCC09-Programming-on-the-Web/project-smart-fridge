@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
 import { Ingredient } from '../../../models/ingredient.model';
-import { ingredientToFormData } from '../../../utils/form-data.util';
+import { ingredientToFormData, appendIngredientToFormDataWithIndex } from '../../../utils/form-data.util';
 import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
 import {readImageAsDataUrl} from '../../../utils/image.util';
@@ -106,18 +106,12 @@ export class IngredientInputPageComponent {
 
   addAllIngredients(): void {
     const rawIngredients = [...this.formalIngredients];
-    const formDataList: FormData[] = [];
-    rawIngredients.forEach((ingredient) => {
-      ingredient.image_url = undefined; 
-      const formData = ingredientToFormData(ingredient, ingredient.image_file);
-      formDataList.push(formData);
+    const allFormData = new FormData();
+    rawIngredients.forEach((ingredient, index) => {
+      ingredient.image_url = undefined;
+      appendIngredientToFormDataWithIndex(allFormData, ingredient, ingredient.image_file, index);
     });
-    forkJoin(
-      // temporary solution to add multiple ingredients
-      formDataList.map((formData) =>
-        this.ingredientService.createIngredient(formData),
-      ),
-    ).subscribe({
+    this.ingredientService.createMultiIngredients(allFormData).subscribe({
       next: (responses) => {
         console.log('All ingredients added successfully:', responses);
         this.notificationMessage = 'All ingredients added successfully!';
@@ -130,6 +124,11 @@ export class IngredientInputPageComponent {
         console.error('Error adding ingredients:', err);
         this.notificationMessage = 'Failed to add some ingredients.';
         this.notificationType = 'error';
+        this.formalIngredients = this.formalIngredients.map((ing) => ({
+          ...ing,
+          image_file: undefined, // Reset image file and url after submission even if it fails
+          image_url: undefined,
+        }));
       },
     });
   }
