@@ -84,7 +84,14 @@ const getUserFridges = async (req, res) => {
   }
 
   try {
-    const fridges = await user.getFridges();
+    const fridges = await user.getFridges({
+      include: [{
+        model: User,
+        as: 'users',
+        attributes: ['id', 'name'],
+        through: { attributes: [] }
+      }]
+    });
     if (!fridges || fridges.length === 0) {
       return res
         .status(404)
