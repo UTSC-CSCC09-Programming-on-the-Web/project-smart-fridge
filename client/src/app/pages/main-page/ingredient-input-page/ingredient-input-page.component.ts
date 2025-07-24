@@ -63,6 +63,11 @@ export class IngredientInputPageComponent {
           } else {
             this.notification.type = 'info';
           }
+          if (this.notification.type !== 'info') {
+            this.notification.createdAt = new Date();
+          } else {
+            this.notification.createdAt = undefined;
+          }
           console.log(
             `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
           );
@@ -124,6 +129,7 @@ export class IngredientInputPageComponent {
         console.log('All ingredients added successfully:', responses);
         this.notification.message = 'All ingredients added successfully!';
         this.notification.type = 'success';
+        this.notification.createdAt = new Date();
         this.tempIngredients = [];
         this.formalIngredients = [];
         this.ingredientService.notifyIngredientsUpdated();

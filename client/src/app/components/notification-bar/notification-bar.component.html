@@ -4,5 +4,6 @@
   [ngClass]="getNotificationClass()"
 >
   <p>{{ notification.message }}</p>
+  <p class="timestamp" *ngIf="notification.createdAt">{{ notification.createdAt | timeAgo:trigger }}</p>
   <button (click)="closeNotification()">Close</button>
 </div>

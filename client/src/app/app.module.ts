@@ -29,6 +29,7 @@ import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
 import { FridgeSelectorComponent } from './components/fridge-selector/fridge-selector.component';
 import { CurrFridgeInfoCenterComponent } from './components/curr-fridge-info-center/curr-fridge-info-center.component';
+import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { CurrFridgeInfoCenterComponent } from './components/curr-fridge-info-cen
     NewFridgeFormComponent,
     FridgeSelectorComponent,
     CurrFridgeInfoCenterComponent,
+    TimeAgoPipe, 
   ],
   imports: [
     BrowserModule,

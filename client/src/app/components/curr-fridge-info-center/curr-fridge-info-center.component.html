@@ -14,6 +14,10 @@
     <p>No currentfridge information available. Please log in.</p>
   </ng-template>
 
-<app-notification-bar #useroom></app-notification-bar>
+<div *ngFor="let notification of fridgeNotificationList" #fridgeRoom>
+  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+</div>
 
-<app-notification-bar #fridgeroom></app-notification-bar>
+<div *ngFor="let notification of userNotificationList" #userRoom>
+  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+</div>
