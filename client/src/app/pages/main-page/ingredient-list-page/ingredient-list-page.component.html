@@ -1,4 +1,4 @@
-<div *ngIf="currentFridge$ | async as fridge; else noFridge">
+<div *ngIf="currentFridge; else noFridge">
   <div class="ingredient-list-page">
     <app-ingredient-form
       [mode]="'add'"

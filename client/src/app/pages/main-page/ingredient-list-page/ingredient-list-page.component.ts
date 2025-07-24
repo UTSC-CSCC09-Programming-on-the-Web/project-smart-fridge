@@ -4,6 +4,8 @@ import { IngredientService } from '../../../services/ingredient.service';
 import { FridgeService } from '../../../services/fridge.service';
 import { Observable } from 'rxjs';
 import { Fridge } from '../../../models/fridge.model';
+import { NotificationService } from '../../../services/notification.service';
+import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-ingredient-list-page',
@@ -17,7 +19,7 @@ export class IngredientListPageComponent {
   hasMoreData = true; // Indicates if there are more ingredients to load
   loading = false; // Indicates if data is currently being loaded
 
-  currentFridge$: Observable<Fridge | null>;
+  currentFridge: Fridge | null = null;
   // Cursors for pagination
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
@@ -25,13 +27,13 @@ export class IngredientListPageComponent {
   constructor(
     private ingredientService: IngredientService,
     private fridgeService: FridgeService,
-  ) {
-    this.currentFridge$ = this.fridgeService.currentFridge$;
-  }
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit(): void {
-    this.currentFridge$.subscribe((fridge) => {
+    this.fridgeService.currentFridge$.subscribe((fridge) => {
       if (fridge) {
+        this.currentFridge = fridge;
         this.loadInitialIngredients();
       }
     });
@@ -183,6 +185,15 @@ export class IngredientListPageComponent {
             console.error('Updated ingredient is null or undefined');
             return;
           }
+          // for testing push notifications
+          this.notificationService.pushFridgeNotification({
+            message: `[Fridge ${this.currentFridge?.name}] Ingredient ${updated.name} updated in the fridge.`,
+            type: 'success',
+          } as Notification);
+          this.notificationService.pushUserNotification({
+            message: `Ingredient ${updated.name} updated in your fridge ${this.currentFridge?.name}.`,
+            type: 'info',
+          } as Notification);
           if (!this.shouldAppendToCurrentList(updated)) {
             console.log('Ingredient not appended to current list:', updated);
             this.ingredients = this.ingredients.filter(

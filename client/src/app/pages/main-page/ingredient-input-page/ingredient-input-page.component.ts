@@ -10,6 +10,7 @@ import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
 import { readImageAsDataUrl } from '../../../utils/image.util';
 import { Notification } from '../../../models/notification.model';
+import { NotificationService } from '../../../services/notification.service';
 
 interface tempIngredient {
   name: string;
@@ -28,6 +29,7 @@ export class IngredientInputPageComponent {
     private addMultiIngredientsService: AddMultiIngredientsService,
     private socketService: SocketService,
     private ingredientService: IngredientService,
+    private notificationService: NotificationService,
   ) {}
 
   notification: Notification = {type: 'info', message: ''};
@@ -133,6 +135,15 @@ export class IngredientInputPageComponent {
         this.tempIngredients = [];
         this.formalIngredients = [];
         this.ingredientService.notifyIngredientsUpdated();
+        // testing push notifications
+        this.notificationService.pushFridgeNotification({
+          message: 'Push to current fridge: New ingredients added to the fridge.',
+          type: 'success',
+        } as Notification);
+        this.notificationService.pushUserNotification({
+          message: 'Push to user: New ingredients added to the fridge.',
+          type: 'info',
+        } as Notification);
       },
       error: (err) => {
         console.error('Error adding ingredients:', err);
