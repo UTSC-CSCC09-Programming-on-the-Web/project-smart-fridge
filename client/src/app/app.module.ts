@@ -53,6 +53,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     NotificationInfoCenterComponent,
     TimeAgoPipe,
   ],
+  
   imports: [
     BrowserModule,
     AppRoutingModule,

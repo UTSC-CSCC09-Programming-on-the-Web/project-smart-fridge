@@ -1,0 +1,90 @@
+version: "3.7"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    labels:
+      - "com.github.nginx-proxy.nginx=true"
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=jieying.gong@mail.utoronto.ca
+  frontend:
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-client:deployment
+    container_name: frontend
+    restart: always
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=smartfridge.dev
+      - LETSENCRYPT_HOST=smartfridge.dev
+      - VIRTUAL_PORT=80
+  backend:
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-backend
+    container_name: backend
+    env_file:
+      - .env
+    restart: always
+    expose:
+      - 3000
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./google-credentials.json:/usr/src/app/.secret/google-credentials.json:ro
+    environment:
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_HOST=api.smartfridge.dev
+      - LETSENCRYPT_HOST=api.smartfridge.dev
+  worker:
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-worker
+    env_file:
+      - .env
+    container_name: worker
+    restart: always
+    depends_on:
+      - db
+      - redis
+      - backend
+    volumes:
+      - ./google-credentials.json:/.secret/google-credentials.json:ro
+    environment: []
+    command: ["node", "workers/index.js"]
+  db:
+    image: postgres:14
+    container_name: smartfridge-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: smartfridge_v1
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: smartfridge-redis
+    restart: always
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:
+

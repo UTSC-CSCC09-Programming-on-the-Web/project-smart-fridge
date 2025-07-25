@@ -12,13 +12,14 @@ const {
 } = require("../redis/redis-socket");
 
 const corsOptions = {
-  origin: "http://localhost:4200",
+  origin: "https://smartfridge.dev",
   credentials: true,
 };
 
 let io;
 
 const setupSocket = async (app) => {
+  console.log("Setting up set up Socket...");
   const httpServer = http.createServer(app);
   io = new Server(httpServer, { cors: corsOptions });
 
@@ -127,7 +128,7 @@ const setupSocket = async (app) => {
       result: data.result,
     });
   });
-
+  console.log("Socket.io setup complete");
   return { httpServer, io };
 };
 
