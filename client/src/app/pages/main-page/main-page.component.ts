@@ -21,7 +21,7 @@ export class MainPageComponent {
   showUserInfo: boolean = false;
   showNewFridgeForm: boolean = false;
   showFridgeSelector: boolean = false;
-  private previousFridgeId: string | null = null;
+  private initialFridgeRooms: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -35,7 +35,7 @@ export class MainPageComponent {
 
   onLogout(): void {
     console.log('User logged out');
-    this.previousFridgeId = null;
+    this.initialFridgeRooms = false;
     this.showFridgeInfo = false;
     this.socketService.disconnect();
     this.authService.logout().subscribe({
@@ -103,7 +103,7 @@ export class MainPageComponent {
         const prevIds = new Set(prev.map(f => f.id));
         const currIds = new Set(curr.map(f => f.id));
         return {
-          added: curr.filter(f => !prevIds.has(f.id)) as Fridge[],
+          added: curr.filter(f => !prevIds.has(f.id) || !this.initialFridgeRooms) as Fridge[],
           removed: prev.filter(f => !currIds.has(f.id)) as Fridge[],
           current: curr as Fridge[],
         };
@@ -128,6 +128,7 @@ export class MainPageComponent {
                 fridgeId: fridge.id,
               } as Notification);
             });
+            this.initialFridgeRooms = true;
           }),
         );
       }

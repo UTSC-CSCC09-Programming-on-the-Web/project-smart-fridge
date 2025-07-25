@@ -47,7 +47,7 @@ const setupSocket = async (app) => {
       socket.join(`user:${userId}`);
       console.log(`User ${userId} joined room user:${userId}`);
     } else {
-      console.warning("No user ID found in session");
+      console.warn("No user ID found in session");
       return socket.emit("error", "User not authenticated");
     }
 
