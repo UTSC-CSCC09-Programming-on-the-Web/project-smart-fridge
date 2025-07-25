@@ -20,6 +20,8 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
     if (!lockIdentifier) {
       io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
+        source: "user",
+        type: 'error',
         message: `Fridge: ${fridge.name} is currently locked, please try again later`,
       });
       return res
@@ -31,8 +33,8 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
     req.fridgeLockIdentifier = lockIdentifier;
     io.to(`fridge:${fridgeId}`).emit("fridgeLockEvent", {
       fridgeId,
-      type: "acquired",
-      userName: req.user.name,
+      type: "info",
+      source: "fridge",
       message: `User ${req.user.name} is updating the fridge ${fridge.name}, please wait...`,
     });
     console.log(
@@ -42,11 +44,11 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
   } catch (error) {
     console.error("Error acquiring fridge lock:", error);
     if (lockIdentifier) {
-      io.to(`fridge:${fridgeId}`).emit("fridgeLockEvent", {
+      io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
-        type: "error",
-        userName: req.user.name,
-        message: `User ${req.user.name} failed to update the fridge ${fridge.name} with lock, please wait and try again later.`,
+        source: "user",
+        type: 'error',
+        message: `Failed to update the fridge ${fridge.name} with lock, please wait and try again later.`,
       });
       const mutex = new Mutex(redisBullmq, `fridge:lock:${fridgeId}`, {
         identifier: lockIdentifier,

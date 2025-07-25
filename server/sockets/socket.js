@@ -105,6 +105,7 @@ const setupSocket = async (app) => {
     );
 
     io.to(`user:${data.userId}`).emit("cvTaskProgress", {
+      source: "task",
       message: message,
       type: data?.type || "info",
     });
@@ -121,6 +122,7 @@ const setupSocket = async (app) => {
       `Publishing addMultiIngredientsFinished to user:${data.userId}`
     );
     io.to(`user:${data.userId}`).emit("addMultiIngredientsFinished", {
+      source: "task",
       traceId: traceId,
       result: data.result,
     });
