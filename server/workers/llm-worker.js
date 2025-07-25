@@ -80,7 +80,6 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
     pubClient.publish(
       `recipeGenerated`,
       JSON.stringify({
-        type: "recipeGenerated",
         traceId: traceId,
         userId: userId,
       })
@@ -104,6 +103,40 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
         traceId: traceId,
         // temp solution to send the result back to the client
         result: returnvalue,
+      })
+    );
+  }
+});
+
+llmRecipeWorker.on("failed", async (job, err) => {
+  console.error(`Job ${job.id} failed with error: ${err.message}`);
+  const traceId = job.data.traceId;
+  const userId = job.data?.user_id;
+  if (!userId) {
+    console.error("No userId found in job data:", job.data);
+    return;
+  }
+  await LlmTask.update(
+    { status: "failed", error: err.message },
+    { where: { trace_id: traceId } }
+  );
+   if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
+    pubClient.publish(
+      `recipeGenerated`,
+      JSON.stringify({
+        traceId: traceId,
+        userId: userId,
+      })
+    );
+  }
+  if (job.name === LLM_JOB_TYPES.OCRextract) {
+    pubClient.publish(
+      "cvTaskProgress",
+      JSON.stringify({
+        userId: userId,
+        type: "error",
+        message:
+          "LLM Task: Get ingredients from Recipe or Shopping record failed with error: " + err.message,
       })
     );
   }

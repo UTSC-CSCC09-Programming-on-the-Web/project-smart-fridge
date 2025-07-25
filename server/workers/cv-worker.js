@@ -63,4 +63,26 @@ cvOCRWorker.on("completed", async (job, returnvalue) => {
   console.log(`LLM Job created successfully for traceId ${traceId}`);
 });
 
+cvOCRWorker.on("failed", async (job, err) => {
+  console.error(`cv OCR Job ${job.id} failed with error:`, err);
+  const traceId = job.data.traceId;
+  const userId = job.data?.user_id;
+  if (!userId) {
+    console.error("No userId found in job data:", job.data);
+    return;
+  }
+   await CvTask.update(
+    { status: "failed", error: err.message },
+    { where: { trace_id: traceId } }
+  );
+  pubClient.publish(
+    "cvTaskProgress",
+    JSON.stringify({
+      userId: userId,
+      type: "error",
+      message: `CV Task: OCR text detection failed with error: ${err.message}`,
+    })
+  );
+});
+
 module.exports = cvOCRWorker;

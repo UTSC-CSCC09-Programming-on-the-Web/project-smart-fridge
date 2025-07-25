@@ -55,8 +55,10 @@ export class SocketService {
     return event$;
   }
 
-  emit(eventName: string, data: any) {
-    this.socket?.emit(eventName, data);
+  async emit(eventName: string, data: any): Promise<void> {
+    await this.connectSocket();
+    console.log(`Emitting event: ${eventName}`, data);
+    this.socket!.emit(eventName, data);
   }
 
   disconnect() {

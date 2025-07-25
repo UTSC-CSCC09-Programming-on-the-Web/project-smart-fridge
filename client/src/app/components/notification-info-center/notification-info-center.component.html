@@ -1,0 +1,30 @@
+
+<div *ngIf="currFridgeInfo as fridge; else noFridge">
+    <h2>Current Fridge Information</h2>
+    <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
+    <p><strong>description:</strong> {{ fridge.description }}</p>
+    <p>Fridge Id: {{ fridge.id }}</p>
+    <p>Fridge Users:</p>
+    <ul>
+    <li *ngFor="let user of fridge.users">{{ user.name }}</li>
+    </ul>
+</div>
+
+  <ng-template #noFridge>
+    <p>No currentfridge information available. Please log in.</p>
+  </ng-template>
+
+<div *ngFor="let notification of currFridgeNotifiList" #fridgeRoom>
+  <p>Fridge Notification:</p>
+  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+</div>
+
+<div *ngFor="let notification of userNotifiList" #userRoom>
+  <p>User Notification:</p>
+  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+</div>
+
+<div *ngIf="showLockNotif" #fridgeLockRoom>
+  <p>Fridge Lock Notification:</p>
+  <app-notification-bar *ngIf="fridgeLockNotif && fridgeLockNotif.message" [notification]="fridgeLockNotif"></app-notification-bar>
+</div>

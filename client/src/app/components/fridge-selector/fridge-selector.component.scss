@@ -1,0 +1,19 @@
+.fridge-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &.selected {
+      font-weight: bold;
+      background-color: #d8f3dc;
+    }
+  }
+}

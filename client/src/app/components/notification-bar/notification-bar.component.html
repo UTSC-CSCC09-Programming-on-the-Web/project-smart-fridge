@@ -1,8 +1,9 @@
 <div
   class="notification-bar"
-  *ngIf="message"
+  *ngIf="notification.message && notification.type !== 'initialization'"
   [ngClass]="getNotificationClass()"
 >
-  <p>{{ message }}</p>
+  <p>{{ notification.message }}</p>
+  <p class="timestamp" *ngIf="notification.createdAt">{{ notification.createdAt | timeAgo:trigger }}</p>
   <button (click)="closeNotification()">Close</button>
 </div>

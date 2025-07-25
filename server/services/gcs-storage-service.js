@@ -17,19 +17,19 @@ const uploadSingleToGCS = async (folderName, file) => {
   console.log("uploadSingleToGCS: check file:", file);
   console.log("uploadSingleToGCS: check folder:", folderName);
   const uniqueFileName = fileNameFormatter(file);
-  const fileUrl = `${folderName}/${uniqueFileName}`
+  const fileUrl = `${folderName}/${uniqueFileName}`;
   const blob = bucket.file(fileUrl);
   const blobStream = blob.createWriteStream({
-    resumable: false, 
+    resumable: false,
     metadata: {
       contentType: file.mimetype,
-      cacheControl: 'public, max-age=31536000',
+      cacheControl: "public, max-age=31536000",
     },
   });
   return new Promise((resolve, reject) => {
-    console.log("bundle finish event...")
+    console.log("bundle finish event...");
     blobStream.on("finish", () => {
-        console.log("upload single to gcs finished back with fileurl:", fileUrl);
+      console.log("upload single to gcs finished back with fileurl:", fileUrl);
       resolve(fileUrl);
     });
     blobStream.on("error", (err) => {
