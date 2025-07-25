@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FridgeService } from '../../services/fridge.service';
-import { Observable, distinctUntilChanged, from, switchMap } from 'rxjs';
+import { Observable, distinctUntilChanged, filter, from, switchMap, take, tap } from 'rxjs';
 import { Fridge } from '../../models/fridge.model';
 import { SocketService } from '../../services/socket.service';
 import { User } from '../../models/user.model';
+import { NotificationService } from '../../services/notification.service';
+import { Notification } from '../../models/notification.model';
 
 @Component({
   selector: 'app-main-page',
@@ -13,8 +15,8 @@ import { User } from '../../models/user.model';
   standalone: false,
 })
 export class MainPageComponent {
-  currentFridge$: Observable<Fridge | null>;
-  currentUser$: Observable<User | null>;
+  currentFridge: Fridge | null = null;
+  currentUser: User | null = null;
   showFridgeInfo: boolean = false;
   showUserInfo: boolean = false;
   showNewFridgeForm: boolean = false;
@@ -25,11 +27,10 @@ export class MainPageComponent {
     private authService: AuthService,
     private fridgeService: FridgeService,
     private socketService: SocketService,
+    private notificationService: NotificationService,
   ) {
     this.fridgeService.getUserFridges().subscribe();
     this.authService.getCurrentUser().subscribe();
-    this.currentFridge$ = this.fridgeService.currentFridge$;
-    this.currentUser$ = this.authService.user$;
   }
 
   onLogout(): void {
@@ -80,8 +81,33 @@ export class MainPageComponent {
   }
 
   ngOnInit(): void {
+    this.authService.user$.subscribe(user => {
+      this.currentUser = user;
+      if (user) {
+        console.log('Current user:', user);
+      } else {
+        console.log('No user logged in');
+      }
+    });
+    this.fridgeService.fridgesList$.pipe(
+      filter(fridges => fridges && fridges.length > 0),
+      distinctUntilChanged((a, b) => a.length === b.length), 
+    ).subscribe(fridges => {
+        console.log('User fridges:', fridges);
+        fridges.forEach(fridge => {
+          this.notificationService.pushFridgeNotification({
+            message: `[Fridge ${fridge.name}] Initialized fridge.`,
+            type: 'initialization',
+            source: 'fridge',
+            fridgeId: fridge.id,
+          } as Notification);
+        });
+    });
     this.fridgeService.currentFridge$
       .pipe(
+        tap((fridge) => {
+          this.currentFridge = fridge;
+        }),
         distinctUntilChanged((a, b) => a?.id === b?.id),
         switchMap((fridge) => {
           const ops: Promise<void>[] = [];

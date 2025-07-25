@@ -10,7 +10,7 @@ import { interval } from 'rxjs';
   standalone: false,
 })
 export class NotificationBarComponent {
-  @Input() notification: Notification = { message: '', type: 'info' };
+  @Input() notification: Notification = { message: '', type: 'info', source: 'system' };
   trigger: Date = new Date();
   private timeSub?: Subscription;
   constructor() {}

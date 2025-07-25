@@ -32,7 +32,7 @@ export class IngredientInputPageComponent {
     private notificationService: NotificationService,
   ) {}
 
-  notification: Notification = {type: 'info', message: ''};
+  notification: Notification = {type: 'info', message: '', source: 'task'};
   tempIngredients: tempIngredient[] = [];
   // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
   formalIngredients: Partial<Ingredient>[] = [];
@@ -56,6 +56,7 @@ export class IngredientInputPageComponent {
       .subscribe({
         next: (data) => {
           this.notification.message = data.message;
+          this.notification.source = 'task';
           if (
             data.type === 'success' ||
             data.type === 'error' ||
@@ -139,10 +140,12 @@ export class IngredientInputPageComponent {
         this.notificationService.pushFridgeNotification({
           message: 'Push to current fridge: New ingredients added to the fridge.',
           type: 'success',
+          source: 'fridge',
         } as Notification);
         this.notificationService.pushUserNotification({
           message: 'Push to user: New ingredients added to the fridge.',
           type: 'info',
+          source: 'user',
         } as Notification);
       },
       error: (err) => {

@@ -1,6 +1,6 @@
 <div
   class="notification-bar"
-  *ngIf="notification.message"
+  *ngIf="notification.message && notification.type !== 'initialization'"
   [ngClass]="getNotificationClass()"
 >
   <p>{{ notification.message }}</p>

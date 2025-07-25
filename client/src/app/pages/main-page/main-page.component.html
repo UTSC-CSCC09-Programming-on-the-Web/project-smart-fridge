@@ -5,11 +5,11 @@
     {{ showUserInfo ? 'Hide' : 'Show' }} User Information
   </button>
   <div *ngIf="showUserInfo">
-    <div *ngIf="currentUser$ | async as user; else noUser">
-      <p><strong>User Name:</strong> {{ user.name }}</p>
+    <div *ngIf="currentUser; else noUser">
+      <p><strong>User Name:</strong> {{ currentUser.name }}</p>
       <p>User Fridges:</p>
       <ul>
-        <li *ngFor="let fridge of user.fridges">
+        <li *ngFor="let fridge of currentUser.fridges">
           {{ fridge.name }} (ID: {{ fridge.id }})
         </li>
       </ul>

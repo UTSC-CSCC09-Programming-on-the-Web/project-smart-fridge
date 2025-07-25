@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, ReplaySubject, tap, of, switchMap, scan } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, tap, of, switchMap, scan, filter } from 'rxjs';
 import { Notification } from '../models/notification.model';
 import { FridgeService } from './fridge.service';
 
@@ -52,7 +52,7 @@ export class NotificationService {
   }
  
   pushFridgeNotification(notification: Notification) {
-    const fridgeId = this.currentFridgeId;
+    const fridgeId = notification.fridgeId || this.currentFridgeId;
     if (!fridgeId) {
       console.error('service:No current fridge ID set for notifications');
       return;
@@ -70,14 +70,18 @@ export class NotificationService {
       this.fridgeListMap.set(fridgeId, new BehaviorSubject<Notification[]>([]));
 
       const buffer: Notification[] = [];
-      this.fridgeNotificationMap.get(fridgeId)!.subscribe(notif => {
+      this.fridgeNotificationMap.get(fridgeId)!.pipe(
+        filter(notif => notif.source === 'fridge')
+      ).subscribe(notif => {
         buffer.push(notif);
-        if (buffer.length > 3) buffer.shift();
+        if (buffer.length > 5) buffer.shift();
         console.log('Service: Buffering fridge notifications:', buffer);
         this.fridgeListMap.get(fridgeId)!.next([...buffer]);
-        this.currentFridgeNotificationsSubject$.next([...buffer]);
-    });
-  }
+        if (fridgeId === this.currentFridgeId) {
+          this.currentFridgeNotificationsSubject$.next([...buffer]);
+        }
+      });
+    }
     console.log('Service: Pushing fridge notification:', notification);
     this.fridgeNotificationMap.get(fridgeId)!.next(notification);
   }
