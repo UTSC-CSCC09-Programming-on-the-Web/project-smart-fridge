@@ -13,7 +13,7 @@ services:
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
     labels:
-      - com.github.nginx-proxy.nginx
+      - "com.github.nginx-proxy.nginx=true"
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
     container_name: nginx-proxy-acme
@@ -32,8 +32,8 @@ services:
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=jieying.live
-      - LETSENCRYPT_HOST=jieying.live
+      - VIRTUAL_HOST=smartfridge.dev
+      - LETSENCRYPT_HOST=smartfridge.dev
       - VIRTUAL_PORT=80
   backend:
     image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-backend
@@ -50,8 +50,8 @@ services:
       - ./google-credentials.json:/usr/src/app/.secret/google-credentials.json:ro
     environment:
       - VIRTUAL_PORT=3000
-      - VIRTUAL_HOST=api.jieying.live
-      - LETSENCRYPT_HOST=api.jieying.live
+      - VIRTUAL_HOST=api.smartfridge.dev
+      - LETSENCRYPT_HOST=api.smartfridge.dev
   worker:
     image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-worker
     env_file:
@@ -61,6 +61,7 @@ services:
     depends_on:
       - db
       - redis
+      - backend
     volumes:
       - ./google-credentials.json:/.secret/google-credentials.json:ro
     environment: []

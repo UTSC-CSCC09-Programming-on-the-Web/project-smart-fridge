@@ -32,7 +32,7 @@ app.use(
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "https://jieying.live",  
+  origin: "https://smartfridge.dev",  
   credentials: true,
 };
 

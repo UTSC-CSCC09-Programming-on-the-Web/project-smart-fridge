@@ -7,15 +7,11 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm ci
 COPY . ./
-RUN npm run build && \
-    echo " Listing /app/dist:" && ls -al /app/dist && \
-    echo " Listing /app/dist/client:" && ls -al /app/dist/client && \
-    echo " Listing /app/dist/client/browser:" && ls -al /app/dist/client/browser
+RUN npm run build 
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
 COPY --from=build /app/dist/client/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf 
-RUN  echo "check NGINX configuration COPY: " && cat /etc/nginx/conf.d/default.conf  
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

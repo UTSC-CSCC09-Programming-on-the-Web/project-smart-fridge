@@ -11,7 +11,7 @@ const {
 } = require("../redis/redis-socket");
 
 const corsOptions = {
-  origin: "https://jieying.live",
+  origin: "https://smartfridge.dev",
   credentials: true,
 };
 
