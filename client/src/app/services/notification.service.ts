@@ -71,7 +71,7 @@ export class NotificationService {
 
       const buffer: Notification[] = [];
       this.fridgeNotificationMap.get(fridgeId)!.pipe(
-        filter(notif => notif.source === 'fridge')
+        filter(notif => notif.source === 'fridge' && notif.type !== 'initialization'),
       ).subscribe(notif => {
         buffer.push(notif);
         if (buffer.length > 5) buffer.shift();
