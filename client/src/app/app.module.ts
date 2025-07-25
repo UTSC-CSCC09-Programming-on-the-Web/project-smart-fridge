@@ -28,7 +28,7 @@ import { NotificationBarComponent } from './components/notification-bar/notifica
 import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-form.component';
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
 import { FridgeSelectorComponent } from './components/fridge-selector/fridge-selector.component';
-import { CurrFridgeInfoCenterComponent } from './components/curr-fridge-info-center/curr-fridge-info-center.component';
+import { NotificationInfoCenterComponent } from './components/notification-info-center/notification-info-center.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 
 @NgModule({
@@ -50,8 +50,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     NotificationBarComponent,
     NewFridgeFormComponent,
     FridgeSelectorComponent,
-    CurrFridgeInfoCenterComponent,
-    TimeAgoPipe, 
+    NotificationInfoCenterComponent,
+    TimeAgoPipe,
   ],
   imports: [
     BrowserModule,

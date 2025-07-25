@@ -8,17 +8,19 @@ import { SocketService } from '../../services/socket.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-curr-fridge-info-center',
+  selector: 'app-notification-info-center',
   standalone: false,
-  templateUrl: './curr-fridge-info-center.component.html',
-  styleUrl: './curr-fridge-info-center.component.scss'
+  templateUrl: './notification-info-center.component.html',
+  styleUrl: './notification-info-center.component.scss'
 })
-export class CurrFridgeInfoCenterComponent {
+export class NotificationInfoCenterComponent {
   currFridgeInfo: Fridge | null = null;
   currFridgeNotifiList: Notification[] = [];
   userNotifiList: Notification[] = [];
   fridgesList: Fridge[] = [];
   currUserId: string | null = null;
+  fridgeLockNotif: Notification | null = null;
+  showLockNotif: boolean = false;
 
   constructor(private fridgeService: FridgeService, private notificationService: NotificationService, private socketService: SocketService, private authService: AuthService) {}
 
@@ -75,6 +77,39 @@ export class CurrFridgeInfoCenterComponent {
       error: (err) => {
         console.error('Error handling fridge update notification:', err);
       }
-  }); 
+    });
+
+    this.socketService.fromSocketEvent<any>('fridgeLockEvent').subscribe({
+      next: (data) => {
+        const lockNotif : Notification = {
+          type: data.type,
+          source: data.source,
+          message: data.message,
+          fridgeId: data.fridgeId,
+          createdAt: new Date(),
+        };
+        this.fridgeLockNotif = data.source === 'lock' ? lockNotif : null;
+        this.showLockNotif = data.lock;
+      },
+      error: (err) => {
+        console.error('Error handling fridge lock notification:', err);
+      }
+    });
+
+    this.socketService.fromSocketEvent<any>('fridgeLockError').subscribe({
+      next: (data) => {
+        const lockNotif : Notification = {
+          type: data.type,
+          source: data.source,
+          message: data.message,
+          fridgeId: data.fridgeId,
+          createdAt: new Date(),
+        };
+        this.fridgeLockNotif = data.source === 'lock' ? lockNotif : null;
+      },
+      error: (err) => {
+        console.error('Error handling fridge lock notification:', err);
+      }
+    });
 }
 }

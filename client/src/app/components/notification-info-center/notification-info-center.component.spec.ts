@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CurrFridgeInfoCenterComponent } from './curr-fridge-info-center.component';
+import { CurrFridgeInfoCenterComponent } from './notification-info-center.component';
 
 describe('CurrFridgeInfoCenterComponent', () => {
   let component: CurrFridgeInfoCenterComponent;

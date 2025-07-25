@@ -23,3 +23,8 @@
   <p>User Notification:</p>
   <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
 </div>
+
+<div *ngIf="showLockNotif" #fridgeLockRoom>
+  <p>Fridge Lock Notification:</p>
+  <app-notification-bar *ngIf="fridgeLockNotif && fridgeLockNotif.message" [notification]="fridgeLockNotif"></app-notification-bar>
+</div>

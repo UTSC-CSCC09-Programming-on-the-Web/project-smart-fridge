@@ -242,6 +242,7 @@ const updateIngredient = async (req, res) => {
     lockIdentifier
   );
   await mutex.acquire();
+   await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time for testing
   let type;
   let error;
   try {

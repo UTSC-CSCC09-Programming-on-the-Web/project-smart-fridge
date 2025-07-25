@@ -20,7 +20,7 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
     if (!lockIdentifier) {
       io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
-        source: "user",
+        source: "lock",
         type: 'error',
         message: `Fridge: ${fridge.name} is currently locked, please try again later`,
       });
@@ -32,9 +32,11 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
     }
     req.fridgeLockIdentifier = lockIdentifier;
     io.to(`fridge:${fridgeId}`).emit("fridgeLockEvent", {
+      userId: req.user.id,
       fridgeId,
       type: "info",
-      source: "fridge",
+      source: "lock",
+      lock: true,
       message: `User ${req.user.name} is updating the fridge ${fridge.name}, please wait...`,
     });
     console.log(
@@ -46,7 +48,7 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
     if (lockIdentifier) {
       io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
-        source: "user",
+        source: "lock",
         type: 'error',
         message: `Failed to update the fridge ${fridge.name} with lock, please wait and try again later.`,
       });
