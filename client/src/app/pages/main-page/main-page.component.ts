@@ -81,6 +81,7 @@ export class MainPageComponent {
   }
 
   ngOnInit(): void {
+    this.socketService.connectSocket();
     this.authService.user$.subscribe(user => {
       this.currentUser = user;
       if (user) {

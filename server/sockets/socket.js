@@ -28,18 +28,27 @@ const setupSocket = async (app) => {
     })
   );
 
+  io.use((socket, next) => {
+  const user = socket.handshake.session?.passport?.user;
+  if (!user) {
+    return next();
+  }
+  socket.userId = user;
+  next();
+});
+
   await connectSocketRedis();
   io.adapter(createAdapter(pubClient, subClient));
 
   io.on("connection", (socket) => {
     console.log("socket connect to", socket.id);
-    console.log("Headers:", socket.handshake.headers);
-    const userId = socket.handshake.session?.passport?.user;
+    const userId = socket.userId;
     if (userId) {
       socket.join(`user:${userId}`);
       console.log(`User ${userId} joined room user:${userId}`);
     } else {
-      console.log("No user ID found in session");
+      console.warning("No user ID found in session");
+      return socket.emit("error", "User not authenticated");
     }
 
     socket.on("joinFridgeRoom", async (fridgeId) => {
