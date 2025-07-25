@@ -17,6 +17,7 @@ const {
 } = require("../services/fridge-lock-service.js");
 const parseIndexedFormData = require("../utils/parse-index-formdata.js");
 const { notifyFridgeUpdateEvent } = require("../utils/notify-event.js");
+const e = require("cors");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -114,6 +115,7 @@ const createIngredient = async (req, res) => {
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
 
   let type;
+  let error;
   try {
     const relativePath = req.file ? req.file.relativePath : null;
     //  console.log("Image URL:", image_url);
@@ -135,6 +137,7 @@ const createIngredient = async (req, res) => {
   } catch (err) {
     console.error("Error creating ingredient:", err);
     type = 'error';
+    error = err?.message || "Failed to create ingredient";
     res.status(400).json({ error: "Failed to create ingredient" });
   } finally {
     console.log(
@@ -144,6 +147,7 @@ const createIngredient = async (req, res) => {
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'add one', {
       ingredientName: req.body.name || null,
+      error: error || null,
     });
   }
 };
@@ -170,6 +174,7 @@ const createMultiIngredients = async (req, res) => {
   await mutex.acquire();
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
   let type;
+  let error;
   try {
     const reqResult = parseIndexedFormData(req);
     const ingredients = reqResult.map(({ image, ...rest }) => ({
@@ -188,6 +193,7 @@ const createMultiIngredients = async (req, res) => {
   } catch (err) {
     console.error("Error creating ingredient:", err);
     type = 'error';
+    error = err?.message || "Failed to add multi ingredients";
     res.status(400).json({ error: "Failed to create ingredient" });
   } finally {
     console.log(
@@ -197,7 +203,7 @@ const createMultiIngredients = async (req, res) => {
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'add multi', {
       ingredientsQty: newIngredients.length || 0,
-      error: err.message || null,
+      error: error || null,
     });
   }
 };
@@ -234,6 +240,7 @@ const updateIngredient = async (req, res) => {
   );
   await mutex.acquire();
   let type;
+  let error;
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
@@ -248,12 +255,13 @@ const updateIngredient = async (req, res) => {
   } catch (err) {
     console.error("Error updating ingredient:", err);
     type = 'error';
+    error = err?.message || "Failed to update ingredient";
     res.status(400).json({ error: "Failed to update ingredient" });
   } finally {
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'modify', {
       ingredientName: req.body.name || null,
-      error: err.message || null,
+      error: error || null,
     });
   }
 };
@@ -281,6 +289,7 @@ const deleteIngredient = async (req, res) => {
   }
   await mutex.acquire();
   let type;
+  let error;
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
@@ -304,12 +313,13 @@ const deleteIngredient = async (req, res) => {
   } catch (err) {
     console.error("Error deleting ingredient:", err);
     type = 'error';
+    error = err?.message || "Failed to delete ingredient";
     res.status(400).json({ error: "Failed to delete ingredient" });
   } finally {
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'delete', {
       ingredientName: req.body.name || null,
-      error: err.message || null,
+      error: error || null,
     });
   }
 };
