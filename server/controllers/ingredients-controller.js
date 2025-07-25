@@ -145,9 +145,10 @@ const createIngredient = async (req, res) => {
       lockIdentifier
     );
     await mutex.release();
-    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'add one', {
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Add single', {
       ingredientName: req.body.name || null,
       error: error || null,
+      userName: req.user.name || null,
     });
   }
 };
@@ -175,6 +176,7 @@ const createMultiIngredients = async (req, res) => {
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
   let type;
   let error;
+  let newIngredients = [];
   try {
     const reqResult = parseIndexedFormData(req);
     const ingredients = reqResult.map(({ image, ...rest }) => ({
@@ -182,7 +184,7 @@ const createMultiIngredients = async (req, res) => {
       image_url: image ? image.relativePath : null,
       fridge_id: fridgeId,
     }));
-    const newIngredients = await Ingredient.bulkCreate(ingredients);
+    newIngredients = await Ingredient.bulkCreate(ingredients);
 
     const ingredientsWithImageUrl = newIngredients.map((ingredient) => ({
       ...ingredient.toJSON(),
@@ -201,9 +203,10 @@ const createMultiIngredients = async (req, res) => {
       lockIdentifier
     );
     await mutex.release();
-    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'add multi', {
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Batch add', {
       ingredientsQty: newIngredients.length || 0,
       error: error || null,
+      userName: req.user.name || null,
     });
   }
 };
@@ -259,9 +262,10 @@ const updateIngredient = async (req, res) => {
     res.status(400).json({ error: "Failed to update ingredient" });
   } finally {
     await mutex.release();
-    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'modify', {
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Modify', {
       ingredientName: req.body.name || null,
       error: error || null,
+      userName: req.user.name || null,
     });
   }
 };
@@ -317,9 +321,10 @@ const deleteIngredient = async (req, res) => {
     res.status(400).json({ error: "Failed to delete ingredient" });
   } finally {
     await mutex.release();
-    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'delete', {
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Delete', {
       ingredientName: req.body.name || null,
       error: error || null,
+      userName: req.user.name || null,
     });
   }
 };

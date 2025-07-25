@@ -63,7 +63,7 @@ export class NotificationService {
     if (!notification.createdAt){
       notification.createdAt = new Date();
     }
-    // lazy initialization of fridge notification stream
+  
     if (!this.fridgeNotificationMap.has(fridgeId)) {
       console.log('Service: Creating new notification stream for fridge:', fridgeId);
       this.fridgeNotificationMap.set(fridgeId, new ReplaySubject<Notification>(5));

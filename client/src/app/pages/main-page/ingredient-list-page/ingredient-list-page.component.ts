@@ -185,18 +185,6 @@ export class IngredientListPageComponent {
             console.error('Updated ingredient is null or undefined');
             return;
           }
-          // for testing push notifications
-          this.notificationService.pushFridgeNotification({
-            message: `[Fridge ${this.currentFridge?.name}] Ingredient ${updated.name} updated in the fridge.`,
-            type: 'success',
-            source: 'fridge',
-            fridgeId: this.currentFridge?.id,
-          } as Notification);
-          this.notificationService.pushUserNotification({
-            message: `Ingredient ${updated.name} updated in your fridge ${this.currentFridge?.name}.`,
-            type: 'info',
-            source: 'user',
-          } as Notification);
           if (!this.shouldAppendToCurrentList(updated)) {
             console.log('Ingredient not appended to current list:', updated);
             this.ingredients = this.ingredients.filter(
