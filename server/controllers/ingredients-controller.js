@@ -7,8 +7,17 @@ const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config();
-const getImageUrl = require("../utils/image-url.js");
-const { get } = require("http");
+const { getImageUrl } = require("../utils/image-url.js");
+const { deleteFileFromGCS } = require("../services/gcs-storage-service.js");
+const Mutex = require("redis-semaphore").Mutex;
+const redisBullmq = require("../redis/redis-bullmq.js");
+const {
+  lockLostHandling,
+  ingredientMutex,
+} = require("../services/fridge-lock-service.js");
+const parseIndexedFormData = require("../utils/parse-index-formdata.js");
+const { notifyFridgeUpdateEvent } = require("../utils/notify-event.js");
+const e = require("cors");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
@@ -88,8 +97,27 @@ const createIngredient = async (req, res) => {
     return res.status(400).json({ error: "Invalid fridge ID" });
   }
 
+  const lockIdentifier = req.fridgeLockIdentifier;
+  if (!lockIdentifier) {
+    return res
+      .status(423)
+      .json({ error: "Fridge is currently locked, please try again later" });
+  }
+  const mutex = ingredientMutex(fridgeId, lockIdentifier);
+  if (!mutex) {
+    return res.status(500).json({ error: "Failed to create ingredient mutex" });
+  }
+  console.log(
+    "Acquiring mutex for fridge lock with identifier:",
+    lockIdentifier
+  );
+  await mutex.acquire();
+  // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
+
+  let type;
+  let error;
   try {
-    const relativePath = req.file ? `ingredients/${req.file.filename}` : null;
+    const relativePath = req.file ? req.file.relativePath : null;
     //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({
@@ -104,15 +132,92 @@ const createIngredient = async (req, res) => {
       image_url: getImageUrl(newIngredient.image_url),
     };
     console.log("Ingredient with image URL:", ingredientWithImageUrl.image_url);
+    type = 'success';
     res.status(201).json(ingredientWithImageUrl);
   } catch (err) {
     console.error("Error creating ingredient:", err);
+    type = 'error';
+    error = err?.message || "Failed to create ingredient";
     res.status(400).json({ error: "Failed to create ingredient" });
+  } finally {
+    console.log(
+      "Releasing mutex for fridge lock with identifier:",
+      lockIdentifier
+    );
+    await mutex.release();
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Add single', {
+      ingredientName: req.body.name || null,
+      error: error || null,
+      userName: req.user.name || null,
+    });
+  }
+};
+
+const createMultiIngredients = async (req, res) => {
+  const fridgeId = req.fridgeId || req.params.fridge_id;
+  if (!fridgeId) {
+    return res.status(400).json({ error: "Invalid fridge ID" });
+  }
+  const lockIdentifier = req.fridgeLockIdentifier;
+  if (!lockIdentifier) {
+    return res
+      .status(423)
+      .json({ error: "Fridge is currently locked, please try again later" });
+  }
+  const mutex = ingredientMutex(fridgeId, lockIdentifier);
+  if (!mutex) {
+    return res.status(500).json({ error: "Failed to create ingredient mutex" });
+  }
+  console.log(
+    "Acquiring mutex for fridge lock with identifier:",
+    lockIdentifier
+  );
+  await mutex.acquire();
+  // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
+  let type;
+  let error;
+  let newIngredients = [];
+  try {
+    const reqResult = parseIndexedFormData(req);
+    const ingredients = reqResult.map(({ image, ...rest }) => ({
+      ...rest,
+      image_url: image ? image.relativePath : null,
+      fridge_id: fridgeId,
+    }));
+    newIngredients = await Ingredient.bulkCreate(ingredients);
+
+    const ingredientsWithImageUrl = newIngredients.map((ingredient) => ({
+      ...ingredient.toJSON(),
+      image_url: getImageUrl(ingredient.image_url),
+    }));
+    type = 'success';
+    res.status(201).json(ingredientsWithImageUrl);
+  } catch (err) {
+    console.error("Error creating ingredient:", err);
+    type = 'error';
+    error = err?.message || "Failed to add multi ingredients";
+    res.status(400).json({ error: "Failed to create ingredient" });
+  } finally {
+    console.log(
+      "Releasing mutex for fridge lock with identifier:",
+      lockIdentifier
+    );
+    await mutex.release();
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Batch add', {
+      ingredientsQty: newIngredients.length || 0,
+      error: error || null,
+      userName: req.user.name || null,
+    });
   }
 };
 
 // PUT /api/fridges/:fridgeId/ingredients/:id
 const updateIngredient = async (req, res) => {
+  const fridgeId = req.fridgeId || req.params.fridge_id;
+  if (!fridgeId) {
+    return res.status(400).json({ error: "Invalid fridge ID" });
+  }
+
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ error: "Invalid ingredient ID" });
@@ -122,7 +227,24 @@ const updateIngredient = async (req, res) => {
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
-
+  const lockIdentifier = req.fridgeLockIdentifier;
+  if (!lockIdentifier) {
+    return res
+      .status(423)
+      .json({ error: "Fridge is currently locked, please try again later" });
+  }
+  const mutex = ingredientMutex(fridgeId, lockIdentifier);
+  if (!mutex) {
+    return res.status(500).json({ error: "Failed to create ingredient mutex" });
+  }
+  console.log(
+    "[Ingredient controller] Acquiring mutex for fridge lock with identifier:",
+    lockIdentifier
+  );
+  await mutex.acquire();
+   await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time for testing
+  let type;
+  let error;
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
@@ -132,20 +254,47 @@ const updateIngredient = async (req, res) => {
       fields: ["name", "quantity", "unit", "expire_date", "type"],
     });
     ingredient.image_url = getImageUrl(ingredient.image_url);
+    type = 'success';
     res.status(200).json(ingredient);
   } catch (err) {
     console.error("Error updating ingredient:", err);
+    type = 'error';
+    error = err?.message || "Failed to update ingredient";
     res.status(400).json({ error: "Failed to update ingredient" });
+  } finally {
+    await mutex.release();
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Modify', {
+      ingredientName: req.body.name || null,
+      error: error || null,
+      userName: req.user.name || null,
+    });
   }
 };
 
 // DELETE /api/fridges/:fridgeId/ingredients/:id
 const deleteIngredient = async (req, res) => {
+  const fridgeId = req.fridgeId || req.params.fridge_id;
+  if (!fridgeId) {
+    return res.status(400).json({ error: "Invalid fridge ID" });
+  }
   const id = req.params.id;
   if (!id || isNaN(Number(id))) {
     return res.status(400).json({ error: "Invalid ingredient ID" });
   }
 
+  const lockIdentifier = req.fridgeLockIdentifier;
+  if (!lockIdentifier) {
+    return res
+      .status(423)
+      .json({ error: "Fridge is currently locked, please try again later" });
+  }
+  const mutex = ingredientMutex(fridgeId, lockIdentifier);
+  if (!mutex) {
+    return res.status(500).json({ error: "Failed to create ingredient mutex" });
+  }
+  await mutex.acquire();
+  let type;
+  let error;
   try {
     const ingredient = await Ingredient.findByPk(id);
     if (!ingredient) {
@@ -153,15 +302,10 @@ const deleteIngredient = async (req, res) => {
     }
 
     if (ingredient.image_url) {
-      const imagePath = path.join(
-        __dirname,
-        "..",
-        "uploads/",
-        ingredient.image_url
-      );
+      const imagePath = ingredient.image_url;
       console.log("Deleting image at:", imagePath);
       try {
-        await fs.promises.unlink(imagePath);
+        await deleteFileFromGCS(imagePath);
         console.log(`Image deleted: ${imagePath}`);
       } catch (err) {
         console.warn(`Warning: Failed to delete image: ${imagePath}`, err);
@@ -169,10 +313,20 @@ const deleteIngredient = async (req, res) => {
     }
 
     await ingredient.destroy();
+    type = 'success';
     res.status(204).send();
   } catch (err) {
     console.error("Error deleting ingredient:", err);
+    type = 'error';
+    error = err?.message || "Failed to delete ingredient";
     res.status(400).json({ error: "Failed to delete ingredient" });
+  } finally {
+    await mutex.release();
+    notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Delete', {
+      ingredientName: req.body.name || null,
+      error: error || null,
+      userName: req.user.name || null,
+    });
   }
 };
 
@@ -181,4 +335,5 @@ module.exports = {
   createIngredient,
   updateIngredient,
   deleteIngredient,
+  createMultiIngredients,
 };

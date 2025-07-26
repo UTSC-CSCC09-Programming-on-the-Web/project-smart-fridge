@@ -67,6 +67,16 @@ export class IngredientService {
     );
   }
 
+  createMultiIngredients(formData: FormData): Observable<Ingredient[] | null> {
+    const fridge_id = getFridgeIdOrFallback(this.fridgeService);
+    if (!fridge_id) return of(null);
+    return this.http.post<Ingredient[]>(
+      `${this.endpoint}/api/fridges/${fridge_id}/ingredients/multi`,
+      formData,
+      { withCredentials: true },
+    );
+  }
+
   /**
    * Updates an existing ingredient on the server.
    * @param id The ID of the ingredient to update.

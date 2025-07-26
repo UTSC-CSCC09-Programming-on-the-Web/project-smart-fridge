@@ -3,13 +3,10 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { Fridge } from '../models/fridge.model';
 import { environment } from '../../environments/environment';  
 
-export interface Fridge {
-  id: string;
-  name: string;
-  description: string;
-}
+
 
 interface FridgeResponse {
   success: boolean;
@@ -20,11 +17,14 @@ interface FridgeResponse {
   providedIn: 'root',
 })
 export class FridgeService {
- // endpoint = 'http://localhost:3000';
+
+  private fridgesListSubject = new BehaviorSubject<Fridge[]>([]);
+  public fridgesList$ = this.fridgesListSubject.asObservable();
+  private currentFridgeSubject = new BehaviorSubject<Fridge | null>(null);
+  public currentFridge$ = this.currentFridgeSubject.asObservable();
+
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
-  private fridgeSubject = new BehaviorSubject<Fridge | null>(null);
-  public currentfridge$ = this.fridgeSubject.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -83,8 +83,12 @@ export class FridgeService {
             console.error('Failed to retrieve user fridges:', res);
             return;
           }
-          this.fridgeSubject.next(res.fridges[0] || null);
-          console.log('User fridges retrieved:', res.fridges);
+          const fridges = res.fridges || [];
+          this.fridgesListSubject.next(fridges);
+          if (fridges.length > 0 && !this.currentFridgeSubject.value) {
+            this.currentFridgeSubject.next(fridges[0]);
+          }
+          console.log('User fridges retrieved:', fridges);
         }),
         catchError((err) => {
           console.error('Error retrieving user fridges:', err);
@@ -94,6 +98,22 @@ export class FridgeService {
   }
 
   getCurrentFridgeId(): string | null {
-    return this.fridgeSubject.value?.id || null;
+    return this.currentFridgeSubject.value?.id || null;
+  }
+
+  setCurrentFridge(fridge: Fridge | null): void {
+    if (
+      fridge &&
+      (!this.currentFridgeSubject.value ||
+        fridge.id !== this.currentFridgeSubject.value.id)
+    ) {
+      console.log('Setting next current fridge:', fridge);
+      this.currentFridgeSubject.next(fridge);
+    }
+    if (fridge) {
+      console.log('Current fridge set:', fridge);
+    } else {
+      console.log('Current fridge cleared');
+    }
   }
 }

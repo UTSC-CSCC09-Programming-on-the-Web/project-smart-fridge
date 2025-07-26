@@ -3,6 +3,7 @@ import { RecipeService } from '../../../services/recipe.service';
 import { SocketService } from '../../../services/socket.service';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Recipe } from '../../../models/recipe.model';
+import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-recipe-page',
@@ -12,7 +13,11 @@ import { Recipe } from '../../../models/recipe.model';
 })
 export class RecipePageComponent {
   recipe: Recipe | null = null;
-  message: string = '';
+  notification: Notification = {
+    type: 'info',
+    message: '',
+    source: 'task'
+  };
   constructor(
     private recipeService: RecipeService,
     private socketService: SocketService,
@@ -27,7 +32,7 @@ export class RecipePageComponent {
     this.recipeService.postGenerateRecipe().subscribe({
       next: (response) => {
         console.log('Recipe generated successfully:', response);
-        this.message =
+        this.notification.message =
           response.message || 'Recipe generation in progress...Waiting...';
       },
       error: (error) => {
@@ -56,9 +61,14 @@ export class RecipePageComponent {
               .trim();
           }
           this.recipe = JSON.parse(clean) as Recipe;
-          this.message = 'Recipe generated successfully!';
+          this.notification.message = 'Recipe generated successfully!';
+          this.notification.type = 'success';
         },
         error: (err) => {
+          if (err.status === 500){
+            this.notification.message = 'Error generating recipe failed: ' + err.message + '. Please try again later.';
+            this.notification.type = 'error';
+          }
           console.error('Error:', err);
         },
       });

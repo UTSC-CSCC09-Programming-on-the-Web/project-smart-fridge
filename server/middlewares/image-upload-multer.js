@@ -3,6 +3,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { fileNameFormatter } = require("../utils/file-formatter.js");
 
 // create storage configuration for multer
 function createStorage(folder) {
@@ -18,14 +19,12 @@ function createStorage(folder) {
       cb(null, targetPath);
     },
     filename: function (req, file, cb) {
-      const ext = path.extname(file.originalname);
-      const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, `${unique}${ext}`);
+      cb(null, fileNameFormatter(file));
     },
   });
 }
 
-function getImageUploadMiddleware({
+function getDiskImageUploadMiddleware({
   folder,
   multiple = false,
   maxCount = 5,
@@ -55,4 +54,51 @@ function getImageUploadMiddleware({
   }
 }
 
-module.exports = getImageUploadMiddleware;
+function getGCSImageUploadMiddleware({
+  folderName,
+  multiple = false,
+  maxCount = 5,
+  maxSizeMB = 5,
+  any = false, // if true, use multer.any() to handle multiple files
+}) {
+  const storage = multer.memoryStorage();
+  const upload = multer({
+    storage,
+    limits: { fileSize: maxSizeMB * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Unsupported image type"), false);
+      }
+    },
+  });
+
+  let handler;
+  if (any) {
+    handler = upload.any();
+  } else if (multiple) {
+    handler = upload.array("images", maxCount);
+  } else {
+    handler = upload.single("image");
+  }
+
+  return (req, res, next) => {
+    handler(req, res, (err) => {
+      if (err) {
+        console.error("Multer error:", err);
+        return res.status(400).json({ error: err.message });
+      }
+      console.log("[gcs multer] Uploaded file(s):", req.file || req.files);
+      req.uploadFolderName = folderName;
+      console.log("[gcs multer] upload foldername:", req.uploadFolderName);
+      next();
+    });
+  };
+}
+
+module.exports = {
+  getDiskImageUploadMiddleware,
+  getGCSImageUploadMiddleware,
+};

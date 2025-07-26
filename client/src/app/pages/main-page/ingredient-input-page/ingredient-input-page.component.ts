@@ -2,10 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
 import { Ingredient } from '../../../models/ingredient.model';
-import { ingredientToFormData } from '../../../utils/form-data.util';
+import {
+  ingredientToFormData,
+  appendIngredientToFormDataWithIndex,
+} from '../../../utils/form-data.util';
 import { forkJoin } from 'rxjs';
 import { IngredientService } from '../../../services/ingredient.service';
-import {readImageAsDataUrl} from '../../../utils/image.util';
+import { readImageAsDataUrl } from '../../../utils/image.util';
+import { Notification } from '../../../models/notification.model';
+import { NotificationService } from '../../../services/notification.service';
 
 interface tempIngredient {
   name: string;
@@ -24,15 +29,15 @@ export class IngredientInputPageComponent {
     private addMultiIngredientsService: AddMultiIngredientsService,
     private socketService: SocketService,
     private ingredientService: IngredientService,
+    private notificationService: NotificationService,
   ) {}
 
-  notificationMessage: string = '';
-  notificationType: 'success' | 'error' | 'info' = 'info';
+  notification: Notification = {type: 'info', message: '', source: 'task'};
   tempIngredients: tempIngredient[] = [];
- // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
+  // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
   formalIngredients: Partial<Ingredient>[] = [];
   handleMultiImagesUploaded(images: File[]): void {
-    this.notificationMessage = '';
+    this.notification.message = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
     const formData = new FormData();
     images.forEach((image) => {
@@ -50,18 +55,24 @@ export class IngredientInputPageComponent {
       .fromSocketEvent<{ message: string; type: string }>('cvTaskProgress')
       .subscribe({
         next: (data) => {
-          this.notificationMessage = data.message;
+          this.notification.message = data.message;
+          this.notification.source = 'task';
           if (
             data.type === 'success' ||
             data.type === 'error' ||
             data.type === 'info'
           ) {
-            this.notificationType = data.type as 'success' | 'error' | 'info';
+            this.notification.type = data.type as 'success' | 'error' | 'info';
           } else {
-            this.notificationType = 'info';
+            this.notification.type = 'info';
+          }
+          if (this.notification.type !== 'info') {
+            this.notification.createdAt = new Date();
+          } else {
+            this.notification.createdAt = undefined;
           }
           console.log(
-            `Received CV Task Progress with type: ${this.notificationType} and message: ${this.notificationMessage}`,
+            `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
           );
         },
         error: (err) => {
@@ -94,7 +105,7 @@ export class IngredientInputPageComponent {
             expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
               .toISOString()
               .split('T')[0],
-            image_url: "",
+            image_url: '',
           }));
           console.log('Parsed ingredients:', this.formalIngredients);
         },
@@ -106,30 +117,46 @@ export class IngredientInputPageComponent {
 
   addAllIngredients(): void {
     const rawIngredients = [...this.formalIngredients];
-    const formDataList: FormData[] = [];
-    rawIngredients.forEach((ingredient) => {
-      ingredient.image_url = undefined; 
-      const formData = ingredientToFormData(ingredient, ingredient.image_file);
-      formDataList.push(formData);
+    const allFormData = new FormData();
+    rawIngredients.forEach((ingredient, index) => {
+      ingredient.image_url = undefined;
+      appendIngredientToFormDataWithIndex(
+        allFormData,
+        ingredient,
+        ingredient.image_file,
+        index,
+      );
     });
-    forkJoin(
-      // temporary solution to add multiple ingredients
-      formDataList.map((formData) =>
-        this.ingredientService.createIngredient(formData),
-      ),
-    ).subscribe({
+    this.ingredientService.createMultiIngredients(allFormData).subscribe({
       next: (responses) => {
         console.log('All ingredients added successfully:', responses);
-        this.notificationMessage = 'All ingredients added successfully!';
-        this.notificationType = 'success';
+        this.notification.message = 'All ingredients added successfully!';
+        this.notification.type = 'success';
+        this.notification.createdAt = new Date();
         this.tempIngredients = [];
         this.formalIngredients = [];
         this.ingredientService.notifyIngredientsUpdated();
+        // testing push notifications
+        this.notificationService.pushFridgeNotification({
+          message: 'Push to current fridge: New ingredients added to the fridge.',
+          type: 'success',
+          source: 'fridge',
+        } as Notification);
+        this.notificationService.pushUserNotification({
+          message: 'Push to user: New ingredients added to the fridge.',
+          type: 'info',
+          source: 'user',
+        } as Notification);
       },
       error: (err) => {
         console.error('Error adding ingredients:', err);
-        this.notificationMessage = 'Failed to add some ingredients.';
-        this.notificationType = 'error';
+        this.notification.message = 'Failed to add some ingredients.';
+        this.notification.type = 'error';
+        this.formalIngredients = this.formalIngredients.map((ing) => ({
+          ...ing,
+          image_file: undefined, // Reset image file and url after submission even if it fails
+          image_url: undefined,
+        }));
       },
     });
   }
@@ -171,7 +198,10 @@ export class IngredientInputPageComponent {
     this.addingTempIngredientsIndex = index;
   }
 
-async submitTempIngredientImageFile(imageFile: File, i: number): Promise<void> {
+  async submitTempIngredientImageFile(
+    imageFile: File,
+    i: number,
+  ): Promise<void> {
     const file = imageFile;
     const previewUrl = await readImageAsDataUrl(file);
     if (this.addingTempIngredientsIndex !== null) {

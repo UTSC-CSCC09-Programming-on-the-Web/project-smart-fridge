@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
  // apiEndpoint: 'http://localhost:3000', 
-  apiEndpoint: 'http://165.22.229.115:3000',
+  apiEndpoint: 'https://api.smartfridge.dev',
 };
 
 /*

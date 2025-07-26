@@ -1,7 +1,6 @@
 require("dotenv").config();
 const vision = require("@google-cloud/vision");
-const path = require("path");
-const fs = require("fs");
+const { getGCSUri } = require("../utils/image-url.js");
 
 const client = new vision.ImageAnnotatorClient();
 
@@ -10,9 +9,9 @@ const extractTextFromImage = async (relativePath) => {
     if (!relativePath) {
       throw new Error("Relative path is required to extract text from image");
     }
-    const absolutePath = path.resolve(__dirname, "../uploads/", relativePath);
+    const absolutePath = getGCSUri(relativePath);
     console.log(`Extracting text from image at path: ${absolutePath}`);
-    if (!absolutePath || !fs.existsSync(absolutePath)) {
+    if (!absolutePath) {
       throw new Error("Invalid image path");
     }
     const [result] = await client.textDetection(absolutePath);

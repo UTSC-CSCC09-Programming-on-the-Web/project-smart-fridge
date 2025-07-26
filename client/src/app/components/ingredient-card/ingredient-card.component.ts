@@ -24,12 +24,20 @@ export class IngredientCardComponent {
 
   ingredientDisplay: Partial<Ingredient> = {};
 
-  ngOnInit(): void {
+  updateIngredientDisplay(): void {
     if (this.mode === 'multi-add') {
       this.ingredientDisplay = { ...this.partialIngredient };
     } else {
       this.ingredientDisplay = { ...this.ingredient };
     }
+  }
+
+  ngOnInit(): void {
+    this.updateIngredientDisplay();
+  }
+
+  ngOnChanges(): void {
+    this.updateIngredientDisplay();
   }
 
   onImageError(event: Event): void {
