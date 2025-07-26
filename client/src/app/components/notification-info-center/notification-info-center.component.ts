@@ -15,18 +15,25 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NotificationInfoCenterComponent {
   currFridgeInfo: Fridge | null = null;
+  currFridgeId: string | null = null;
   currFridgeNotifiList: Notification[] = [];
   userNotifiList: Notification[] = [];
   fridgesList: Fridge[] = [];
   currUserId: string | null = null;
   fridgeLockNotif: Notification | null = null;
   showLockNotif: boolean = false;
+  fridgeLockNotifMap = new Map<string, Notification>();
 
   constructor(private fridgeService: FridgeService, private notificationService: NotificationService, private socketService: SocketService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.fridgeService.currentFridge$.pipe(distinctUntilChanged((a, b) => a?.id === b?.id)).subscribe((fridge) => {
       this.currFridgeInfo = fridge;
+      this.currFridgeId = fridge?.id || null;
+      if (this.currFridgeId && this.fridgeLockNotifMap.has(this.currFridgeId)) {
+        this.fridgeLockNotif = this.fridgeLockNotifMap.get(this.currFridgeId) || null;
+        this.showLockNotif = this.fridgeLockNotif ? true : false;
+      }
     });
     this.fridgeService.fridgesList$.pipe(distinctUntilChanged((a, b) => a.length === b.length)).subscribe((fridges) => {
       this.fridgesList = fridges;
@@ -79,7 +86,7 @@ export class NotificationInfoCenterComponent {
       }
     });
 
-    this.socketService.fromSocketEvent<any>('fridgeLockEvent').subscribe({
+    this.socketService.fromSocketEvent<any>('fridgeLockEvent').pipe(filter(data => data.source === 'lock')).subscribe({
       next: (data) => {
         const lockNotif : Notification = {
           type: data.type,
@@ -88,8 +95,15 @@ export class NotificationInfoCenterComponent {
           fridgeId: data.fridgeId,
           createdAt: new Date(),
         };
-        this.fridgeLockNotif = data.source === 'lock' ? lockNotif : null;
-        this.showLockNotif = data.lock;
+        if (data.lock){
+          this.fridgeLockNotifMap.set(data.fridgeId, lockNotif);
+        } else {
+          this.fridgeLockNotifMap.delete(data.fridgeId);
+        }
+        if (data.fridgeId === this.currFridgeId) {
+          this.fridgeLockNotif = lockNotif;
+          this.showLockNotif = data.lock;
+        }
       },
       error: (err) => {
         console.error('Error handling fridge lock notification:', err);
