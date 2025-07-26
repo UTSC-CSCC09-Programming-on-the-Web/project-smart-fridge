@@ -13,10 +13,13 @@ services:
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
     labels:
-      - "com.github.nginx-proxy.nginx=true"
+      - "com.github.nginx-proxy.nginx"
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
     container_name: nginx-proxy-acme
+    restart: always
+    depends_on:
+      - nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/etc/nginx/certs
