@@ -29,6 +29,8 @@ import { NewFridgeFormComponent } from './components/new-fridge-form/new-fridge-
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
 import { FridgeSelectorComponent } from './components/fridge-selector/fridge-selector.component';
 import { NotificationInfoCenterComponent } from './components/notification-info-center/notification-info-center.component';
+import { InfoNotificationPageComponent } from './pages/main-page/info-notification-page/info-notification-page.component';
+import { AddiFeaturePageComponent } from './pages/main-page/addi-feature-page/addi-feature-page.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 
 @NgModule({
@@ -52,6 +54,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     FridgeSelectorComponent,
     NotificationInfoCenterComponent,
     TimeAgoPipe,
+    InfoNotificationPageComponent,
+    AddiFeaturePageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,37 @@
+<div class="addi-feature-page">
+<div class = "addi-feature-nav-bar">
+<button class="btn" (click)="switchRecipePage()">
+  Generate Recipe
+</button>
+
+
+<button class="btn" (click)="switchIngredientInputPage()">
+  Show Ingredient Input
+</button>
+
+  <button class="btn" (click)="switchFridgeList()">
+    Click to switch Fridge
+  </button>
+
+  <button class="btn" (click)="addNewFridge()">Create or Join a Fridge</button>
+
+</div>
+
+<div class="addi-feature-content">
+  <div *ngIf="mode === 'ingredientInputPage'">
+  <app-ingredient-input-page></app-ingredient-input-page>
+</div>
+  <div *ngIf="mode === 'recipePage'">
+  <app-recipe-page></app-recipe-page>
+</div>
+  <div *ngIf="mode === 'fridgeSelector'">
+    <app-fridge-selector></app-fridge-selector>
+  </div>
+
+  <div *ngIf="mode === 'newFridge'">
+    <app-new-fridge-form
+      (submitForm)="onSubmitNewFridgeForm()"
+    ></app-new-fridge-form>
+</div>
+</div>
+

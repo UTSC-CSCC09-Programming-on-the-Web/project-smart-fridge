@@ -1,42 +1,19 @@
 <app-header></app-header>
 
 <div class="main-container">
-  <button class="btn" (click)="fetchUserInfo()">
-    {{ showUserInfo ? 'Hide' : 'Show' }} User Information
-  </button>
-  <div *ngIf="showUserInfo">
-    <div *ngIf="currentUser; else noUser">
-      <p><strong>User Name:</strong> {{ currentUser.name }}</p>
-      <p>User Fridges:</p>
-      <ul>
-        <li *ngFor="let fridge of currentUser.fridges">
-          {{ fridge.name }} (ID: {{ fridge.id }})
-        </li>
-      </ul>
-    </div>
-  </div>
-  <ng-template #noUser>
-    <p>No user information available. Please log in.</p>
-  </ng-template>
-
+ 
   <button class="btn" (click)="onLogout()">Logout</button>
 
-  <button class="btn" (click)="switchFridgeList()">
-    Click to switch Fridge
-  </button>
-  <div *ngIf="showFridgeSelector">
-    <app-fridge-selector></app-fridge-selector>
+<div class="main-row">
+  <div class="info-col">
+    <app-info-notification-page></app-info-notification-page>
   </div>
-
-  <button class="btn" (click)="addNewFridge()">Create or Join a Fridge</button>
-  <div *ngIf="showNewFridgeForm">
-    <app-new-fridge-form
-      (submitForm)="onSubmitNewFridgeForm()"
-    ></app-new-fridge-form>
+  <div class="fridge-col">
+    <div class="main-fridge-container">
+      <app-addi-feature-page></app-addi-feature-page>
+      <app-ingredient-list-page></app-ingredient-list-page>
+    </div>
   </div>
-
-  <app-notification-info-center></app-notification-info-center>
-  <app-recipe-page></app-recipe-page>
-  <app-ingredient-input-page></app-ingredient-input-page>
-  <router-outlet></router-outlet>
+</div>
+  <div class = "footer"></div>
 </div>

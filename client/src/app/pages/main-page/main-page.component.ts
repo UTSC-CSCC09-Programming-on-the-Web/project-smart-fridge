@@ -16,11 +16,6 @@ import { Notification } from '../../models/notification.model';
 })
 export class MainPageComponent {
   currentFridge: Fridge | null = null;
-  currentUser: User | null = null;
-  showFridgeInfo: boolean = false;
-  showUserInfo: boolean = false;
-  showNewFridgeForm: boolean = false;
-  showFridgeSelector: boolean = false;
   private initialFridgeRooms: boolean = false;
 
   constructor(
@@ -36,7 +31,6 @@ export class MainPageComponent {
   onLogout(): void {
     console.log('User logged out');
     this.initialFridgeRooms = false;
-    this.showFridgeInfo = false;
     this.socketService.disconnect();
     this.authService.logout().subscribe({
       next: () => {
@@ -48,49 +42,9 @@ export class MainPageComponent {
     });
   }
   
-  fetchUserInfo(): void {
-    this.showUserInfo = !this.showUserInfo;
-  }
-
-  addNewFridge(): void {
-    this.showNewFridgeForm = !this.showNewFridgeForm;
-  }
-
-  onSubmitNewFridgeForm(): void {
-    this.showNewFridgeForm = false;
-    this.fridgeService.getUserFridges().subscribe({
-      next: () => {
-        console.log('New fridge added successfully');
-      },
-      error: (err) => {
-        console.error('Error adding new fridge:', err);
-      },
-    });
-    this.authService.getCurrentUser().subscribe({
-      next: () => {
-        console.log('User data refreshed after adding new fridge');
-      },
-      error: (err) => {
-        console.error('Error refreshing user data:', err);
-      },
-    });
-  }
-
-  switchFridgeList(): void {
-    this.showFridgeSelector = !this.showFridgeSelector;
-  }
 
   ngOnInit(): void {
     this.socketService.connectSocket();
-    this.authService.user$.subscribe(user => {
-      this.currentUser = user;
-      if (user) {
-        console.log('Current user:', user);
-      } else {
-        console.log('No user logged in');
-      }
-    });
-
     this.fridgeService.fridgesList$.pipe(
       //filter(fridges => fridges && fridges.length > 0),
       pairwise(),

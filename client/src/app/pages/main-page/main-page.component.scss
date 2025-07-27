@@ -1,8 +1,8 @@
 .main-container {
   padding: 20px;
-  max-width: 960px;
   margin: 0 auto;
-  background-color: #f9f9f8;
+  width: 90%;
+  background-color: #e8e879;
 }
 
 .btn {
@@ -11,4 +11,23 @@
   border-radius: 4px;
   cursor: pointer;
   margin: 10px 5px;
+}
+
+.main-row {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: 16px; 
+}
+
+.info-col {
+ 
+  background-color: #c7e9ef;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.fridge-col {
+  background-color: #f6d2d2;
+  padding: 10px;
+  border-radius: 8px;
 }
