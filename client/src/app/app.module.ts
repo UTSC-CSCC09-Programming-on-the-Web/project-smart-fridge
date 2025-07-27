@@ -31,6 +31,7 @@ import { FridgeSelectorComponent } from './components/fridge-selector/fridge-sel
 import { NotificationInfoCenterComponent } from './components/notification-info-center/notification-info-center.component';
 import { InfoNotificationPageComponent } from './pages/main-page/info-notification-page/info-notification-page.component';
 import { AddiFeaturePageComponent } from './pages/main-page/addi-feature-page/addi-feature-page.component';
+import { TempIngredientsListComponent } from './pages/main-page/ingredient-input-page/temp-ingredients-list/temp-ingredients-list.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     TimeAgoPipe,
     InfoNotificationPageComponent,
     AddiFeaturePageComponent,
+    TempIngredientsListComponent
   ],
   imports: [
     BrowserModule,
