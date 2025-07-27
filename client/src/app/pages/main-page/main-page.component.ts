@@ -17,6 +17,8 @@ import { Notification } from '../../models/notification.model';
 export class MainPageComponent {
   currentFridge: Fridge | null = null;
   private initialFridgeRooms: boolean = false;
+  showOverlay: boolean = false;
+  overlayMode: 'temp-ingredient-list' | 'recipe-generated' | null = null;
 
   constructor(
     private authService: AuthService,

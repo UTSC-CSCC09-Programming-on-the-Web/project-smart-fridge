@@ -32,6 +32,7 @@ import { NotificationInfoCenterComponent } from './components/notification-info-
 import { InfoNotificationPageComponent } from './pages/main-page/info-notification-page/info-notification-page.component';
 import { AddiFeaturePageComponent } from './pages/main-page/addi-feature-page/addi-feature-page.component';
 import { TempIngredientsListComponent } from './pages/main-page/ingredient-input-page/temp-ingredients-list/temp-ingredients-list.component';
+import { OverlayModelComponent } from './pages/main-page/overlay-model/overlay-model.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     NewFridgeFormComponent,
     FridgeSelectorComponent,
     NotificationInfoCenterComponent,
+    OverlayModelComponent,
     TimeAgoPipe,
     InfoNotificationPageComponent,
     AddiFeaturePageComponent,

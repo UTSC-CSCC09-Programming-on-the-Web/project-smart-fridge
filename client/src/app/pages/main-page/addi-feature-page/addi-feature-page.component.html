@@ -19,7 +19,9 @@
 
 <div class="addi-feature-content">
   <div *ngIf="mode === 'ingredientInputPage'">
-  <app-ingredient-input-page></app-ingredient-input-page>
+  <app-ingredient-input-page
+    (showTempIngredientsOverlay)="onShowTempIngredientsOverlay()"
+  ></app-ingredient-input-page>
 </div>
   <div *ngIf="mode === 'recipePage'">
   <app-recipe-page></app-recipe-page>

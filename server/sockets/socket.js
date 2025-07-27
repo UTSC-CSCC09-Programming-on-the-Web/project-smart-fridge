@@ -108,6 +108,7 @@ const setupSocket = async (app) => {
       source: "task",
       message: message,
       type: data?.type || "info",
+      finished: data?.finished || false,
     });
   });
 

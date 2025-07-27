@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FridgeService } from '../../../services/fridge.service';
 
@@ -10,6 +10,9 @@ import { FridgeService } from '../../../services/fridge.service';
 })
 export class AddiFeaturePageComponent {
   mode: 'newFridge' | 'fridgeSelector' | 'recipePage' | 'ingredientInputPage' = 'ingredientInputPage';  
+
+  @Output() showOverlay: EventEmitter<void> = new EventEmitter<void>();
+  @Output() overlayMode: EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null> = new EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null>();
 
   constructor(
     private authService: AuthService,
@@ -50,6 +53,11 @@ export class AddiFeaturePageComponent {
 
   switchIngredientInputPage(): void {
     this.mode = 'ingredientInputPage';
+  }
+
+  onShowTempIngredientsOverlay(): void {
+    this.overlayMode.emit('temp-ingredient-list');
+    this.showOverlay.emit();
   }
 
 }

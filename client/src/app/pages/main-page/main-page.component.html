@@ -10,10 +10,19 @@
   </div>
   <div class="fridge-col">
     <div class="main-fridge-container">
-      <app-addi-feature-page></app-addi-feature-page>
+      <app-addi-feature-page
+        (showOverlay)="showOverlay = true"
+        (overlayMode)="overlayMode = $event"
+      ></app-addi-feature-page>
       <app-ingredient-list-page></app-ingredient-list-page>
     </div>
   </div>
 </div>
+
+<app-overlay-model
+  *ngIf="showOverlay && overlayMode"
+  (close)="showOverlay = false"
+></app-overlay-model>
+
   <div class = "footer"></div>
 </div>

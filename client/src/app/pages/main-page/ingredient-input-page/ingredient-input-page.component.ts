@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
 import { Ingredient } from '../../../models/ingredient.model';
@@ -28,9 +28,9 @@ export class IngredientInputPageComponent {
   constructor(
     private addMultiIngredientsService: AddMultiIngredientsService,
     private socketService: SocketService,
-    private ingredientService: IngredientService,
-    private notificationService: NotificationService,
   ) {}
+
+  @Output() showTempIngredientsOverlay: EventEmitter<void> = new EventEmitter<void>();
 
   notification: Notification = {type: 'info', message: '', source: 'task'};
   tempIngredients: tempIngredient[] = [];
@@ -52,7 +52,7 @@ export class IngredientInputPageComponent {
   ngOnInit(): void {
     console.log('Ingredient Input Page initialized');
     this.socketService
-      .fromSocketEvent<{ message: string; type: string }>('cvTaskProgress')
+      .fromSocketEvent<{ message: string; type: string; finished: boolean | null}>('cvTaskProgress')
       .subscribe({
         next: (data) => {
           this.notification.message = data.message;
@@ -74,6 +74,9 @@ export class IngredientInputPageComponent {
           console.log(
             `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
           );
+          if(data?.finished && data.type === 'success') {
+            this.showTempIngredientsOverlay.emit();
+          }
         },
         error: (err) => {
           console.error('Error receiving CV Task Progress:', err);
