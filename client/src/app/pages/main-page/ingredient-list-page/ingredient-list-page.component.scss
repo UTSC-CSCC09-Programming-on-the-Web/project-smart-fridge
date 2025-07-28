@@ -8,6 +8,8 @@
 .ingredient-list {
   display: flex;
   flex-direction: column;
+  max-height: 1200px;
+  overflow-y: auto;
   gap: 10px;
 }
 

@@ -24,6 +24,8 @@ export class IngredientListPageComponent {
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
+  showAddForm = false; 
+
   constructor(
     private ingredientService: IngredientService,
     private fridgeService: FridgeService,
@@ -46,6 +48,13 @@ export class IngredientListPageComponent {
       this.loading = false;
       this.loadInitialIngredients();
     });
+  }
+
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    if (this.showAddForm) {
+      this.scrollToTop();
+    }
   }
 
   loadInitialIngredients(): void {

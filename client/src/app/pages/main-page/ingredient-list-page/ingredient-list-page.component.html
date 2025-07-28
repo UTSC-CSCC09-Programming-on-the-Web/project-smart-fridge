@@ -1,6 +1,9 @@
 <div *ngIf="currentFridge; else noFridge">
+  <button class="add-ingredient-button" (click)="toggleAddForm()">
+    {{ showAddForm ? 'Cancel' : 'Add a Single Ingredient' }}
+  </button>
   <div class="ingredient-list-page">
-    <app-ingredient-form
+    <app-ingredient-form *ngIf="showAddForm"
       [mode]="'add'"
       (addIngredient)="handleNewIngredient($event)"
     ></app-ingredient-form>

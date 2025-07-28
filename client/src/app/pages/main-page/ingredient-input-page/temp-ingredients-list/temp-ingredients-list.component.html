@@ -1,4 +1,7 @@
 <div class="temp-ingredients-list">
+   <div *ngIf="formalIngredients.length === 0">
+     <p>There is no parsed ingredient. Please upload other receipts or shopping records for generating ingredients added to fridge
+    </div>
     <div *ngFor="let partialIngredient of formalIngredients; let i = index">
       <app-ingredient-card
         [partialIngredient]="partialIngredient"
