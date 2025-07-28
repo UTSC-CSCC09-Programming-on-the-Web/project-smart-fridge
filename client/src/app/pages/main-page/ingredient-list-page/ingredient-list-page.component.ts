@@ -51,6 +51,7 @@ export class IngredientListPageComponent {
   loadInitialIngredients(): void {
     console.log('Loading initial ingredients...');
     this.loading = true;
+    this.hasMoreData = true;
     this.ingredientService.getIngredients().subscribe({
       next: (data) => {
         if (!data || !data.ingredients) {
@@ -119,12 +120,16 @@ export class IngredientListPageComponent {
           console.log('fetch more cursors set:', {
             expireDateCursor: this.expireDateCursor,
             idCursor: this.idCursor,
+            ingredientscount: data.ingredients.length,
+            dataingredients: data.ingredients,
+            ingredients: this.ingredients,
           });
           if (
             data.ingredients.length < 10 ||
             !data.nextExpireCursor ||
             !data.nextIdCursor
           ) {
+            console.log('No more data to load');
             this.hasMoreData = false;
           }
         },
@@ -241,6 +246,7 @@ export class IngredientListPageComponent {
 
   onScrollDown() {
     if (this.hasMoreData && !this.loading) {
+      console.log('Scrolling down, fetching more ingredients...');
       this.fetchMoreIngredients();
     }
   }

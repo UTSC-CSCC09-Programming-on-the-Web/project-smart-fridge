@@ -20,7 +20,7 @@
 </div>
 
 <app-overlay-model
-  *ngIf="showOverlay && overlayMode"
+  [hidden]="!(showOverlay && overlayMode)"
   (close)="showOverlay = false"
 ></app-overlay-model>
 
