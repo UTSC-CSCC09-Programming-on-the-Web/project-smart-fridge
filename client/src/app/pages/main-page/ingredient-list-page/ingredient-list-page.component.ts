@@ -50,6 +50,10 @@ export class IngredientListPageComponent {
     });
   }
 
+  refreshIngredients() {
+    this.ingredientService.notifyIngredientsUpdated();
+  }
+
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
     if (this.showAddForm) {

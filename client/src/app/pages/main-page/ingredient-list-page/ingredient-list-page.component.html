@@ -1,4 +1,10 @@
 <div *ngIf="currentFridge; else noFridge">
+
+  <button mat-fab extended (click)="refreshIngredients()">
+    <mat-icon>refresh</mat-icon>
+    Click to Refresh the Fridge
+  </button>
+
   <button mat-fab extended class="add-ingredient-button" (click)="toggleAddForm()">
     <mat-icon>{{ showAddForm ? 'cancel' : 'add' }}</mat-icon>
     {{ showAddForm ? 'Cancel' : 'Add a Single Ingredient' }}
