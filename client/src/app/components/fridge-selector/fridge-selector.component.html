@@ -1,9 +1,11 @@
-<ul class="fridge-list">
-  <li
-    *ngFor="let fridge of fridges"
+<mat-action-list class="fridge-list">
+    <button mat-list-item 
+    *ngFor="let fridge of fridges" 
     [class.selected]="fridge.id === currentFridge?.id"
-    (click)="onFridgeSelect(fridge)"
-  >
-    {{ fridge.name }}
-  </li>
-</ul>
+    (click)="onFridgeSelect(fridge)">
+     <div matListItemMeta>
+        <mat-icon>{{ fridge.id === currentFridge?.id ? 'check' : 'kitchen' }}</mat-icon>
+      </div>
+    <div mat-line>{{ fridge.name }}</div>
+  </button>
+</mat-action-list>
