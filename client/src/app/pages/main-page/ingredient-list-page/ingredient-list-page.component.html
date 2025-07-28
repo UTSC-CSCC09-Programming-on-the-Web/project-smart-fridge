@@ -10,9 +10,11 @@
 
     <div
       class="ingredient-list"
+      #scrollableDiv
       infiniteScroll
       [infiniteScrollDistance]="2"
       [infiniteScrollThrottle]="150"
+      [infiniteScrollContainer]="scrollableDiv"
       (scrolled)="onScrollDown()"
     >
       <ng-container *ngFor="let ing of ingredients; trackBy: trackById">
