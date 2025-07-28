@@ -40,8 +40,10 @@
 
 .ingredient-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 10px;
+  margin-left: 15px;
 }
 
 .btn {
