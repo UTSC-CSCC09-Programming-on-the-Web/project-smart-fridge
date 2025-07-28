@@ -18,14 +18,14 @@ const {
 const parseIndexedFormData = require("../utils/parse-index-formdata.js");
 const { notifyFridgeUpdateEvent } = require("../utils/notify-event.js");
 const e = require("cors");
+const dayjs = require("dayjs");
 
 // for infintie scroll pagination, we use expire date and id as cursors
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getIngredientsInfiniteScroll = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const expireCursor = req.query.expireDateCursor
-    ? new Date(req.query.expireDateCursor)
-    : null;
+  console.log("Checking req.query.expireDateCursor:", req.query.expireDateCursor);
+  const expireCursor = req.query.expireDateCursor ? dayjs(req.query.expireDateCursor).format('YYYY-MM-DD') : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
   const fridgeId = req.fridgeId || req.params.fridge_id;
   if (!fridgeId) {
