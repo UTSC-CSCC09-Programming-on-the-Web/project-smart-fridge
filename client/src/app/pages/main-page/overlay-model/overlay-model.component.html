@@ -2,6 +2,6 @@
 <div class="overlay">
   <div class="overlay-content">
     <button class="close-btn" (click)="close.emit()">Close</button>
-    <app-temp-ingredients-list (finishAdding)="close.emit()"></app-temp-ingredients-list>
+    <app-temp-ingredients-list (finishAdding)="handleFinishAdding()"></app-temp-ingredients-list>
   </div>
 </div>

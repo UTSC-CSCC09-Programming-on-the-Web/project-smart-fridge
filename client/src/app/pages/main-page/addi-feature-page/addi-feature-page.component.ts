@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FridgeService } from '../../../services/fridge.service';
+import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 
 @Component({
   selector: 'app-addi-feature-page',
@@ -10,14 +11,21 @@ import { FridgeService } from '../../../services/fridge.service';
 })
 export class AddiFeaturePageComponent {
   mode: 'newFridge' | 'fridgeSelector' | 'recipePage' | 'ingredientInputPage' = 'ingredientInputPage';  
-
+  showTempIngredientsBtn: boolean = false;
   @Output() showOverlay: EventEmitter<void> = new EventEmitter<void>();
   @Output() overlayMode: EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null> = new EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null>();
-
   constructor(
     private authService: AuthService,
     private fridgeService: FridgeService,
+    private addMultiIngredientsService: AddMultiIngredientsService
   ) {}
+
+  ngOnInit(): void {
+    this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
+      console.log('Batch adding finished');
+      this.showTempIngredientsBtn = false;
+    });
+  }
 
   addNewFridge(): void {
     this.mode = 'newFridge';
@@ -55,7 +63,12 @@ export class AddiFeaturePageComponent {
     this.mode = 'ingredientInputPage';
   }
 
+  handleShowTempIngredientsBtn(): void {
+    this.showTempIngredientsBtn = true;
+  }
+
   onShowTempIngredientsOverlay(): void {
+    console.log('Showing temporary ingredients overlay from AddiFeaturePageComponent');
     this.overlayMode.emit('temp-ingredient-list');
     this.showOverlay.emit();
   }

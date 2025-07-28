@@ -6,6 +6,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { validateImageFile, readImageAsDataUrl } from '../../utils/image.util';
+import { AddMultiIngredientsService } from '../../services/add-multi-ingredients.service';
 
 @Component({
   selector: 'app-multi-image-upload',
@@ -20,6 +21,14 @@ export class MultiImageUploadComponent {
   maxCount: number = 5; // Maximum number of images allowed
 
   @Output() multiImagesUploaded = new EventEmitter<File[]>();
+
+  constructor(private addMultiIngredientsService: AddMultiIngredientsService) {}
+
+  ngOnInit(): void {
+    this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
+      this.clearAllImages();
+    });
+  }
 
   onFilesSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
@@ -56,6 +65,9 @@ export class MultiImageUploadComponent {
   removeImage(index: number): void {
     this.selectedImages.splice(index, 1);
     this.imagePreviews.splice(index, 1);
+    if (index === this.selectedImages.length && this?.fileInput?.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
   clearAllImages(): void {
     this.selectedImages = [];

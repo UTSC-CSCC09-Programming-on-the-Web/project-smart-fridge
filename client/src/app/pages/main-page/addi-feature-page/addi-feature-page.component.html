@@ -20,8 +20,11 @@
 <div class="addi-feature-content">
   <div *ngIf="mode === 'ingredientInputPage'">
   <app-ingredient-input-page
-    (showTempIngredientsOverlay)="onShowTempIngredientsOverlay()"
+    (showTempIngredientsOverlay)="handleShowTempIngredientsBtn()"
   ></app-ingredient-input-page>
+  <button *ngIf="showTempIngredientsBtn" class="btn" (click)="onShowTempIngredientsOverlay()">
+    Show Temporary Ingredients
+  </button>
 </div>
   <div *ngIf="mode === 'recipePage'">
   <app-recipe-page></app-recipe-page>

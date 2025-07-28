@@ -33,9 +33,7 @@ export class IngredientInputPageComponent {
   @Output() showTempIngredientsOverlay: EventEmitter<void> = new EventEmitter<void>();
 
   notification: Notification = {type: 'info', message: '', source: 'task'};
-  tempIngredients: tempIngredient[] = [];
-  // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
-  formalIngredients: Partial<Ingredient>[] = [];
+
   handleMultiImagesUploaded(images: File[]): void {
     this.notification.message = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
@@ -82,9 +80,14 @@ export class IngredientInputPageComponent {
           console.error('Error receiving CV Task Progress:', err);
         },
       });
+    this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
+      console.log('Batch adding finished');
+      this.notification = {
+        type: 'info',
+        message: '',
+        source: 'task',
+      };
+    });
   }
 
-  handleFinishAdding(): void {
-    console.log('Finish adding ingredients');
-  }
 }
