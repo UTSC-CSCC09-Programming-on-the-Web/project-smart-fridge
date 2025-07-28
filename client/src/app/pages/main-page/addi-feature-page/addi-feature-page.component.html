@@ -1,42 +1,29 @@
 <div class="addi-feature-page">
-<div class = "addi-feature-nav-bar">
-<button mat-button (click)="switchRecipePage()">
-  Generate Recipe
-</button>
 
+  <div class="addi-feature-nav-bar">
+    <mat-tab-group  [preserveContent]="true">
+      <mat-tab label="🍳 Generate Recipe">
+          <app-recipe-page></app-recipe-page>
+      </mat-tab>
 
-<button mat-button (click)="switchIngredientInputPage()">
-  Show Ingredient Input
-</button>
+      <mat-tab label="🏷️ Ingredient Input">
+          <app-ingredient-input-page
+            (showTempIngredientsOverlay)="handleShowTempIngredientsBtn()"
+          ></app-ingredient-input-page>
 
-  <button mat-button (click)="switchFridgeList()">
-    Click to switch Fridge
-  </button>
+          <button *ngIf="showTempIngredientsBtn" mat-flat-button (click)="onShowTempIngredientsOverlay()">
+            Show Temporary Ingredients
+          </button>
+      </mat-tab>
 
-  <button mat-button (click)="addNewFridge()">Create or Join a Fridge</button>
+      <mat-tab label="🔄 Switch Fridge">
+          <app-fridge-selector></app-fridge-selector>
+      </mat-tab>
 
-</div>
-
-<div class="addi-feature-content">
-  <div [hidden]="mode !== 'ingredientInputPage'">
-  <app-ingredient-input-page
-    (showTempIngredientsOverlay)="handleShowTempIngredientsBtn()"
-  ></app-ingredient-input-page>
-  <button *ngIf="showTempIngredientsBtn" mat-flat-button (click)="onShowTempIngredientsOverlay()">
-    Show Temporary Ingredients
-  </button>
-</div>
-  <div [hidden]="mode !== 'recipePage'">
-  <app-recipe-page></app-recipe-page>
-</div>
-  <div [hidden]="mode !== 'fridgeSelector'">
-    <app-fridge-selector></app-fridge-selector>
+      <mat-tab label="➕ Create/Join Fridge">
+          <app-new-fridge-form (submitForm)="onSubmitNewFridgeForm()"></app-new-fridge-form>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-
-  <div [hidden]="mode !== 'newFridge'">
-    <app-new-fridge-form
-      (submitForm)="onSubmitNewFridgeForm()"
-    ></app-new-fridge-form>
-</div>
 </div>
 

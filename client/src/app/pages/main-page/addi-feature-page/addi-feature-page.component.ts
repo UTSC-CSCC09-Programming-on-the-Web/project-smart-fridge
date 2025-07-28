@@ -10,7 +10,7 @@ import { AddMultiIngredientsService } from '../../../services/add-multi-ingredie
   styleUrl: './addi-feature-page.component.scss'
 })
 export class AddiFeaturePageComponent {
-  mode: 'newFridge' | 'fridgeSelector' | 'recipePage' | 'ingredientInputPage' = 'ingredientInputPage';  
+  
   showTempIngredientsBtn: boolean = false;
   @Output() showOverlay: EventEmitter<void> = new EventEmitter<void>();
   @Output() overlayMode: EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null> = new EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null>();
@@ -27,12 +27,7 @@ export class AddiFeaturePageComponent {
     });
   }
 
-  addNewFridge(): void {
-    this.mode = 'newFridge';
-  }
-
   onSubmitNewFridgeForm(): void {
-    this.mode = 'fridgeSelector';
     this.fridgeService.getUserFridges().subscribe({
       next: () => {
         console.log('New fridge added successfully');
@@ -49,18 +44,6 @@ export class AddiFeaturePageComponent {
         console.error('Error refreshing user data:', err);
       },
     });
-  }
-
-  switchFridgeList(): void {
-    this.mode = 'fridgeSelector';
-  }
-
-  switchRecipePage(): void {
-    this.mode = 'recipePage';
-  }
-
-  switchIngredientInputPage(): void {
-    this.mode = 'ingredientInputPage';
   }
 
   handleShowTempIngredientsBtn(): void {
