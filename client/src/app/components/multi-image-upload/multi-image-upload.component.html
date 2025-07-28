@@ -6,23 +6,27 @@
   <p>Maximum {{ maxCount }} images can be uploaded.</p>
   <form>
     <label for="fileInput">Select images:</label>
-    <input
-      type="file"
-      (change)="onFilesSelected($event)"
-      accept="image/*"
-      multiple
-      #fileInput
-    />
+    <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple hidden #fileInput>
   </form>
+   <button mat-stroked-button color="primary" (click)="fileInput.click()">Choose File</button>
+  <span *ngIf="selectedFileName.length > 0" class="file-name">{{ selectedFileName.join(', ') }}</span>
   <div
     class="image-previews-list"
     *ngFor="let image of imagePreviews; let i = index"
   >
     <div class="image-container">
       <img [src]="image" alt="Image Preview" class="image-preview" />
-      <button class="btn" (click)="removeImage(i)">Remove</button>
+      <button mat-icon-button (click)="removeImage(i)">
+        <mat-icon>backspace</mat-icon>
+      </button>
     </div>
   </div>
-  <button class="btn" (click)="clearAllImages()">Clear All</button>
-  <button class="btn" (click)="uploadImages()">Upload Images</button>
+  <button mat-raised-button (click)="clearAllImages()">
+    <mat-icon>clear_all</mat-icon>
+    Clear All
+  </button>
+  <button mat-flat-button (click)="uploadImages()">
+    <mat-icon>image</mat-icon>
+    Upload Images
+  </button>
 </div>

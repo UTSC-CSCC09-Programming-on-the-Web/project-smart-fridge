@@ -1,8 +1,11 @@
 <app-header></app-header>
 
 <div class="main-container">
- 
-  <button class="btn" (click)="onLogout()">Logout</button>
+
+  <button mat-raised-button (click)="onLogout()">
+    <mat-icon>exit_to_app</mat-icon>
+    Logout
+  </button>
 
 <div class="main-row">
   <div class="info-col">
@@ -14,6 +17,7 @@
         (showOverlay)="showOverlay = true"
         (overlayMode)="overlayMode = $event"
       ></app-addi-feature-page>
+      <mat-divider></mat-divider>
       <app-ingredient-list-page></app-ingredient-list-page>
     </div>
   </div>

@@ -43,19 +43,22 @@
     </p>
   </div>
   <div class="ingredient-actions">
-    <button class="btn" type="button" (click)="onUpdateIngredient()">
+    <button mat-flat-button type="button" (click)="onUpdateIngredient()">
+      <mat-icon>edit</mat-icon>
       Edit
     </button>
-    <button class="btn" type="button" (click)="onDeleteIngredient()">
+    <button mat-raised-button type="button" style="color: brown; " (click)="onDeleteIngredient()">
+      <mat-icon>delete</mat-icon>
       Delete
     </button>
   </div>
   <button
-    class="btn"
+    mat-stroked-button
     type="button"
     *ngIf="mode === 'multi-add'"
     (click)="addIngredientImage.emit()"
   >
+    <mat-icon>add</mat-icon>
     Add an image to the ingredient
   </button>
 </div>

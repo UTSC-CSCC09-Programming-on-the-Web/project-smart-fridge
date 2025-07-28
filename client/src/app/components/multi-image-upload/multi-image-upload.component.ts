@@ -29,7 +29,7 @@ export class MultiImageUploadComponent {
       this.clearAllImages();
     });
   }
-
+  selectedFileName: string[] = [];
   onFilesSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
       console.warn('File input is not available.');
@@ -38,7 +38,6 @@ export class MultiImageUploadComponent {
     const input = this.fileInput.nativeElement;
     if (input.files && input.files.length > 0) {
       const files = Array.from(input.files);
-
       for (const file of files) {
         const errorMessage = validateImageFile(file);
         if (errorMessage) {
@@ -50,6 +49,7 @@ export class MultiImageUploadComponent {
           return;
         }
         this.selectedImages.push(file);
+        this.selectedFileName.push(file.name);
         readImageAsDataUrl(file)
           .then((dataUrl) => {
             this.imagePreviews.push(dataUrl);
@@ -65,9 +65,7 @@ export class MultiImageUploadComponent {
   removeImage(index: number): void {
     this.selectedImages.splice(index, 1);
     this.imagePreviews.splice(index, 1);
-    if (index === this.selectedImages.length && this?.fileInput?.nativeElement) {
-      this.fileInput.nativeElement.value = '';
-    }
+    this.selectedFileName.splice(index, 1);
   }
   clearAllImages(): void {
     this.selectedImages = [];
@@ -75,6 +73,7 @@ export class MultiImageUploadComponent {
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.value = '';
     }
+    this.selectedFileName = [];
   }
 
   uploadImages() {

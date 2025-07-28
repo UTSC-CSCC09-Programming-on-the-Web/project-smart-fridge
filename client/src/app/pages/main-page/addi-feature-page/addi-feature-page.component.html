@@ -1,19 +1,19 @@
 <div class="addi-feature-page">
 <div class = "addi-feature-nav-bar">
-<button class="btn" (click)="switchRecipePage()">
+<button mat-button (click)="switchRecipePage()">
   Generate Recipe
 </button>
 
 
-<button class="btn" (click)="switchIngredientInputPage()">
+<button mat-button (click)="switchIngredientInputPage()">
   Show Ingredient Input
 </button>
 
-  <button class="btn" (click)="switchFridgeList()">
+  <button mat-button (click)="switchFridgeList()">
     Click to switch Fridge
   </button>
 
-  <button class="btn" (click)="addNewFridge()">Create or Join a Fridge</button>
+  <button mat-button (click)="addNewFridge()">Create or Join a Fridge</button>
 
 </div>
 
@@ -22,7 +22,7 @@
   <app-ingredient-input-page
     (showTempIngredientsOverlay)="handleShowTempIngredientsBtn()"
   ></app-ingredient-input-page>
-  <button *ngIf="showTempIngredientsBtn" class="btn" (click)="onShowTempIngredientsOverlay()">
+  <button *ngIf="showTempIngredientsBtn" mat-flat-button (click)="onShowTempIngredientsOverlay()">
     Show Temporary Ingredients
   </button>
 </div>

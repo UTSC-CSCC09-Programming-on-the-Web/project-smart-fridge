@@ -5,5 +5,7 @@
 >
   <p>{{ notification.message }}</p>
   <p class="timestamp" *ngIf="notification.createdAt">{{ notification.createdAt | timeAgo:trigger }}</p>
-  <button (click)="closeNotification()">Close</button>
+  <button mat-icon-button (click)="closeNotification()">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>

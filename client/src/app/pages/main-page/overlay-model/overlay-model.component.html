@@ -1,7 +1,11 @@
 
 <div class="overlay">
-  <div class="overlay-content">
-    <button class="close-btn" (click)="close.emit()">Close</button>
-    <app-temp-ingredients-list (finishAdding)="handleFinishAdding()"></app-temp-ingredients-list>
+  <div class="overlay-container">
+    <button mat-icon-button class="close-btn" (click)="close.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <div class="overlay-content">
+      <app-temp-ingredients-list (finishAdding)="handleFinishAdding()"></app-temp-ingredients-list>
+    </div>
   </div>
 </div>

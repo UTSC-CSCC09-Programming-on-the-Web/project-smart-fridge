@@ -46,6 +46,7 @@ export class IngredientFormComponent {
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
   imagePreviewUrl: string | null = null;
+  selectedFileName: string | null = null;
 
   onFileSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
@@ -64,6 +65,7 @@ export class IngredientFormComponent {
 
       this.selectedImage = image;
       this.imagePreviewUrl = null;
+      this.selectedFileName = image.name;
       readImageAsDataUrl(image)
         .then((dataUrl) => {
           this.imagePreviewUrl = dataUrl;
@@ -103,6 +105,7 @@ export class IngredientFormComponent {
       this.fileInput.nativeElement.value = '';
     }
     this.imagePreviewUrl = null;
+    this.selectedFileName = null;
   }
 
   postIngredient(): void {

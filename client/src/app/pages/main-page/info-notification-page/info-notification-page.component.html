@@ -1,7 +1,8 @@
  <div class = "info-notification-container">
     <header>User Information and Notifications</header>
 
-   <button class="btn" (click)="fetchUserInfo()">
+   <button mat-fab extended (click)="fetchUserInfo()">
+     <mat-icon>{{ showUserInfo ? 'hide_source' : 'more_horiz' }}</mat-icon>
      {{ showUserInfo ? 'Hide' : 'Show' }} User Information
    </button>
 

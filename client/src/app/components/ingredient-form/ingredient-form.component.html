@@ -28,13 +28,11 @@
   </div>
   <!--image url will change to file upload in the futuer -->
   <div class="image-container" *ngIf="mode === 'add' || mode === 'image'">
-    <input
-      type="file"
-      (change)="onFileSelected($event)"
-      accept="image/*"
-      #fileInput
-    />
-    <img
+  <label>Upload Image</label>
+  <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #fileInput>
+  <button mat-stroked-button color="primary" (click)="fileInput.click()">Choose File</button>
+  <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+  <img
       class="image-preview"
       *ngIf="imagePreviewUrl"
       [src]="imagePreviewUrl"
@@ -43,29 +41,32 @@
   </div>
   <!-- submit button -->
   <button
-    class="btn"
+    mat-flat-button
     type="submit"
     *ngIf="mode !== 'image'"
     [disabled]="ingredientForm.invalid"
   >
+    <mat-icon>{{ mode === "edit" ? "save" : "add" }}</mat-icon>
     {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
   </button>
   <!-- submit button for image mode -->
   <button
-    class="btn"
+    mat-flat-button
     type="button"
     *ngIf="mode === 'image'"
     (click)="submitImageFile()"
   >
+    <mat-icon>image</mat-icon>
     Upload Image
   </button>
   <!-- cancel button -->
   <button
-    class="btn"
+    mat-raised-button
     type="button"
     *ngIf="mode === 'edit'"
     (click)="cancelEdit.emit()"
   >
+    <mat-icon>cancel</mat-icon>
     Cancel
   </button>
 </form>

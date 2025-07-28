@@ -30,3 +30,9 @@
   padding: 10px;
   border-radius: 8px;
 }
+
+.main-fridge-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
