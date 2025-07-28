@@ -98,14 +98,18 @@ export class IngredientFormComponent {
 
   ngOnInit(): void {}
 
-  clearForm(): void {
-    this.ingredientForm.reset();
+  removeImage(): void {
     this.selectedImage = null;
+    this.imagePreviewUrl = null;
+    this.selectedFileName = null;
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
-    this.imagePreviewUrl = null;
-    this.selectedFileName = null;
+  }
+
+  clearForm(): void {
+    this.ingredientForm.reset();
+    this.removeImage();
   }
 
   postIngredient(): void {
