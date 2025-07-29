@@ -28,7 +28,7 @@ interface tempIngredient {
 export class TempIngredientsListComponent {
   tempIngredients: tempIngredient[] = [];
   formalIngredients: Partial<Ingredient>[] = [];
-
+  @Output() addAll: EventEmitter<void> = new EventEmitter<void>();
   @Output() finishAdding: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
@@ -82,6 +82,7 @@ export class TempIngredientsListComponent {
   }
 
   addAllIngredients(): void {
+    this.addAll.emit();
     const rawIngredients = [...this.formalIngredients];
     const allFormData = new FormData();
     rawIngredients.forEach((ingredient, index) => {

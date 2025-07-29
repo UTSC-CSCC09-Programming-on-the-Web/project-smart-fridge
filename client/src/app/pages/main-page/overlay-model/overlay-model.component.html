@@ -6,6 +6,7 @@
     <div class="overlay-content">
       <app-temp-ingredients-list
         (finishAdding)="handleFinishAdding()"
+        (addAll)="close.emit()"
       ></app-temp-ingredients-list>
     </div>
   </div>

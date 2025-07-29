@@ -39,7 +39,7 @@
   </div>
 </div>
 
-<div *ngIf="showLockNotif && fridgeLockNotif && fridgeLockNotif.message" #fridgeLockRoom>
+<div *ngIf="showLockNotif && fridgeLockNotif && fridgeLockNotif.message && fridgeLockNotif.fridgeId === currFridgeId" #fridgeLockRoom>
   <h3>Fridge Lock Notifications</h3>
   <app-notification-bar
     *ngIf="fridgeLockNotif && fridgeLockNotif.message"
