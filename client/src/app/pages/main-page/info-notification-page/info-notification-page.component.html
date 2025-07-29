@@ -1,21 +1,23 @@
  <div class = "info-notification-container">
-    <header>User Information and Notifications</header>
+    <h2>Information and Notification Center</h2>
 
-   <button mat-fab extended (click)="fetchUserInfo()">
+   <button mat-raised-button (click)="fetchUserInfo()" style="background-color: rgb(198, 220, 251); color: rgb(0, 61, 160); border-radius: 8px">
      <mat-icon>{{ showUserInfo ? 'hide_source' : 'more_horiz' }}</mat-icon>
      {{ showUserInfo ? 'Hide' : 'Show' }} User Information
    </button>
 
   <div *ngIf="showUserInfo">
     <div *ngIf="currentUser; else noUser">
+      <h3>User Information</h3>
       <p><strong>User Name:</strong> {{ currentUser.name }}</p>
-      <p>User Fridges:</p>
+      <p><strong>User Fridges:</strong></p>
       <ul>
         <li *ngFor="let fridge of currentUser.fridges">
           {{ fridge.name }} (ID: {{ fridge.id }})
         </li>
       </ul>
     </div>
+    <mat-divider></mat-divider>
   </div>
   <ng-template #noUser>
     <p>No user information available. Please log in.</p>

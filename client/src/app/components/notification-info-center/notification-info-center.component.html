@@ -1,10 +1,13 @@
 
 <div *ngIf="currFridgeInfo as fridge; else noFridge">
-    <h2>Current Fridge Information</h2>
+    <h3>Current Fridge Information</h3>
     <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
-    <p><strong>description:</strong> {{ fridge.description }}</p>
-    <p>Fridge Id: {{ fridge.id }}</p>
-    <p>Fridge Users:</p>
+    <div class="description-wrapper" *ngIf="fridge.description">
+    <p><strong>Description:</strong></p> 
+    <p style="margin: 0 20px;">{{ fridge.description }}</p>
+    </div>
+    <p><strong>Fridge Id:</strong> {{ fridge.id }}</p>
+    <p><strong>Fridge Users:</strong></p>
     <ul>
     <li *ngFor="let user of fridge.users">{{ user.name }}</li>
     </ul>

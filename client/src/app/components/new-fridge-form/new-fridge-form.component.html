@@ -1,6 +1,8 @@
+ <h2 class="new-fridge-form-title">Create or Join a Fridge</h2>
 <div class="new-fridge-form-container">
-  <h2>Create or Join a Fridge - Choose an Action</h2>
-
+<div class="form-instructions">
+    <span>Select whether you want to create a new fridge or join an existing one.</span>
+</div>
   <div class="form-toggle">
     <button mat-stroked-button  (click)="switchForm('create')" [disabled]="currentForm === 'create'">
       Create
@@ -33,6 +35,9 @@
   </form>
 
   <form *ngIf="currentForm === 'join'" [formGroup]="joinForm" (ngSubmit)="onSubmit()">
+    <div class="form-instructions">
+      <span>Ensure you have the Fridge ID to join an existing fridge.</span>
+    </div>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Fridge ID</mat-label>
       <input matInput formControlName="fridge_id" placeholder="Enter Fridge ID" />

@@ -2,8 +2,7 @@
 @use  '@angular/material' as mat;
 
 .ingredient-list-page {
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin-top: 10px;
 }
 
 .ingredient-list {
@@ -12,6 +11,7 @@
   max-height: 1500px;
   overflow-y: auto;
   gap: 10px;
+  margin: 0 auto;
 }
 
 .button-wrapper {

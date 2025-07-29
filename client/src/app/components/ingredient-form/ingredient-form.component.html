@@ -7,16 +7,16 @@
   [ngClass]="mode + '-form'"
 >
   <!-- title -->
-  <div class="ingredient-form-title" *ngIf="mode !== 'image'">
+  <h3 class="ingredient-form-title" *ngIf="mode !== 'image'">
     {{
       mode === "edit"
         ? "Edit Ingredient"
         : "Add a new ingredient into your fridge"
     }}
-  </div>
-  <div class="ingredient-form-title" *ngIf="mode === 'image'">
+  </h3>
+  <h3 class="ingredient-form-title" *ngIf="mode === 'image'">
     Add an image for the ingredient
-  </div>
+  </h3>
 
   <div class="ingredient-grid-form">
 
@@ -66,7 +66,7 @@
       <mat-hint>Type is optional, you can leave it empty</mat-hint>
     </mat-form-field>
   </ng-content>
-  <!--image url will change to file upload in the futuer -->
+
 <div class="upload-wrapper grid-col-span-2" *ngIf="mode === 'add' || mode === 'image'">
   <div class="upload-row">
     <label class="upload-label">Upload Image:</label>

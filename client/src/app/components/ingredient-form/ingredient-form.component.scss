@@ -3,7 +3,9 @@
 .ingredient-form {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 10px 20px;
+  margin: 10px auto;
+  width: 100%;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -12,17 +14,16 @@
   font-size: 24px;
   font-weight: bold;
   text-align: start;
-  margin-bottom: 10px;
-  margin-left: 30px;
-  color: #333;
+  margin: 20px auto;
+  color: #444;
 }
 
 .add-form {
-  background-color: #bdd8ef;
+  background-color: #ffeeec;
 }
 
 .edit-form {
-  background-color: #fff3e0;
+  background-color: #fffaec;
 }
 
 .ingredient-grid-form {
@@ -71,11 +72,13 @@
 
 .choose-file-btn {
   padding: 8px 16px;
-  border: solid 1px #444;
+  border: solid 1px #666;
   border-radius: 4px;
   height: 32px;
   width: 120px;
+  color: #671903;
   cursor: pointer;
+  background-color:  #faebe7;
 }
 
 .file-name {
@@ -97,5 +100,4 @@
   border-radius: 8px;
   object-fit: contain;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f8f8f8;
 }

@@ -8,7 +8,7 @@
     class="notification-bar"
   >
   <div class="notification-message">
-      {{ notification.message | slice:0:300 }}{{ (notification.message.length > 300 && notification.type !== 'error') ? '...' : '' }}
+      {{ notification.message | slice:0:120 }}{{ (notification.message.length > 120 && notification.type !== 'error') ? '...' : '' }}
   </div>
   <button mat-icon-button (click)="closeNotification()">
     <mat-icon>close</mat-icon>
