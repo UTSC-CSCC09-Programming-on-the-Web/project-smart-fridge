@@ -48,6 +48,8 @@ async function handleMultiReceiptsOCR(images, cvTask) {
           images_done +
           "/" +
           cvTask.images_count,
+        taskCurrentCount: images_done, // +1 for cv start
+        taskTotalCount: cvTask.images_count + 5, // cv images + finish cv + start llm + working llm(2) + finish llm
       })
     );
     console.log(`Image ${image.original_filename} processed successfully`);

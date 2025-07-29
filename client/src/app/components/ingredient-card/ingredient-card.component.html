@@ -4,58 +4,82 @@
     Temporay Ingredient Result -- Extracted from Image, please review before
     adding to fridge.
   </p>
-  <img
-    *ngIf="mode === 'view' && ingredient.image_url; else defaultImage"
-    class="ingredient-img"
-    [src]="ingredient.image_url"
-    (error)="onImageError($event)"
-    alt="{{ ingredient.name }}"
-  />
-  <img
-    *ngIf="
-      mode === 'multi-add' && partialIngredient && partialIngredient.image_url
-    "
-    class="ingredient-img"
-    [src]="partialIngredient.image_url"
-    (error)="onImageError($event)"
-    alt="{{ partialIngredient.name }}"
-  />
   <ng-template #defaultImage>
     <img
       *ngIf="mode === 'view'"
-      class="ingredient-img"
+      mat-card-md-image
       src="assets/default-ingredient.png"
       alt="{{ ingredientDisplay.name }}"
     />
   </ng-template>
-  <div [ngClass]="['ingredient-info', mode]">
-    <h3>{{ ingredientDisplay.name }}</h3>
-    <p>{{ ingredientDisplay.quantity }} {{ ingredientDisplay.unit }}</p>
-    <p *ngIf="mode === 'view'">
-      Expire Date: {{ ingredientDisplay.expire_date }}
-    </p>
-    <p *ngIf="mode === 'multi-add'">
-      Default Expire Date: {{ ingredientDisplay.expire_date }}
-    </p>
-    <p *ngIf="ingredientDisplay.type">Type: {{ ingredientDisplay.type }}</p>
-    <p *ngIf="mode === 'view'" [class.expired]="ingredientDisplay.is_expired">
-      {{ ingredientDisplay.is_expired ? "Expired" : "Fresh" }}
-    </p>
-  </div>
-  <div class="ingredient-actions">
-    <button class="btn" type="button" (click)="onUpdateIngredient()">
-      Edit
-    </button>
-    <button class="btn" type="button" (click)="onDeleteIngredient()">
-      Delete
-    </button>
-  </div>
-  <button
-    class="btn"
-    type="button"
-    *ngIf="mode === 'multi-add'"
-    (click)="addIngredientImage.emit()"
-  >
-    Add an image to the ingredient
-  </button>
+  <mat-card [ngClass]="['ingredient-info', mode]" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{ ingredientDisplay.name }}</mat-card-title>
+        <img
+          *ngIf="mode === 'view' && ingredient.image_url; else defaultImage"
+          mat-card-lg-image
+          [src]="ingredient.image_url"
+          (error)="onImageError($event)"
+          alt="{{ ingredient.name }}"
+        />
+        <img
+          *ngIf="
+            mode === 'multi-add' &&
+            partialIngredient &&
+            partialIngredient.image_url
+          "
+          mat-card-lg-image
+          [src]="partialIngredient.image_url"
+          (error)="onImageError($event)"
+          alt="{{ partialIngredient.name }}"
+        />
+        <mat-card-subtitle>
+          <ul>
+            <li>
+              <strong>Quantity:</strong> {{ ingredientDisplay.quantity }}
+              {{ ingredientDisplay.unit }}
+            </li>
+            <li *ngIf="mode === 'view'">
+              <strong>Expire Date:</strong> {{ ingredientDisplay.expire_date }}
+            </li>
+            <li *ngIf="mode === 'multi-add'">
+              Default Expire Date: {{ ingredientDisplay.expire_date }}
+            </li>
+            <li *ngIf="ingredientDisplay.type">
+              <strong>Type:</strong> {{ ingredientDisplay.type }}</li>
+          </ul>
+        </mat-card-subtitle>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <p *ngIf="mode === 'view'" class="expire-information" [ngClass]=" ingredientDisplay.is_expired ? 'expired' : 'fresh'">
+        {{ ingredientDisplay.is_expired ? "Already Expired!! Remember to clean it! " : "Fresh" }}
+      </p>
+    </mat-card-content>
+    <mat-card-actions class="ingredient-actions">
+      <button mat-flat-button type="button" (click)="onUpdateIngredient()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        *ngIf="mode === 'multi-add'"
+        (click)="addIngredientImage.emit()"
+      >
+        <mat-icon>add</mat-icon>
+        Add an image to the ingredient
+      </button>
+      <button
+        mat-raised-button
+        type="button"
+        style="color: brown"
+        (click)="onDeleteIngredient()"
+      >
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>

@@ -1,14 +1,24 @@
+<h2 class="new-fridge-form-title">Create or Join a Fridge</h2>
 <div class="new-fridge-form-container">
-  <h2>Create or Join a Fridge - Choose an Action</h2>
-
+  <div class="form-instructions">
+    <span
+      >Select whether you want to create a new fridge or join an existing
+      one.</span
+    >
+  </div>
   <div class="form-toggle">
     <button
+      mat-stroked-button
       (click)="switchForm('create')"
       [disabled]="currentForm === 'create'"
     >
       Create
     </button>
-    <button (click)="switchForm('join')" [disabled]="currentForm === 'join'">
+    <button
+      mat-stroked-button
+      (click)="switchForm('join')"
+      [disabled]="currentForm === 'join'"
+    >
       Join
     </button>
   </div>
@@ -18,11 +28,37 @@
     [formGroup]="createForm"
     (ngSubmit)="onSubmit()"
   >
-    <label>Fridge Name</label>
-    <input formControlName="name" placeholder="Enter your firdge name!" />
-    <label>Description</label>
-    <input formControlName="description" placeholder="Optional" />
-    <button type="submit" [disabled]="createForm.invalid || loading">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fridge Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Enter your fridge name!"
+      />
+      <mat-error *ngIf="createForm.get('name')?.hasError('required')">
+        Fridge name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <mat-hint
+        >Describe your fridge, e.g. "Family fridge", "Office fridge".</mat-hint
+      >
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Optional"
+      ></textarea>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="createForm.invalid || loading"
+    >
+      <mat-icon>create</mat-icon>
       Create
     </button>
   </form>
@@ -32,9 +68,30 @@
     [formGroup]="joinForm"
     (ngSubmit)="onSubmit()"
   >
-    <label>Fridge ID</label>
-    <input formControlName="fridge_id" placeholder="Enter Fridge ID" />
-    <button type="submit" [disabled]="joinForm.invalid || loading">Join</button>
+    <div class="form-instructions">
+      <span>Ensure you have the Fridge ID to join an existing fridge.</span>
+    </div>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Fridge ID</mat-label>
+      <input
+        matInput
+        formControlName="fridge_id"
+        placeholder="Enter Fridge ID"
+      />
+      <mat-error *ngIf="joinForm.get('fridge_id')?.hasError('required')">
+        Fridge ID is required
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      [disabled]="joinForm.invalid || loading"
+    >
+      <mat-icon>group_add</mat-icon>
+      Join
+    </button>
   </form>
 
   <p *ngIf="message">{{ message }}</p>

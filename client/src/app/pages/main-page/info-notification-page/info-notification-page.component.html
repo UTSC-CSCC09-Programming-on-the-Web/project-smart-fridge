@@ -1,0 +1,34 @@
+<div class="info-notification-container">
+  <h2>Information and Notification Center</h2>
+
+  <button
+    mat-raised-button
+    (click)="fetchUserInfo()"
+    style="
+      background-color: rgb(198, 220, 251);
+      color: rgb(0, 61, 160);
+      border-radius: 8px;
+    "
+  >
+    <mat-icon>{{ showUserInfo ? "hide_source" : "more_horiz" }}</mat-icon>
+    {{ showUserInfo ? "Hide" : "Show" }} User Information
+  </button>
+
+  <app-toggle-container [(open)]="showUserInfo">
+    <div *ngIf="currentUser; else noUser">
+      <h3>User Information</h3>
+      <p><strong>User Name:</strong> {{ currentUser.name }}</p>
+      <p><strong>User Fridges:</strong></p>
+      <ul>
+        <li *ngFor="let fridge of currentUser.fridges">
+          {{ fridge.name }} (ID: {{ fridge.id }})
+        </li>
+      </ul>
+    </div>
+    <mat-divider></mat-divider>
+  </app-toggle-container>
+  <ng-template #noUser>
+    <p>No user information available. Please log in.</p>
+  </ng-template>
+  <app-notification-info-center></app-notification-info-center>
+</div>

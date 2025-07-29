@@ -1,18 +1,44 @@
 <div *ngIf="currentFridge; else noFridge">
-  <div class="ingredient-list-page">
-    <app-ingredient-form
-      [mode]="'add'"
-      (addIngredient)="handleNewIngredient($event)"
-    ></app-ingredient-form>
+  <div class="ingredient-list-page" >
+    <h3 style="margin-left: 10px; color: #642d00; font-size: 27px;">Ingredients List in the fridge</h3>
+    <div class="button-wrapper">
+      <button
+        mat-fab
+        extended
+        class="add-ingredient-button"
+        (click)="toggleAddForm()"
+      >
+        <mat-icon>{{ showAddForm ? "cancel" : "add" }}</mat-icon>
+        {{ showAddForm ? "Cancel" : "Add a Single Ingredient" }}
+      </button>
+
+      <button mat-fab extended (click)="refreshIngredients()">
+        <mat-icon>refresh</mat-icon>
+        Click to Refresh the Fridge
+      </button>
+    </div>
+    <app-toggle-container
+      [(open)]="showAddForm"
+    >
+      <div class="add-ingredient-form">
+        <app-ingredient-form
+          class="add-ingredient-form"
+          [mode]="'add'"
+          (addIngredient)="handleNewIngredient($event)"
+        ></app-ingredient-form>
+      </div>
+    </app-toggle-container>
 
     <div
       class="ingredient-list"
+      #scrollableDiv
       infiniteScroll
       [infiniteScrollDistance]="2"
       [infiniteScrollThrottle]="150"
+      [infiniteScrollContainer]="scrollableDiv"
       (scrolled)="onScrollDown()"
     >
-      <ng-container *ngFor="let ing of ingredients; trackBy: trackById">
+      <div *ngFor="let ing of ingredients; trackBy: trackById">
         <app-ingredient-card
           [ingredient]="ing"
           (editRequest)="toggleEditForm(ing)"
@@ -20,20 +46,34 @@
         ></app-ingredient-card>
         <!-- Show the edit form if the ingredient is being edited -->
         <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
-        <app-ingredient-form
+        
+      <app-toggle-container
+        [open]="(editingIngredient && editingIngredient.id === ing.id) ? true : false"
+        >
+        <div
+          class="edit-ingredient-form"
           *ngIf="editingIngredient && editingIngredient?.id === ing.id"
-          [mode]="'edit'"
-          [ingredientToEdit]="editingIngredient"
-          (submitIngredient)="handleUpdateIngredient($event)"
-          (cancelEdit)="cancelEdit()"
-        ></app-ingredient-form>
-      </ng-container>
+        >
+          <app-ingredient-form
+            [mode]="'edit'"
+            [ingredientToEdit]="editingIngredient"
+            (submitIngredient)="handleUpdateIngredient($event)"
+            (cancelEdit)="cancelEdit()"
+          ></app-ingredient-form>
+        </div>
+          </app-toggle-container>
+      </div>
 
       <div *ngIf="loading" class="loading-indicator">
         loading more ingredients...
+        <mat-progress-bar mode="buffer"></mat-progress-bar>
       </div>
       <div *ngIf="!hasMoreData && !loading" class="no-more-data">
-        No more ingredients to load.
+        {{
+          ingredients.length === 0
+            ? "There is no ingredients in your fridge. Add some ingredients!"
+            : "No more ingredients to load"
+        }}
       </div>
       <button class="scroll-to-top" (click)="scrollToTop()">↑ Top</button>
     </div>
@@ -43,5 +83,6 @@
 <ng-template #noFridge>
   <div class="no-fridge-message">
     <p>Waiting for fridge or there is no fridge!</p>
-  </div></ng-template
->
+    <mat-progress-bar mode="buffer"></mat-progress-bar>
+  </div>
+</ng-template>

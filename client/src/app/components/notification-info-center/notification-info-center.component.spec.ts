@@ -8,9 +8,8 @@ describe('CurrFridgeInfoCenterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CurrFridgeInfoCenterComponent]
-    })
-    .compileComponents();
+      imports: [CurrFridgeInfoCenterComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CurrFridgeInfoCenterComponent);
     component = fixture.componentInstance;

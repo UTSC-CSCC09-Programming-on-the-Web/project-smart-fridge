@@ -82,6 +82,7 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
       JSON.stringify({
         traceId: traceId,
         userId: userId,
+        finished: true,
       })
     );
   }
@@ -92,6 +93,7 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
       JSON.stringify({
         userId: userId,
         type: "success",
+        finished: true,
         message:
           "Get ingredients from Recipe or Shopping record task completed successfully! ",
       })

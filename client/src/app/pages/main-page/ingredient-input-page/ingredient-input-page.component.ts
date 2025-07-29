@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
 import { Ingredient } from '../../../models/ingredient.model';
@@ -28,14 +28,13 @@ export class IngredientInputPageComponent {
   constructor(
     private addMultiIngredientsService: AddMultiIngredientsService,
     private socketService: SocketService,
-    private ingredientService: IngredientService,
-    private notificationService: NotificationService,
   ) {}
 
-  notification: Notification = {type: 'info', message: '', source: 'task'};
-  tempIngredients: tempIngredient[] = [];
-  // formalIngredients: Partial<Ingredient>[] = [{name: 'default name', quantity: 1, unit: 'pcs', expire_date: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], image_url: 'assets/default-ingredient.png'}];
-  formalIngredients: Partial<Ingredient>[] = [];
+  @Output() showTempIngredientsOverlay: EventEmitter<void> =
+    new EventEmitter<void>();
+
+  notification: Notification = { type: 'info', message: '', source: 'task' };
+
   handleMultiImagesUploaded(images: File[]): void {
     this.notification.message = '';
     console.log('Ingredient Input Page: Images uploaded:', images);
@@ -51,171 +50,60 @@ export class IngredientInputPageComponent {
 
   ngOnInit(): void {
     console.log('Ingredient Input Page initialized');
-    this.socketService
-      .fromSocketEvent<{ message: string; type: string }>('cvTaskProgress')
-      .subscribe({
-        next: (data) => {
-          this.notification.message = data.message;
-          this.notification.source = 'task';
-          if (
-            data.type === 'success' ||
-            data.type === 'error' ||
-            data.type === 'info'
-          ) {
-            this.notification.type = data.type as 'success' | 'error' | 'info';
-          } else {
-            this.notification.type = 'info';
-          }
-          if (this.notification.type !== 'info') {
-            this.notification.createdAt = new Date();
-          } else {
-            this.notification.createdAt = undefined;
-          }
-          console.log(
-            `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
-          );
-        },
-        error: (err) => {
-          console.error('Error receiving CV Task Progress:', err);
-        },
-      });
-    this.socketService
-      .fromSocketEvent<{
-        traceId: string;
-        result: any;
-      }>('addMultiIngredientsFinished')
-      .subscribe({
-        next: (data) => {
-          console.log(
-            `Received addMultiIngredientsFinished with traceId: ${data.traceId} and result:`,
-            data.result,
-          );
-          let clean = data.result.trim();
-          if (clean.startsWith('```json')) {
-            clean = clean
-              .replace(/^```json/, '')
-              .replace(/```$/, '')
-              .trim();
-          }
-          this.tempIngredients = JSON.parse(clean) as tempIngredient[];
-          this.formalIngredients = this.tempIngredients.map((ing) => ({
-            name: ing.name || 'default name', // temporary set
-            quantity: parseFloat(ing.quantity) || 1, // temporary set
-            unit: ing.unit || 'pcs', // temporary set
-            expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
-              .toISOString()
-              .split('T')[0],
-            image_url: '',
-          }));
-          console.log('Parsed ingredients:', this.formalIngredients);
-        },
-        error: (err) => {
-          console.error('Error receiving addMultiIngredientsFinished:', err);
-        },
-      });
-  }
+    let cvTaskCurrentCount = 0;
+    let cvTaskTotalCount = 0;
+    this.socketService.fromSocketEvent<any>('cvTaskProgress').subscribe({
+      next: (data) => {
+        this.notification.message = data.message;
+        this.notification.source = 'task';
+        if (
+          data.type === 'success' ||
+          data.type === 'error' ||
+          data.type === 'info'
+        ) {
+          this.notification.type = data.type as 'success' | 'error' | 'info';
+        } else {
+          this.notification.type = 'info';
+        }
+        if (this.notification.type !== 'info') {
+          this.notification.createdAt = new Date();
+        } else {
+          this.notification.createdAt = undefined;
+        }
+        if (data?.taskTotalCount) {
+          cvTaskTotalCount = data.taskTotalCount;
+        }
 
-  addAllIngredients(): void {
-    const rawIngredients = [...this.formalIngredients];
-    const allFormData = new FormData();
-    rawIngredients.forEach((ingredient, index) => {
-      ingredient.image_url = undefined;
-      appendIngredientToFormDataWithIndex(
-        allFormData,
-        ingredient,
-        ingredient.image_file,
-        index,
-      );
-    });
-    this.ingredientService.createMultiIngredients(allFormData).subscribe({
-      next: (responses) => {
-        console.log('All ingredients added successfully:', responses);
-        this.notification.message = 'All ingredients added successfully!';
-        this.notification.type = 'success';
-        this.notification.createdAt = new Date();
-        this.tempIngredients = [];
-        this.formalIngredients = [];
-        this.ingredientService.notifyIngredientsUpdated();
-        // testing push notifications
-        this.notificationService.pushFridgeNotification({
-          message: 'Push to current fridge: New ingredients added to the fridge.',
-          type: 'success',
-          source: 'fridge',
-        } as Notification);
-        this.notificationService.pushUserNotification({
-          message: 'Push to user: New ingredients added to the fridge.',
-          type: 'info',
-          source: 'user',
-        } as Notification);
+        if (data?.taskCurrentCount) {
+          cvTaskCurrentCount = data.taskCurrentCount;
+        } else if (cvTaskCurrentCount !== 0 && cvTaskTotalCount !== 0) {
+          cvTaskCurrentCount += 1; // increment by 1 for cv start
+        }
+
+        this.notification.taskCurrentCount = cvTaskCurrentCount;
+        this.notification.taskTotalCount = cvTaskTotalCount;
+        console.log(
+          `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
+        );
+        if (data?.finished && data.type === 'success') {
+          this.showTempIngredientsOverlay.emit();
+          this.notification.taskCurrentCount = 1;
+          this.notification.taskTotalCount = 1;
+          cvTaskCurrentCount = 0;
+          cvTaskTotalCount = 0;
+        }
       },
       error: (err) => {
-        console.error('Error adding ingredients:', err);
-        this.notification.message = 'Failed to add some ingredients.';
-        this.notification.type = 'error';
-        this.formalIngredients = this.formalIngredients.map((ing) => ({
-          ...ing,
-          image_file: undefined, // Reset image file and url after submission even if it fails
-          image_url: undefined,
-        }));
+        console.error('Error receiving CV Task Progress:', err);
       },
     });
-  }
-
-  editingTempIngredient: Partial<Ingredient> | null = null;
-  editingTempIngredientsIndex: number | null = null;
-
-  toggleEditForm(ingredient: Partial<Ingredient>, index: number): void {
-    console.log('Toggling edit form for ingredient:', ingredient);
-    this.editingTempIngredient = ingredient;
-    this.editingTempIngredientsIndex = index;
-  }
-
-  cancelEdit() {
-    this.editingTempIngredient = null;
-    this.editingTempIngredientsIndex = null;
-  }
-
-  editTempIngredient(ingredient: Partial<Ingredient>): void {
-    if (this.editingTempIngredientsIndex !== null) {
-      this.formalIngredients[this.editingTempIngredientsIndex] = {
-        ...this.formalIngredients[this.editingTempIngredientsIndex],
-        ...ingredient,
+    this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
+      console.log('Batch adding finished');
+      this.notification = {
+        type: 'info',
+        message: '',
+        source: 'task',
       };
-    }
-    this.cancelEdit();
-  }
-
-  deleteTempIngredient(ingredient: Partial<Ingredient>): void {
-    this.formalIngredients = this.formalIngredients.filter(
-      (ing) => ing !== ingredient,
-    );
-  }
-
-  addingTempIngredientImage: boolean = false;
-  addingTempIngredientsIndex: number | null = null;
-  addTempIngredientImage(index: number): void {
-    this.addingTempIngredientImage = true;
-    this.addingTempIngredientsIndex = index;
-  }
-
-  async submitTempIngredientImageFile(
-    imageFile: File,
-    i: number,
-  ): Promise<void> {
-    const file = imageFile;
-    const previewUrl = await readImageAsDataUrl(file);
-    if (this.addingTempIngredientsIndex !== null) {
-      this.formalIngredients[i] = {
-        ...this.formalIngredients[i],
-        image_file: file,
-        image_url: previewUrl,
-      };
-    }
-    this.cancelAddTempIngredientImage();
-  }
-
-  cancelAddTempIngredientImage(): void {
-    this.addingTempIngredientImage = false;
-    this.addingTempIngredientsIndex = null;
+    });
   }
 }

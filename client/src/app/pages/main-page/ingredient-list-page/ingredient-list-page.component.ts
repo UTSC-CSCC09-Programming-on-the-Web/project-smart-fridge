@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Ingredient } from '../../../models/ingredient.model';
 import { IngredientService } from '../../../services/ingredient.service';
 import { FridgeService } from '../../../services/fridge.service';
@@ -24,6 +24,9 @@ export class IngredientListPageComponent {
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
+  showAddForm = false;
+  @ViewChild('scrollableDiv') containerRef!: ElementRef;
+
   constructor(
     private ingredientService: IngredientService,
     private fridgeService: FridgeService,
@@ -48,9 +51,23 @@ export class IngredientListPageComponent {
     });
   }
 
+  refreshIngredients() {
+    this.ingredientService.notifyIngredientsUpdated();
+  }
+
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    if (this.showAddForm) {
+      window.scrollBy({ top: 200, behavior: 'smooth' });
+    }else{
+      window.scrollBy({ top: -200, behavior: 'smooth' });
+    }
+  }
+
   loadInitialIngredients(): void {
     console.log('Loading initial ingredients...');
     this.loading = true;
+    this.hasMoreData = true;
     this.ingredientService.getIngredients().subscribe({
       next: (data) => {
         if (!data || !data.ingredients) {
@@ -119,12 +136,16 @@ export class IngredientListPageComponent {
           console.log('fetch more cursors set:', {
             expireDateCursor: this.expireDateCursor,
             idCursor: this.idCursor,
+            ingredientscount: data.ingredients.length,
+            dataingredients: data.ingredients,
+            ingredients: this.ingredients,
           });
           if (
             data.ingredients.length < 10 ||
             !data.nextExpireCursor ||
             !data.nextIdCursor
           ) {
+            console.log('No more data to load');
             this.hasMoreData = false;
           }
         },
@@ -233,6 +254,9 @@ export class IngredientListPageComponent {
   toggleEditForm(ingredient: Ingredient) {
     console.log('Toggling edit form for ingredient:', ingredient);
     this.editingIngredient = ingredient;
+    if (this.editingIngredient && this.editingIngredient.id === ingredient.id) {
+      this.containerRef.nativeElement.scrollBy({ top: 150, behavior: 'smooth' });
+    } 
   }
 
   cancelEdit() {
@@ -241,12 +265,14 @@ export class IngredientListPageComponent {
 
   onScrollDown() {
     if (this.hasMoreData && !this.loading) {
+      console.log('Scrolling down, fetching more ingredients...');
       this.fetchMoreIngredients();
     }
   }
 
   scrollToTop(): void {
-    window.scrollTo({ top: 10, behavior: 'smooth' });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+    this.containerRef.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // following functions are helper
