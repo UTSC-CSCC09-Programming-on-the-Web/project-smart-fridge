@@ -41,3 +41,19 @@
   margin-top: 10px;
   margin-left: 15px;
 }
+
+.expired {
+  color: rgb(209, 3, 3);
+  font-weight: bold;
+}
+
+.fresh {
+  color: rgb(0, 107, 0);
+}
+
+.expire-information {
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 500px;
+  margin: 0 20px;
+}

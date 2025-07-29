@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Ingredient } from '../../../models/ingredient.model';
 import { IngredientService } from '../../../services/ingredient.service';
 import { FridgeService } from '../../../services/fridge.service';
@@ -263,9 +263,11 @@ export class IngredientListPageComponent {
       this.fetchMoreIngredients();
     }
   }
+@ViewChild('scrollableDiv') containerRef!: ElementRef;
 
   scrollToTop(): void {
-    window.scrollTo({ top: 10, behavior: 'smooth' });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+    this.containerRef.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // following functions are helper
