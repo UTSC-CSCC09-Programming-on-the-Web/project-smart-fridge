@@ -1,0 +1,28 @@
+<div class="loading-notification-container"
+  *ngIf="notification.message && notification.type !== 'initialization'"
+  [ngClass]="getClass()"
+>
+ <img src="../assets/fridge-loading.gif" class="loading-gif grid-col-1" alt="loading..." [hidden]="isFinished" />
+<div class="{{isFinished ? 'grid-col-span-2': 'grid-col-2'}}">
+ <div
+    class="notification-bar"
+  >
+  <div class="notification-message">
+      {{ notification.message | slice:0:300 }}{{ (notification.message.length > 300 && notification.type !== 'error') ? '...' : '' }}
+  </div>
+  <button mat-icon-button (click)="closeNotification()">
+    <mat-icon>close</mat-icon>
+  </button> 
+  </div>
+<div class="notification-loading-bar"
+  *ngIf="notification.taskTotalCount && notification.taskCurrentCount">
+  <mat-progress-bar
+    *ngIf="notification.taskTotalCount && notification.taskCurrentCount"
+    [value]="Progress"
+  ></mat-progress-bar>
+  <p>
+    {{ Progress | number: '1.0-0' }}%
+  </p>
+</div>
+</div>
+</div>

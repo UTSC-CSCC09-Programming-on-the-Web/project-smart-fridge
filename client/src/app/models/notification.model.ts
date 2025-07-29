@@ -6,4 +6,6 @@ export interface Notification {
   createdAt?: Date; //optional
   source: `task`| `user` | `fridge` | `system` | `lock`; 
   fridgeId?: string; //optional, only if source is 'fridge'
+  taskTotalCount?: number; 
+  taskCurrentCount?: number; 
 }

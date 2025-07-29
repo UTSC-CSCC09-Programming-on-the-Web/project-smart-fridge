@@ -33,6 +33,7 @@ import { TempIngredientsListComponent } from './pages/main-page/ingredient-input
 import { OverlayModelComponent } from './pages/main-page/overlay-model/overlay-model.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe'; 
 import { MaterialModule } from './material.module'; 
+import { TaskLoadingNotificationComponent } from './components/task-loading-notification/task-loading-notification.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { MaterialModule } from './material.module';
     TimeAgoPipe,
     InfoNotificationPageComponent,
     AddiFeaturePageComponent,
-    TempIngredientsListComponent
+    TempIngredientsListComponent,
+    TaskLoadingNotificationComponent
   ],
   imports: [
     BrowserModule,

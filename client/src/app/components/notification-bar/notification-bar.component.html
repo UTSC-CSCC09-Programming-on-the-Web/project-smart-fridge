@@ -4,8 +4,10 @@
   [ngClass]="getNotificationClass()"
 >
   <p>{{ notification.message }}</p>
+  <div class="notification-btm-wrapper">
   <p class="timestamp" *ngIf="notification.createdAt">{{ notification.createdAt | timeAgo:trigger }}</p>
   <button mat-icon-button (click)="closeNotification()">
     <mat-icon>close</mat-icon>
   </button>
+  </div>
 </div>

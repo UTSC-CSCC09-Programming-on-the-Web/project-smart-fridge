@@ -1,0 +1,45 @@
+.loading-notification-container {
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+}
+.notification-bar {
+  margin-top: 5px;
+  padding: 0 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grid-col-1 {
+  grid-column: 1;
+}
+
+.grid-col-2 {
+  grid-column: 2;
+}
+
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.loading-gif {
+  width: 90%;
+  height: 90%;
+  padding: 10px 10px;
+  margin-right: 8px;
+}
+
+.notification-loading-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 10px;
+  gap: 7px;
+}
+
+.notification-task-finished {
+  background-color: #d4e9ed;
+  color: #1c2a6c;
+}

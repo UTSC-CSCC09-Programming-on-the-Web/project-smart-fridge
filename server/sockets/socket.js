@@ -109,6 +109,8 @@ const setupSocket = async (app) => {
       message: message,
       type: data?.type || "info",
       finished: data?.finished || false,
+      taskCurrentCount: data?.taskCurrentCount || null,
+      taskTotalCount: data?.taskTotalCount || null,
     });
   });
 

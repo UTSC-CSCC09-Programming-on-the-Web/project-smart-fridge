@@ -4,8 +4,9 @@
   border-radius: 4px;
   margin-bottom: 16px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .timestamp {
@@ -29,4 +30,12 @@
   background-color: #d1ecf1;
   border-color: #bee5eb;
   color: #0c5460;
+}
+
+.notification-btm-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }

@@ -49,8 +49,10 @@ export class IngredientInputPageComponent {
 
   ngOnInit(): void {
     console.log('Ingredient Input Page initialized');
+    let cvTaskCurrentCount = 0; 
+    let cvTaskTotalCount = 0;
     this.socketService
-      .fromSocketEvent<{ message: string; type: string; finished: boolean | null}>('cvTaskProgress')
+      .fromSocketEvent<any>('cvTaskProgress')
       .subscribe({
         next: (data) => {
           this.notification.message = data.message;
@@ -69,11 +71,27 @@ export class IngredientInputPageComponent {
           } else {
             this.notification.createdAt = undefined;
           }
+           if (data?.taskTotalCount) {
+            cvTaskTotalCount = data.taskTotalCount;
+          }
+          
+          if (data?.taskCurrentCount) {
+            cvTaskCurrentCount = data.taskCurrentCount;
+          }else if (cvTaskCurrentCount !== 0 && cvTaskTotalCount !== 0) {
+            cvTaskCurrentCount += 1; // increment by 1 for cv start
+          }
+    
+          this.notification.taskCurrentCount = cvTaskCurrentCount;
+          this.notification.taskTotalCount = cvTaskTotalCount;
           console.log(
             `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
           );
           if(data?.finished && data.type === 'success') {
             this.showTempIngredientsOverlay.emit();
+            this.notification.taskCurrentCount = 1;
+            this.notification.taskTotalCount = 1;
+            cvTaskCurrentCount = 0;
+            cvTaskTotalCount = 0;
           }
         },
         error: (err) => {
