@@ -1,8 +1,11 @@
 .main-container {
-  padding: 20px;
-  margin: 0 auto;
-  width: 90%;
-  background-color: #fcfced;
+  padding: 20px 40px 100px 40px;
+  background-color: #fcfce4;
+  border-radius: 4px;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .header-container {
@@ -10,7 +13,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 0 20px;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .logout-btn {
@@ -24,22 +28,31 @@
   display: grid;
   grid-template-columns: 4fr 8fr;
   gap: 16px;
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto; 
 }
 
 .info-col {
-  padding: 10px;
+  display: flex;
+  padding: 20px 10px;
   border-radius: 8px;
   background-color: #f1f8ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .fridge-col {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #ffffff;
-}
-
-.main-fridge-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 0 10px;
+}
+
+.fridge-col-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ffffffc3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -17,13 +17,14 @@ html {
     )
   );
 }
+/* src/styles.scss */
+
+html {
+  height: 100%;
+}
 
 body {
   height: 100%;
-}
-/* src/styles.scss */
-
-body {
   font-family: "Inter", sans-serif;
   color: #444;
 }
