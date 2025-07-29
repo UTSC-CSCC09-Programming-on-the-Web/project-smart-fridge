@@ -40,7 +40,13 @@ export class RecipePageComponent {
           response.message || 'Recipe generation in progress...Waiting...';
       },
       error: (error) => {
-        console.error('Error generating recipe:', error);
+         this.finishGenerating = false;
+            this.notificationService.pushUserNotification( {
+              type: 'error',
+              message: 'Error generating recipe: ' + error + '. Please try again later.',
+              source: 'user',
+            });
+          this.recipeCardDisplay = false;
       },
     });
   }
@@ -81,7 +87,13 @@ export class RecipePageComponent {
               err.message +
               '. Please try again later.';
             this.notification.type = 'error';
-            this.finishGenerating;
+            this.finishGenerating = false;
+            this.notificationService.pushUserNotification( {
+              type: 'error',
+              message: this.notification.message,
+              source: 'user',
+            });
+            this.recipeCardDisplay = false;
           }
           console.error('Error:', err);
         },
