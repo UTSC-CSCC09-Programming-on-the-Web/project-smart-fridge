@@ -7,17 +7,18 @@ import { AddMultiIngredientsService } from '../../../services/add-multi-ingredie
   selector: 'app-addi-feature-page',
   standalone: false,
   templateUrl: './addi-feature-page.component.html',
-  styleUrl: './addi-feature-page.component.scss'
+  styleUrl: './addi-feature-page.component.scss',
 })
 export class AddiFeaturePageComponent {
-  
   showTempIngredientsBtn: boolean = false;
   @Output() showOverlay: EventEmitter<void> = new EventEmitter<void>();
-  @Output() overlayMode: EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null> = new EventEmitter<'temp-ingredient-list' | 'recipe-generated'|null>();
+  @Output() overlayMode: EventEmitter<
+    'temp-ingredient-list' | 'recipe-generated' | null
+  > = new EventEmitter<'temp-ingredient-list' | 'recipe-generated' | null>();
   constructor(
     private authService: AuthService,
     private fridgeService: FridgeService,
-    private addMultiIngredientsService: AddMultiIngredientsService
+    private addMultiIngredientsService: AddMultiIngredientsService,
   ) {}
 
   ngOnInit(): void {
@@ -51,9 +52,10 @@ export class AddiFeaturePageComponent {
   }
 
   onShowTempIngredientsOverlay(): void {
-    console.log('Showing temporary ingredients overlay from AddiFeaturePageComponent');
+    console.log(
+      'Showing temporary ingredients overlay from AddiFeaturePageComponent',
+    );
     this.overlayMode.emit('temp-ingredient-list');
     this.showOverlay.emit();
   }
-
 }

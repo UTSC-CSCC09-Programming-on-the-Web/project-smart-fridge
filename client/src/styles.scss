@@ -1,20 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
-
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 html {
-  @include mat.theme((
-    color: mat.$orange-palette,
-    typography: (
-      plain-family: Inter,
-      brand-family: Pacifico,
-      bold-weight: 700,
-      medium-weight: 500,
-      regular-weight: 400,
-    ),
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: mat.$orange-palette,
+      typography: (
+        plain-family: Inter,
+        brand-family: Pacifico,
+        bold-weight: 700,
+        medium-weight: 500,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
 }
 
 body {
@@ -23,12 +24,12 @@ body {
 /* src/styles.scss */
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   color: #444;
 }
 
 strong {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   color: #333;
   font-size: 17px;
@@ -36,28 +37,27 @@ strong {
 }
 
 h1 {
-  font-family: 'Pacifico', cursive; 
+  font-family: "Pacifico", cursive;
   color: #000444;
   font-size: 40px;
 }
 
 h2 {
-  font-family: 'Satisfy', cursive; 
+  font-family: "Satisfy", cursive;
   font-weight: 700;
   font-size: 30px;
-  color:  #333;
+  color: #333;
 }
 
-h3{
-  font-family: 'Satisfy', cursive; 
+h3 {
+  font-family: "Satisfy", cursive;
   font-weight: 700;
   font-size: 24px;
   color: rgb(9, 9, 101);
 }
 
-h4{
-  font-family: 'Satisfy', cursive ;
+h4 {
+  font-family: "Satisfy", cursive;
   font-weight: 500;
   font-size: 22px;
 }
-

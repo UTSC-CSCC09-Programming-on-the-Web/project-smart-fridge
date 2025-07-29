@@ -1,35 +1,37 @@
-<div class="header-container" >
+<div class="header-container">
   <app-header></app-header>
-  <button mat-raised-button (click)="onLogout()" class="logout-btn" 
-  style="  background-color: #a5362e; color: white; ">
+  <button
+    mat-raised-button
+    (click)="onLogout()"
+    class="logout-btn"
+    style="background-color: #a5362e; color: white"
+  >
     <mat-icon>exit_to_app</mat-icon>
     Logout
   </button>
- </div>
-
-
-<div class="main-container">
-
-<div class="main-row">
-  <div class="info-col">
-    <app-info-notification-page></app-info-notification-page>
-  </div>
-  <div class="fridge-col">
-    <div class="main-fridge-container">
-      <app-addi-feature-page
-        (showOverlay)="showOverlay = true"
-        (overlayMode)="overlayMode = $event"
-      ></app-addi-feature-page>
-      <mat-divider></mat-divider>
-      <app-ingredient-list-page></app-ingredient-list-page>
-    </div>
-  </div>
 </div>
 
-<app-overlay-model
-  [hidden]="!(showOverlay && overlayMode)"
-  (close)="showOverlay = false"
-></app-overlay-model>
+<div class="main-container">
+  <div class="main-row">
+    <div class="info-col">
+      <app-info-notification-page></app-info-notification-page>
+    </div>
+    <div class="fridge-col">
+      <div class="main-fridge-container">
+        <app-addi-feature-page
+          (showOverlay)="showOverlay = true"
+          (overlayMode)="overlayMode = $event"
+        ></app-addi-feature-page>
+        <mat-divider></mat-divider>
+        <app-ingredient-list-page></app-ingredient-list-page>
+      </div>
+    </div>
+  </div>
 
-  <div class = "footer"></div>
+  <app-overlay-model
+    [hidden]="!(showOverlay && overlayMode)"
+    (close)="showOverlay = false"
+  ></app-overlay-model>
+
+  <div class="footer"></div>
 </div>

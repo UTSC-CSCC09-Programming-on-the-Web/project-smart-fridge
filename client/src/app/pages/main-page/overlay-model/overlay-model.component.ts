@@ -5,20 +5,17 @@ import { AddMultiIngredientsService } from '../../../services/add-multi-ingredie
   selector: 'app-overlay-model',
   standalone: false,
   templateUrl: './overlay-model.component.html',
-  styleUrls: ['./overlay-model.component.scss']
+  styleUrls: ['./overlay-model.component.scss'],
 })
 export class OverlayModelComponent {
-@Output() close = new EventEmitter<void>();
-@Input() mode: 'temp-ingredient-list' | 'recipe-generated' | null = null;
+  @Output() close = new EventEmitter<void>();
+  @Input() mode: 'temp-ingredient-list' | 'recipe-generated' | null = null;
 
-  constructor(private addMultiIngredientsService: AddMultiIngredientsService) {
-  }
+  constructor(private addMultiIngredientsService: AddMultiIngredientsService) {}
 
   handleFinishAdding(): void {
     this.close.emit();
     this.mode = null;
     this.addMultiIngredientsService.notifyFinishBatchAdding();
   }
-
 }
-  

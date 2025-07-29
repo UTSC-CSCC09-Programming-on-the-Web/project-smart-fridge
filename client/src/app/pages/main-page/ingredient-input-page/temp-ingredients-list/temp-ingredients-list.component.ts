@@ -23,7 +23,7 @@ interface tempIngredient {
   selector: 'app-temp-ingredients-list',
   standalone: false,
   templateUrl: './temp-ingredients-list.component.html',
-  styleUrl: './temp-ingredients-list.component.scss'
+  styleUrl: './temp-ingredients-list.component.scss',
 })
 export class TempIngredientsListComponent {
   tempIngredients: tempIngredient[] = [];
@@ -36,7 +36,7 @@ export class TempIngredientsListComponent {
     private ingredientService: IngredientService,
     private notificationService: NotificationService,
   ) {}
-  
+
   ngOnInit(): void {
     this.socketService
       .fromSocketEvent<{
@@ -68,7 +68,8 @@ export class TempIngredientsListComponent {
           }));
           const notification: Notification = {
             type: 'success',
-            message: 'Ingredients parsed from receipt or shopping list successfully! Please go ahead and review them for adding, the temporary result will lose if you reload the page!',
+            message:
+              'Ingredients parsed from receipt or shopping list successfully! Please go ahead and review them for adding, the temporary result will lose if you reload the page!',
             source: 'user',
           };
           this.notificationService.pushUserNotification(notification);
@@ -168,5 +169,4 @@ export class TempIngredientsListComponent {
     this.addingTempIngredientImage = false;
     this.addingTempIngredientsIndex = null;
   }
-
 }

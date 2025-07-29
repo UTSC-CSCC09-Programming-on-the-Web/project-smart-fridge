@@ -8,9 +8,8 @@ describe('InfoNotificationPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InfoNotificationPageComponent]
-    })
-    .compileComponents();
+      imports: [InfoNotificationPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InfoNotificationPageComponent);
     component = fixture.componentInstance;

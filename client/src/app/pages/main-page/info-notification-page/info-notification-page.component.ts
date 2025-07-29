@@ -6,16 +6,14 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'app-info-notification-page',
   standalone: false,
   templateUrl: './info-notification-page.component.html',
-  styleUrl: './info-notification-page.component.scss'
+  styleUrl: './info-notification-page.component.scss',
 })
 export class InfoNotificationPageComponent {
- currentUser: User | null = null;
+  currentUser: User | null = null;
   showUserInfo: boolean = false;
- constructor(
-   private authService: AuthService,
- ) {}
+  constructor(private authService: AuthService) {}
 
-   fetchUserInfo(): void {
+  fetchUserInfo(): void {
     this.showUserInfo = !this.showUserInfo;
   }
 
@@ -26,8 +24,7 @@ export class InfoNotificationPageComponent {
       },
       error: (err) => {
         console.error('Failed to fetch user info', err);
-      }
+      },
     });
   }
-
 }

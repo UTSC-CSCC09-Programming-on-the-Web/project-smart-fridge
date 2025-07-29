@@ -6,10 +6,16 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
   selector: 'app-task-loading-notification',
   standalone: false,
   templateUrl: './task-loading-notification.component.html',
-  styleUrl: './task-loading-notification.component.scss'
+  styleUrl: './task-loading-notification.component.scss',
 })
 export class TaskLoadingNotificationComponent {
- @Input() notification: Notification = { message: '', type: 'info', source: 'system', taskTotalCount: 0, taskCurrentCount: 0 };
+  @Input() notification: Notification = {
+    message: '',
+    type: 'info',
+    source: 'system',
+    taskTotalCount: 0,
+    taskCurrentCount: 0,
+  };
 
   constructor() {}
 
@@ -24,7 +30,7 @@ export class TaskLoadingNotificationComponent {
     if (this.notification.type === 'success' && this.isFinished) {
       console.log('Task finished notification');
       return 'notification-task-finished';
-    }else{
+    } else {
       return 'notification-info';
     }
   }
@@ -37,7 +43,7 @@ export class TaskLoadingNotificationComponent {
     }
     return 0;
   }
-  
+
   get isFinished(): boolean {
     return this.Progress >= 100;
   }

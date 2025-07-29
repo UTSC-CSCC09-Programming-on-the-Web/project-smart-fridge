@@ -19,102 +19,141 @@
   </h3>
 
   <div class="ingredient-grid-form">
+    <!-- form fields -->
+    <ng-content *ngIf="mode !== 'image'" [formGroup]="ingredientForm">
+      <mat-form-field appearance="outline" class="grid-col-span-2">
+        <mat-label>Ingredient Name</mat-label>
+        <input matInput formControlName="name" placeholder="e.g. Tomato" />
+        <mat-error *ngIf="ingredientForm.get('name')?.hasError('required')">
+          Ingredient name is required
+        </mat-error>
+      </mat-form-field>
 
-  <!-- form fields -->
-  <ng-content *ngIf="mode !== 'image'" [formGroup]="ingredientForm">
-    <mat-form-field appearance="outline" class="grid-col-span-2">
-      <mat-label>Ingredient Name</mat-label>
-      <input matInput formControlName="name" placeholder="e.g. Tomato" />
-      <mat-error *ngIf="ingredientForm.get('name')?.hasError('required')">
-        Ingredient name is required
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="grid-col-2">
+        <mat-label>Quantity</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="quantity"
+          placeholder="e.g. 2"
+        />
+        <mat-error *ngIf="ingredientForm.get('quantity')?.hasError('required')">
+          Quantity is required
+        </mat-error>
+        <mat-error *ngIf="ingredientForm.get('quantity')?.hasError('min')">
+          Quantity must be bigger than 0
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="grid-col-2">
-      <mat-label>Quantity</mat-label>
-      <input matInput type="number" formControlName="quantity" placeholder="e.g. 2" />
-      <mat-error *ngIf="ingredientForm.get('quantity')?.hasError('required')">
-        Quantity is required
-      </mat-error>
-      <mat-error *ngIf="ingredientForm.get('quantity')?.hasError('min')">
-        Quantity must be bigger than 0
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="grid-col-1">
+        <mat-label>Unit</mat-label>
+        <input
+          matInput
+          formControlName="unit"
+          placeholder="e.g. g / ml / pcs"
+        />
+        <mat-error *ngIf="ingredientForm.get('unit')?.hasError('required')">
+          Unit is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="grid-col-1">
-      <mat-label>Unit</mat-label>
-      <input matInput formControlName="unit" placeholder="e.g. g / ml / pcs" />
-      <mat-error *ngIf="ingredientForm.get('unit')?.hasError('required')">
-        Unit is required
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="grid-col-span-2">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-label>Expire Date</mat-label>
+        <input
+          matInput
+          formControlName="expire_date"
+          [matDatepicker]="picker"
+        />
+        <mat-datepicker-toggle
+          matIconPrefix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error
+          *ngIf="ingredientForm.get('expire_date')?.hasError('required')"
+        >
+          Expire date is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="grid-col-span-2">
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-label>Expire Date</mat-label>
-      <input matInput  formControlName="expire_date" [matDatepicker]="picker">
-      <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="ingredientForm.get('expire_date')?.hasError('required')">
-        Expire date is required
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="grid-col-span-2">
+        <mat-label>Type</mat-label>
+        <input
+          matInput
+          formControlName="type"
+          placeholder="e.g. vegetable / meat (optional)"
+        />
+        <mat-hint>Type is optional, you can leave it empty</mat-hint>
+      </mat-form-field>
+    </ng-content>
 
-    <mat-form-field appearance="outline" class="grid-col-span-2">
-      <mat-label>Type</mat-label>
-      <input matInput formControlName="type" placeholder="e.g. vegetable / meat (optional)" />
-      <mat-hint>Type is optional, you can leave it empty</mat-hint>
-    </mat-form-field>
-  </ng-content>
+    <div
+      class="upload-wrapper grid-col-span-2"
+      *ngIf="mode === 'add' || mode === 'image'"
+    >
+      <div class="upload-row">
+        <label class="upload-label">Upload Image:</label>
+        <button
+          mat-stroked-button
+          class="choose-file-btn"
+          color="primary"
+          (click)="fileInput.click()"
+        >
+          Choose File
+        </button>
+        <span *ngIf="selectedFileName" class="file-name">{{
+          selectedFileName
+        }}</span>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          hidden
+          #fileInput
+        />
+      </div>
 
-<div class="upload-wrapper grid-col-span-2" *ngIf="mode === 'add' || mode === 'image'">
-  <div class="upload-row">
-    <label class="upload-label">Upload Image:</label>
-    <button mat-stroked-button class="choose-file-btn" color="primary" (click)="fileInput.click()">Choose File</button>
-    <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
-    <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #fileInput />
-  </div>
+      <div class="preview-wrapper" *ngIf="imagePreviewUrl">
+        <img class="image-preview" [src]="imagePreviewUrl" alt="Preview" />
+        <button mat-icon-button (click)="removeImage()">
+          <mat-icon>backspace</mat-icon>
+        </button>
+      </div>
+    </div>
 
-  <div class="preview-wrapper" *ngIf="imagePreviewUrl">
-    <img class="image-preview" [src]="imagePreviewUrl" alt="Preview" />
-    <button mat-icon-button (click)="removeImage()">
-        <mat-icon>backspace</mat-icon>
+    <!-- submit button -->
+    <button
+      mat-flat-button
+      type="submit"
+      *ngIf="mode !== 'image'"
+      [disabled]="ingredientForm.invalid"
+      class="grid-col-span-2"
+    >
+      <mat-icon>{{ mode === "edit" ? "save" : "add" }}</mat-icon>
+      {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
     </button>
-  </div>
-</div>
-
-  <!-- submit button -->
-  <button
-    mat-flat-button
-    type="submit"
-    *ngIf="mode !== 'image'"
-    [disabled]="ingredientForm.invalid"
-    class="grid-col-span-2"
-  >
-    <mat-icon>{{ mode === "edit" ? "save" : "add" }}</mat-icon>
-    {{ mode === "edit" ? "Save Changes" : "Add Ingredient" }}
-  </button>
-  <!-- submit button for image mode -->
-  <button
-    mat-flat-button
-    type="button"
-    *ngIf="mode === 'image'"
-    (click)="submitImageFile()"
-  >
-    <mat-icon>image</mat-icon>
-    Upload Image
-  </button>
-  <!-- cancel button -->
-  <button
-    mat-raised-button
-    type="button"
-    *ngIf="mode === 'edit'"
-    (click)="cancelEdit.emit()"
-    class="grid-col-span-2"
-    style="margin-top: 5px;"
-  >
-    <mat-icon>cancel</mat-icon>
-    Cancel
-  </button>
+    <!-- submit button for image mode -->
+    <button
+      mat-flat-button
+      type="button"
+      *ngIf="mode === 'image'"
+      (click)="submitImageFile()"
+    >
+      <mat-icon>image</mat-icon>
+      Upload Image
+    </button>
+    <!-- cancel button -->
+    <button
+      mat-raised-button
+      type="button"
+      *ngIf="mode === 'edit'"
+      (click)="cancelEdit.emit()"
+      class="grid-col-span-2"
+      style="margin-top: 5px"
+    >
+      <mat-icon>cancel</mat-icon>
+      Cancel
+    </button>
   </div>
 </form>

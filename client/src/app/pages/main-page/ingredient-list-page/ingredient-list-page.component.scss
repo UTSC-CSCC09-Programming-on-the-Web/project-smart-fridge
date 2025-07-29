@@ -1,5 +1,5 @@
 // generate simple scss for class="ingredient-list-page" and class="ingredient-list"
-@use  '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 .ingredient-list-page {
   margin-top: 10px;
@@ -36,7 +36,7 @@
   transition: opacity 0.3s ease;
 }
 
-.add-ingredient-form{
+.add-ingredient-form {
   width: 80%;
   margin: 0 auto;
   text-align: start;

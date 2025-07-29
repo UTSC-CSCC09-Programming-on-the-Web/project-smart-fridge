@@ -28,7 +28,7 @@
 
 .ingredient-grid-form {
   display: grid;
-  grid-template-columns: 2fr 1fr; 
+  grid-template-columns: 2fr 1fr;
   gap: 5px;
   margin: auto;
   padding: 24px;
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   margin-bottom: 5px;
 }
 
@@ -78,7 +78,7 @@
   width: 120px;
   color: #671903;
   cursor: pointer;
-  background-color:  #faebe7;
+  background-color: #faebe7;
 }
 
 .file-name {

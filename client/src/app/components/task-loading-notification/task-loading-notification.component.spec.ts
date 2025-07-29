@@ -8,9 +8,8 @@ describe('TaskLoadingNotificationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskLoadingNotificationComponent]
-    })
-    .compileComponents();
+      imports: [TaskLoadingNotificationComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskLoadingNotificationComponent);
     component = fixture.componentInstance;

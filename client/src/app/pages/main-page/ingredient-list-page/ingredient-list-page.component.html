@@ -1,21 +1,27 @@
 <div *ngIf="currentFridge; else noFridge">
   <div class="ingredient-list-page">
     <div class="button-wrapper">
-      <button mat-fab extended class="add-ingredient-button" (click)="toggleAddForm()">
-        <mat-icon>{{ showAddForm ? 'cancel' : 'add' }}</mat-icon>
-        {{ showAddForm ? 'Cancel' : 'Add a Single Ingredient' }}
+      <button
+        mat-fab
+        extended
+        class="add-ingredient-button"
+        (click)="toggleAddForm()"
+      >
+        <mat-icon>{{ showAddForm ? "cancel" : "add" }}</mat-icon>
+        {{ showAddForm ? "Cancel" : "Add a Single Ingredient" }}
       </button>
-      
+
       <button mat-fab extended (click)="refreshIngredients()">
         <mat-icon>refresh</mat-icon>
         Click to Refresh the Fridge
       </button>
     </div>
-    <div class ="add-ingredient-form"  *ngIf="showAddForm">
-    <app-ingredient-form class="add-ingredient-form"
-      [mode]="'add'"
-      (addIngredient)="handleNewIngredient($event)"
-    ></app-ingredient-form>
+    <div class="add-ingredient-form" *ngIf="showAddForm">
+      <app-ingredient-form
+        class="add-ingredient-form"
+        [mode]="'add'"
+        (addIngredient)="handleNewIngredient($event)"
+      ></app-ingredient-form>
     </div>
 
     <div
@@ -35,7 +41,10 @@
         ></app-ingredient-card>
         <!-- Show the edit form if the ingredient is being edited -->
         <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
-        <div class="edit-ingredient-form" *ngIf="editingIngredient && editingIngredient?.id === ing.id">
+        <div
+          class="edit-ingredient-form"
+          *ngIf="editingIngredient && editingIngredient?.id === ing.id"
+        >
           <app-ingredient-form
             [mode]="'edit'"
             [ingredientToEdit]="editingIngredient"
@@ -50,7 +59,11 @@
         <mat-progress-bar mode="buffer"></mat-progress-bar>
       </div>
       <div *ngIf="!hasMoreData && !loading" class="no-more-data">
-       {{ingredients.length === 0 ? 'There is no ingredients in your fridge. Add some ingredients!' : 'No more ingredients to load.'}}
+        {{
+          ingredients.length === 0
+            ? "There is no ingredients in your fridge. Add some ingredients!"
+            : "No more ingredients to load."
+        }}
       </div>
       <button class="scroll-to-top" (click)="scrollToTop()">↑ Top</button>
     </div>

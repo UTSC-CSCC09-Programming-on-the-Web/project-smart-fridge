@@ -15,7 +15,8 @@ export class AddMultiIngredientsService {
   ) {}
 
   private finishBatchAddingSubject: Subject<void> = new Subject<void>();
-  finishBatchAdding$: Observable<void> = this.finishBatchAddingSubject.asObservable();
+  finishBatchAdding$: Observable<void> =
+    this.finishBatchAddingSubject.asObservable();
 
   notifyFinishBatchAdding(): void {
     this.finishBatchAddingSubject.next();

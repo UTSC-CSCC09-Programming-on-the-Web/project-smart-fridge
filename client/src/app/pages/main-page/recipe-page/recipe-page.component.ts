@@ -16,7 +16,7 @@ export class RecipePageComponent {
   notification: Notification = {
     type: 'info',
     message: '',
-    source: 'task'
+    source: 'task',
   };
   finishGenerating: boolean = false;
   constructor(
@@ -68,10 +68,13 @@ export class RecipePageComponent {
           this.finishGenerating = true;
         },
         error: (err) => {
-          if (err.status === 500){
-            this.notification.message = 'Error generating recipe failed: ' + err.message + '. Please try again later.';
+          if (err.status === 500) {
+            this.notification.message =
+              'Error generating recipe failed: ' +
+              err.message +
+              '. Please try again later.';
             this.notification.type = 'error';
-            this.finishGenerating
+            this.finishGenerating;
           }
           console.error('Error:', err);
         },

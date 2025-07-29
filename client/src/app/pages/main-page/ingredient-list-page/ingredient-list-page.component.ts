@@ -24,7 +24,7 @@ export class IngredientListPageComponent {
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
-  showAddForm = false; 
+  showAddForm = false;
 
   constructor(
     private ingredientService: IngredientService,

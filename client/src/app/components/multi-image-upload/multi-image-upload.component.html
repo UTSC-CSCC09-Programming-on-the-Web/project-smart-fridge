@@ -1,21 +1,43 @@
 <div class="multi-image-upload">
-  <h2>
-    Batch Add multiple ingredients
-  </h2>
-  <p style="font-size: large; font-weight:bold; color: #333;">Upload your receipts or any shopping records images to add multiple ingredients</p>
-  <p style="color: #790000;"><strong style="color: #790000;">Notice:</strong> Maximum {{ maxCount }} images can be uploaded.</p>
-  <div class ="upload-wrapper">
+  <h2>Batch Add multiple ingredients</h2>
+  <p style="font-size: large; font-weight: bold; color: #333">
+    Upload your receipts or any shopping records images to add multiple
+    ingredients
+  </p>
+  <p style="color: #790000">
+    <strong style="color: #790000">Notice:</strong> Maximum
+    {{ maxCount }} images can be uploaded.
+  </p>
+  <div class="upload-wrapper">
     <form>
-        <label class="upload-label" for="fileInput">Select images:</label>
-        <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple hidden #fileInput>
-      </form>
-    <button mat-stroked-button  style="color:  #319551;" class="choose-file-btn"   color="primary" (click)="fileInput.click()">Choose File</button>
-    <span *ngIf="selectedFileName.length > 0" class="file-name">{{ selectedFileName.join(', ') }}</span>
+      <label class="upload-label" for="fileInput">Select images:</label>
+      <input
+        type="file"
+        (change)="onFilesSelected($event)"
+        accept="image/*"
+        multiple
+        hidden
+        #fileInput
+      />
+    </form>
+    <button
+      mat-stroked-button
+      style="color: #319551"
+      class="choose-file-btn"
+      color="primary"
+      (click)="fileInput.click()"
+    >
+      Choose File
+    </button>
+    <span *ngIf="selectedFileName.length > 0" class="file-name">{{
+      selectedFileName.join(", ")
+    }}</span>
   </div>
-  <div
-    class="image-grid"
-  >
-    <div class="image-container"  *ngFor="let image of imagePreviews; let i = index">
+  <div class="image-grid">
+    <div
+      class="image-container"
+      *ngFor="let image of imagePreviews; let i = index"
+    >
       <img [src]="image" alt="Image Preview" class="image-preview" />
       <button mat-icon-button class="remove-btn" (click)="removeImage(i)">
         <mat-icon>backspace</mat-icon>
@@ -24,13 +46,21 @@
   </div>
 
   <div class="upload-actions-wrapper">
-  <button mat-raised-button style="color:  #2c8949; background-color: white;" (click)="clearAllImages()">
-    <mat-icon>clear_all</mat-icon>
-    Clear All
-  </button>
-  <button mat-flat-button style="background-color:  #2c8949; color: white;" (click)="uploadImages()">
-    <mat-icon>image</mat-icon>
-    Upload Images
-  </button>
-   </div>
+    <button
+      mat-raised-button
+      style="color: #2c8949; background-color: white"
+      (click)="clearAllImages()"
+    >
+      <mat-icon>clear_all</mat-icon>
+      Clear All
+    </button>
+    <button
+      mat-flat-button
+      style="background-color: #2c8949; color: white"
+      (click)="uploadImages()"
+    >
+      <mat-icon>image</mat-icon>
+      Upload Images
+    </button>
+  </div>
 </div>

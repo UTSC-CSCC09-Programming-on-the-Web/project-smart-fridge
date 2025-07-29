@@ -1,11 +1,12 @@
-
 <div class="overlay">
   <div class="overlay-container">
     <button mat-icon-button class="close-btn" (click)="close.emit()">
       <mat-icon>close</mat-icon>
     </button>
     <div class="overlay-content">
-      <app-temp-ingredients-list (finishAdding)="handleFinishAdding()"></app-temp-ingredients-list>
+      <app-temp-ingredients-list
+        (finishAdding)="handleFinishAdding()"
+      ></app-temp-ingredients-list>
     </div>
   </div>
 </div>
