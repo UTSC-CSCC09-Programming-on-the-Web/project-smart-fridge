@@ -1,17 +1,18 @@
 "use strict";
+require("dotenv").config();
 
 const handleGoogleSuccess = (req, res) => {
   if (!req.user) {
-    return res.redirect("/auth/google/failure?error=session_lost");
+    return res.redirect(`${process.env.CLIENT_URL}/auth/google/failure?error=session_lost`);
   }
   console.log("Google authentication successful", req.user);
-  res.redirect(`http://localhost:4200/auth/google/success`);
+  res.redirect(`${process.env.CLIENT_URL}/auth/google/success`);
 };
 
 const handleGoogleFailure = (req, res) => {
   console.error("Google authentication failed", req.query);
   res.redirect(
-    `http://localhost:4200/auth/google/failure?error=${encodeURIComponent(
+    `${process.env.CLIENT_URL}/auth/google/failure?error=${encodeURIComponent(
       "Google authentication failed"
     )}`
   );

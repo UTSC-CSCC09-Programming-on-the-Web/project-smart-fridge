@@ -32,6 +32,7 @@ export class MainPageComponent {
   showOverlay: boolean = false;
   overlayMode: 'temp-ingredient-list' | 'recipe-generated' | null = null;
 
+
   constructor(
     private authService: AuthService,
     private fridgeService: FridgeService,
@@ -45,6 +46,7 @@ export class MainPageComponent {
   onLogout(): void {
     console.log('User logged out');
     this.initialFridgeRooms = false;
+
     this.socketService.disconnect();
     this.authService.logout().subscribe({
       next: () => {
@@ -58,6 +60,7 @@ export class MainPageComponent {
 
   ngOnInit(): void {
     this.socketService.connectSocket();
+
     this.fridgeService.fridgesList$
       .pipe(
         //filter(fridges => fridges && fridges.length > 0),

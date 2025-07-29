@@ -56,6 +56,7 @@ export class NotificationInfoCenterComponent {
         this.currFridgeNotifiList = notifications;
       },
     );
+
     this.notificationService.userNotifications$.subscribe((notifications) => {
       this.userNotifiList = notifications;
     });

@@ -1,0 +1,45 @@
+name: Publish Smartfridge Backend to GHCR
+
+on:
+  push:
+    branches:
+      - main
+      - deployment
+    paths:
+      - server/**
+
+env:
+  IMAGE_NAME_BACKEND: smartfridge-backend
+  IMAGE_NAME_WORKER: smartfridge-worker
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.SF_KEY }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Compose build backend and worker
+        run: |
+          docker compose -f docker-compose.backend.yml build backend worker  
+
+      - name: Push backend image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_BACKEND
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker tag $IMAGE_NAME_BACKEND $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
+
+      - name: Push worker image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_WORKER
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker tag $IMAGE_NAME_WORKER $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
