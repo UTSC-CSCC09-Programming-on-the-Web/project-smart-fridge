@@ -1,4 +1,5 @@
 // generate simple scss for class="ingredient-list-page" and class="ingredient-list"
+@use  '@angular/material' as mat;
 
 .ingredient-list-page {
   padding: 20px;
@@ -45,4 +46,27 @@
   width: 70%;
   margin-right: auto;
   margin-left: 40px;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 50px;
+  gap: 8px;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.no-fridge-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #6a0707;
+  gap: 10px;
 }

@@ -10,4 +10,5 @@ import { Recipe } from '../../models/recipe.model';
 export class RecipeCardComponent {
   @Input() recipe: Recipe | null = null;
   @Input() message: string = '';
+  @Input() generateFinish: boolean = false;
 }

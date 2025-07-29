@@ -6,7 +6,8 @@
       <mat-panel-description> View details of your generated recipe </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="recipe-message" style="background-color: rgb(218, 233, 246); color: rgb(33, 93, 188);" *ngIf="message">
-      <mat-icon>info</mat-icon>
+      <mat-icon *ngIf="generateFinish" style="font-size: 32px;">check</mat-icon>
+      <mat-spinner mode="indeterminate" diameter="28" *ngIf="!generateFinish"></mat-spinner>
       <p>{{ message }}</p>
     </div>
   </mat-expansion-panel>

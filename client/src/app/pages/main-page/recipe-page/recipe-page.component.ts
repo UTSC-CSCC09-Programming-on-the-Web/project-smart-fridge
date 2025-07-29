@@ -18,6 +18,7 @@ export class RecipePageComponent {
     message: '',
     source: 'task'
   };
+  finishGenerating: boolean = false;
   constructor(
     private recipeService: RecipeService,
     private socketService: SocketService,
@@ -27,6 +28,7 @@ export class RecipePageComponent {
 
   onGenerateRecipe(): void {
     this.recipeCardDisplay = true;
+    this.finishGenerating = false;
     console.log('Recipe generation triggered');
     console.log('Generated recipe:', this.recipe);
     this.recipeService.postGenerateRecipe().subscribe({
@@ -63,11 +65,13 @@ export class RecipePageComponent {
           this.recipe = JSON.parse(clean) as Recipe;
           this.notification.message = 'Recipe generated successfully!';
           this.notification.type = 'success';
+          this.finishGenerating = true;
         },
         error: (err) => {
           if (err.status === 500){
             this.notification.message = 'Error generating recipe failed: ' + err.message + '. Please try again later.';
             this.notification.type = 'error';
+            this.finishGenerating
           }
           console.error('Error:', err);
         },
