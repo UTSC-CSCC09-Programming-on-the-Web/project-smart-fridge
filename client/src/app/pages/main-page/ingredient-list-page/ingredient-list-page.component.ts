@@ -25,6 +25,7 @@ export class IngredientListPageComponent {
   idCursor: number | null = null;
 
   showAddForm = false;
+  @ViewChild('scrollableDiv') containerRef!: ElementRef;
 
   constructor(
     private ingredientService: IngredientService,
@@ -57,7 +58,9 @@ export class IngredientListPageComponent {
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
     if (this.showAddForm) {
-      this.scrollToTop();
+      window.scrollBy({ top: 200, behavior: 'smooth' });
+    }else{
+      window.scrollBy({ top: -200, behavior: 'smooth' });
     }
   }
 
@@ -251,6 +254,9 @@ export class IngredientListPageComponent {
   toggleEditForm(ingredient: Ingredient) {
     console.log('Toggling edit form for ingredient:', ingredient);
     this.editingIngredient = ingredient;
+    if (this.editingIngredient && this.editingIngredient.id === ingredient.id) {
+      this.containerRef.nativeElement.scrollBy({ top: 150, behavior: 'smooth' });
+    } 
   }
 
   cancelEdit() {
@@ -263,7 +269,6 @@ export class IngredientListPageComponent {
       this.fetchMoreIngredients();
     }
   }
-@ViewChild('scrollableDiv') containerRef!: ElementRef;
 
   scrollToTop(): void {
     window.scrollTo({ top: 300, behavior: 'smooth' });

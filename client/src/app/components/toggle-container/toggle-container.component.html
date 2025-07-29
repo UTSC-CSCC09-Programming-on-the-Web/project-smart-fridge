@@ -1,0 +1,4 @@
+<div [@expandCollapse]="open ? 'open' : 'closed'" class="toggle-content">
+  <ng-content></ng-content>
+  <button [hidden]="true" (click)="close()">Close</button>
+</div>

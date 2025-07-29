@@ -14,7 +14,7 @@
     {{ showUserInfo ? "Hide" : "Show" }} User Information
   </button>
 
-  <div *ngIf="showUserInfo">
+  <app-toggle-container [(open)]="showUserInfo">
     <div *ngIf="currentUser; else noUser">
       <h3>User Information</h3>
       <p><strong>User Name:</strong> {{ currentUser.name }}</p>
@@ -26,7 +26,7 @@
       </ul>
     </div>
     <mat-divider></mat-divider>
-  </div>
+  </app-toggle-container>
   <ng-template #noUser>
     <p>No user information available. Please log in.</p>
   </ng-template>

@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
@@ -35,6 +35,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { MaterialModule } from './material.module';
 import { TaskLoadingNotificationComponent } from './components/task-loading-notification/task-loading-notification.component';
 import { CreditPageComponent } from './pages/credit-page/credit-page.component';
+import { ToggleContainerComponent } from './components/toggle-container/toggle-container.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,8 @@ import { CreditPageComponent } from './pages/credit-page/credit-page.component';
     AddiFeaturePageComponent,
     TempIngredientsListComponent,
     TaskLoadingNotificationComponent,
+    ToggleContainerComponent,
+    CreditPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +75,7 @@ import { CreditPageComponent } from './pages/credit-page/credit-page.component';
     HttpClientModule,
     InfiniteScrollDirective,
     MaterialModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

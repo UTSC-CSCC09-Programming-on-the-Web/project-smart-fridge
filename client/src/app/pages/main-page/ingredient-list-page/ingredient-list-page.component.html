@@ -17,13 +17,17 @@
         Click to Refresh the Fridge
       </button>
     </div>
-    <div class="add-ingredient-form" *ngIf="showAddForm">
-      <app-ingredient-form
-        class="add-ingredient-form"
-        [mode]="'add'"
-        (addIngredient)="handleNewIngredient($event)"
-      ></app-ingredient-form>
-    </div>
+    <app-toggle-container
+      [(open)]="showAddForm"
+    >
+      <div class="add-ingredient-form">
+        <app-ingredient-form
+          class="add-ingredient-form"
+          [mode]="'add'"
+          (addIngredient)="handleNewIngredient($event)"
+        ></app-ingredient-form>
+      </div>
+    </app-toggle-container>
 
     <div
       class="ingredient-list"
@@ -42,6 +46,10 @@
         ></app-ingredient-card>
         <!-- Show the edit form if the ingredient is being edited -->
         <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
+        
+      <app-toggle-container
+        [open]="(editingIngredient && editingIngredient.id === ing.id) ? true : false"
+        >
         <div
           class="edit-ingredient-form"
           *ngIf="editingIngredient && editingIngredient?.id === ing.id"
@@ -53,6 +61,7 @@
             (cancelEdit)="cancelEdit()"
           ></app-ingredient-form>
         </div>
+          </app-toggle-container>
       </div>
 
       <div *ngIf="loading" class="loading-indicator">
