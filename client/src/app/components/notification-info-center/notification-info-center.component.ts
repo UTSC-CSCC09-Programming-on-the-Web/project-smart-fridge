@@ -161,4 +161,20 @@ export class NotificationInfoCenterComponent {
       },
     });
   }
+
+  get hasUserNotifications(): boolean {
+    return (
+      this.userNotifiList &&
+      this.userNotifiList.length > 0 &&
+      this.userNotifiList.some((notifi) => notifi.message && notifi.message !== '')
+    );
+  }
+
+  get hasFridgeNotifications(): boolean {
+    return (
+      this.currFridgeNotifiList &&
+      this.currFridgeNotifiList.length > 0 &&
+      this.currFridgeNotifiList.some((notifi) => notifi.message && notifi.message !== '')
+    );
+  }
 }

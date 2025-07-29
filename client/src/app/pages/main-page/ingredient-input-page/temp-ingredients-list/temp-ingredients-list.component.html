@@ -1,4 +1,5 @@
 <div class="temp-ingredients-list">
+  <h2>Temporary Ingredients List</h2>
   <div *ngIf="formalIngredients.length === 0">
     <p>
       There is no parsed ingredient. Please upload other receipts or shopping
@@ -19,6 +20,7 @@
         editingTempIngredientsIndex !== null &&
         editingTempIngredientsIndex === i
       "
+      class="temp-ingredient-form"
       [mode]="'edit'"
       [ingredientToEdit]="editingTempIngredient"
       (submitIngredient)="editTempIngredient($event)"
@@ -31,8 +33,9 @@
         addingTempIngredientsIndex === i
       "
       [mode]="'image'"
+      class="temp-ingredient-form"
       (submitImage)="submitTempIngredientImageFile($event, i)"
-      (cancelEdit)="cancelAddTempIngredientImage()"
+      (cancelImageUpload)="cancelAddTempIngredientImage()"
     ></app-ingredient-form>
   </div>
   <button

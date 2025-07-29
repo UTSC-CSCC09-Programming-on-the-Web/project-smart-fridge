@@ -136,9 +136,10 @@
     <!-- submit button for image mode -->
     <button
       mat-flat-button
-      type="button"
+      type="submit"
       *ngIf="mode === 'image'"
       (click)="submitImageFile()"
+      class="grid-col-span-2"
     >
       <mat-icon>image</mat-icon>
       Upload Image
@@ -147,8 +148,8 @@
     <button
       mat-raised-button
       type="button"
-      *ngIf="mode === 'edit'"
-      (click)="cancelEdit.emit()"
+      *ngIf="mode === 'edit' || mode === 'image'"
+      (click)="cancel()"
       class="grid-col-span-2"
       style="margin-top: 5px"
     >

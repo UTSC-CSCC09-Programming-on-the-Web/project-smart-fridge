@@ -5,7 +5,7 @@
   flex-direction: column;
   padding: 10px 20px;
   margin: 10px auto;
-  width: 100%;
+  width: 85%;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -24,6 +24,10 @@
 
 .edit-form {
   background-color: #fffaec;
+}
+
+.image-form {
+  background-color: #e8f0fe;
 }
 
 .ingredient-grid-form {

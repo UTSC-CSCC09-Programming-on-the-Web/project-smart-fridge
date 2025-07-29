@@ -17,23 +17,28 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 80%;
-  height: 100%;
+  width: 70%;
+  height: 85%;
   gap: 2px;
 }
 
 .overlay-content {
+  display: flex;
   background: white;
   padding: 20px;
   border-radius: 8px;
   width: 95%;
+  margin: 0 auto;
   max-height: 90%;
   overflow-y: auto;
-  position: relative;
+  flex-direction: column;
+  align-items: center;
 }
 
 .close-btn {
   display: flex;
   align-self: flex-end;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  color: rgb(124, 0, 0);
+  cursor: pointer;
 }

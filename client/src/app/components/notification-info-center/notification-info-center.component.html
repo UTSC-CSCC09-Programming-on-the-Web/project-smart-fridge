@@ -17,10 +17,10 @@
 </ng-template>
 
 <div
-  *ngIf="currFridgeNotifiList && currFridgeNotifiList.length > 0"
+  *ngIf="hasFridgeNotifications"
   #fridgeNotification
 >
-  <h2>Fridge Notifications</h2>
+  <h3>Fridge Notifications</h3>
   <div *ngFor="let notification of currFridgeNotifiList" #fridgeRoom>
     <app-notification-bar
       *ngIf="notification.message"
@@ -29,8 +29,8 @@
   </div>
 </div>
 
-<div *ngIf="userNotifiList && userNotifiList.length > 0" #userNotification>
-  <h2>User Notifications</h2>
+<div *ngIf="hasUserNotifications" #userNotification>
+  <h3>User Notifications</h3>
   <div *ngFor="let notification of userNotifiList" #userRoom>
     <app-notification-bar
       *ngIf="notification.message"
@@ -39,8 +39,8 @@
   </div>
 </div>
 
-<div *ngIf="showLockNotif" #fridgeLockRoom>
-  <h2>Fridge Lock Notifications</h2>
+<div *ngIf="showLockNotif && fridgeLockNotif && fridgeLockNotif.message" #fridgeLockRoom>
+  <h3>Fridge Lock Notifications</h3>
   <app-notification-bar
     *ngIf="fridgeLockNotif && fridgeLockNotif.message"
     [notification]="fridgeLockNotif"

@@ -1,12 +1,12 @@
 <mat-accordion class="recipe-card" multi>
-  <mat-expansion-panel [expanded]="true" hideToggle>
+  <mat-expansion-panel [expanded]="true" hideToggle style="margin-top:20px;  background-color: #fffcea;">
     <mat-expansion-panel-header>
       <mat-panel-title> Recipe Card </mat-panel-title>
       <mat-panel-description>
         View details of your generated recipe
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <div class="recipe-message" *ngIf="message">
+    <div class="recipe-message" *ngIf="message"  [ngClass]="generateFinish ? 'success' : 'loading'">
       <mat-icon *ngIf="generateFinish" style="font-size: 32px">check</mat-icon>
       <mat-spinner
         mode="indeterminate"
@@ -16,7 +16,7 @@
       <p>{{ message }}</p>
     </div>
   </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="recipe" [expanded]="true">
+  <mat-expansion-panel *ngIf="recipe" [expanded]="true" style=" background-color: #faf3cd;">
     <mat-expansion-panel-header>
       <mat-panel-title> 🍳 Recipe: {{ recipe.title }} </mat-panel-title>
     </mat-expansion-panel-header>

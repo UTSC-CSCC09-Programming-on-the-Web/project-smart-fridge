@@ -4,6 +4,7 @@ import { SocketService } from '../../../services/socket.service';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Recipe } from '../../../models/recipe.model';
 import { Notification } from '../../../models/notification.model';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-recipe-page',
@@ -22,6 +23,7 @@ export class RecipePageComponent {
   constructor(
     private recipeService: RecipeService,
     private socketService: SocketService,
+    private notificationService: NotificationService,
   ) {}
 
   recipeCardDisplay: boolean = false;
@@ -66,6 +68,11 @@ export class RecipePageComponent {
           this.notification.message = 'Recipe generated successfully!';
           this.notification.type = 'success';
           this.finishGenerating = true;
+          this.notificationService.pushUserNotification( {
+            type: 'success',
+            message: 'Your recipe generated successfully! Please check the details.',
+            source: 'user',
+          });
         },
         error: (err) => {
           if (err.status === 500) {

@@ -29,6 +29,7 @@ export class IngredientFormComponent {
   @Output() addIngredient = new EventEmitter<FormData>();
   @Output() submitIngredient = new EventEmitter<Partial<Ingredient>>();
   @Output() cancelEdit = new EventEmitter<void>();
+  @Output() cancelImageUpload = new EventEmitter<void>();
   @Output() submitImage = new EventEmitter<File>();
 
   selectedImage: File | null = null;
@@ -145,6 +146,16 @@ export class IngredientFormComponent {
       this.clearForm();
     } else {
       console.error('No image selected for upload');
+    }
+  }
+
+  cancel(): void {
+    if (this.mode === 'image') {
+      this.removeImage();
+      this.cancelImageUpload.emit();
+    } else if (this.mode === 'edit') {
+      this.cancelEdit.emit();
+      this.clearForm();
     }
   }
 }
