@@ -34,6 +34,7 @@ import { OverlayModelComponent } from './pages/main-page/overlay-model/overlay-m
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { MaterialModule } from './material.module';
 import { TaskLoadingNotificationComponent } from './components/task-loading-notification/task-loading-notification.component';
+import { CreditPageComponent } from './pages/credit-page/credit-page.component';
 
 @NgModule({
   declarations: [
