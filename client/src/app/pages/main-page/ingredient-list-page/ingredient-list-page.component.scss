@@ -20,6 +20,15 @@
   margin: 7px 5px;
 }
 
+@media (max-width: 800px) {
+  .button-wrapper {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+
 .scroll-to-top {
   position: fixed;
   bottom: 30px;
