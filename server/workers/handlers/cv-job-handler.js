@@ -1,5 +1,5 @@
 "use strict";
-const { CvTask, CvTaskImage } = require("../../models/index.js");
+const { CvTaskImage } = require("../../models/index.js");
 const { pubClient } = require("../../redis/redis-socket.js");
 const { extractTextFromImage } = require("../../services/gcv-service.js");
 

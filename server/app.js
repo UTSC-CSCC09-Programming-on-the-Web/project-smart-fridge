@@ -3,7 +3,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const session = require("express-session");
 const passport = require("passport");
 require("./config/passport.js");
 const ingredientsRouter = require("./routers/ingredients-router.js");
@@ -20,7 +19,7 @@ const multiIngredientsRouter = require("./routers/add-multi-ingredients-router.j
 
 const { setupSocket } = require("./sockets/socket.js");
 const { sessionMiddleware } = require("./middlewares/session-middleware.js");
-//
+
 const PORT = 3000;
 const app = express();
 app.use(
@@ -50,11 +49,6 @@ async function startServer() {
 
     app.use("/auth", authRouter);
     app.use("/api/stripe", stripeRouter);
-
-    // temporary for get image upload working, uploads folder are public as static resources
-    // in the future, we will move the images under each fridge's own uploads folder
-    // and make the uploads folder private, so that only the fridge owner can access it
-    app.use("/uploads", express.static("uploads"));
 
     app.use("/api/fridges", fridgesRouter);
 

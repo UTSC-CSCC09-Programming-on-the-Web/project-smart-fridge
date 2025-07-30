@@ -2,7 +2,7 @@
 
 const { Worker } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq.js");
-const { CvTask, CvTaskImage } = require("../models/index.js");
+const { CvTask } = require("../models/index.js");
 const { pubClient } = require("../redis/redis-socket.js");
 const { CV_JOB_TYPES } = require("../queues/cv-queue.js");
 const { onCvOCRJobCompleted } = require("../services/cv-llm-orches-service.js");

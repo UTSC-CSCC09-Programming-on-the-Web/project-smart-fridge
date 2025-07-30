@@ -1,6 +1,5 @@
 "use strict";
 
-const express = require("express");
 const { createCheckoutSession } = require("../services/stripe-service");
 const dotenv = require("dotenv");
 dotenv.config();

@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
-  ReplaySubject,
-  tap,
-  of,
-  switchMap,
-  scan,
   filter,
+  of,
+  ReplaySubject,
+  switchMap,
+  tap
 } from 'rxjs';
 import { Notification } from '../models/notification.model';
 import { FridgeService } from './fridge.service';

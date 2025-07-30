@@ -1,16 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Notification } from '../../../models/notification.model';
 import { AddMultiIngredientsService } from '../../../services/add-multi-ingredients.service';
 import { SocketService } from '../../../services/socket.service';
-import { Ingredient } from '../../../models/ingredient.model';
-import {
-  ingredientToFormData,
-  appendIngredientToFormDataWithIndex,
-} from '../../../utils/form-data.util';
-import { forkJoin } from 'rxjs';
-import { IngredientService } from '../../../services/ingredient.service';
-import { readImageAsDataUrl } from '../../../utils/image.util';
-import { Notification } from '../../../models/notification.model';
-import { NotificationService } from '../../../services/notification.service';
 
 interface tempIngredient {
   name: string;

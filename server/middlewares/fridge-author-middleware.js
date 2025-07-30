@@ -1,6 +1,5 @@
 "use strict";
 const UserFridge = require("../models/index.js").UserFridge;
-const User = require("../models/index.js").User;
 
 const fridgeAuthMiddle = async (req, res, next) => {
   const fridgeId =

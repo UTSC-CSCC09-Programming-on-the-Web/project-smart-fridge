@@ -1,11 +1,9 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Ingredient } from '../../../models/ingredient.model';
-import { IngredientService } from '../../../services/ingredient.service';
-import { FridgeService } from '../../../services/fridge.service';
-import { Observable } from 'rxjs';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Fridge } from '../../../models/fridge.model';
+import { Ingredient } from '../../../models/ingredient.model';
+import { FridgeService } from '../../../services/fridge.service';
+import { IngredientService } from '../../../services/ingredient.service';
 import { NotificationService } from '../../../services/notification.service';
-import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-ingredient-list-page',

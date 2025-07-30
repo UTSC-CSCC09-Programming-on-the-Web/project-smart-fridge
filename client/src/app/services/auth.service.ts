@@ -1,12 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { HttpParams } from '@angular/common/http';
-import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
 import { environment } from '../../environments/environment';
+import { User } from '../models/user.model';
 
 
 @Injectable({

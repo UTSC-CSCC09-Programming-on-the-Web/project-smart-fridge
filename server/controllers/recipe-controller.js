@@ -4,7 +4,6 @@ const {
   getIngredientsForRecipe,
 } = require("../services/ingredient-service.js");
 const {
-  llmQueue,
   addLlmJob,
   LLM_JOB_TYPES,
 } = require("../queues/llm-queue.js");

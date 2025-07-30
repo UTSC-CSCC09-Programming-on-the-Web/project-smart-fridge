@@ -1,7 +1,4 @@
 "use strict";
-
-const { cvQueue, addCvJob, CV_JOB_TYPES } = require("../queues/cv-queue.js");
-const { CvTask, CvTaskImage } = require("../models");
 const {
   startOCRReceiptOrchestrator,
 } = require("../services/cv-llm-orches-service.js");

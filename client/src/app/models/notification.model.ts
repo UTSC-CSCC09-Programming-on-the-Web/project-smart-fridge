@@ -1,4 +1,3 @@
-import { Fridge } from './fridge.model';
 
 export interface Notification {
   message: string;

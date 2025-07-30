@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { sequelize, LlmTask } = require("../models");
+const { sequelize } = require("../models");
 const { pubClient } = require("../redis/redis-socket");
 
 (async () => {

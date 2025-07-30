@@ -2,17 +2,12 @@
 "use strict";
 const { Ingredient } = require("../models/index.js");
 const validateIngredient = require("../utils/validate-ingredient.js");
-const { Op, where, DATE } = require("sequelize");
-const path = require("path");
-const fs = require("fs");
+const { Op } = require("sequelize");
 const dotenv = require("dotenv");
 dotenv.config();
 const { getImageUrl } = require("../utils/image-url.js");
 const { deleteFileFromGCS } = require("../services/gcs-storage-service.js");
-const Mutex = require("redis-semaphore").Mutex;
-const redisBullmq = require("../redis/redis-bullmq.js");
 const {
-  lockLostHandling,
   ingredientMutex,
 } = require("../services/fridge-lock-service.js");
 const parseIndexedFormData = require("../utils/parse-index-formdata.js");

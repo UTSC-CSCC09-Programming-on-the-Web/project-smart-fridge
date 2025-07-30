@@ -1,24 +1,20 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { FridgeService } from '../../services/fridge.service';
 import {
-  Observable,
   distinctUntilChanged,
   filter,
   forkJoin,
   from,
   map,
-  pipe,
-  switchMap,
-  take,
-  tap,
   pairwise,
+  switchMap,
+  tap
 } from 'rxjs';
 import { Fridge } from '../../models/fridge.model';
-import { SocketService } from '../../services/socket.service';
-import { User } from '../../models/user.model';
-import { NotificationService } from '../../services/notification.service';
 import { Notification } from '../../models/notification.model';
+import { AuthService } from '../../services/auth.service';
+import { FridgeService } from '../../services/fridge.service';
+import { NotificationService } from '../../services/notification.service';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-main-page',

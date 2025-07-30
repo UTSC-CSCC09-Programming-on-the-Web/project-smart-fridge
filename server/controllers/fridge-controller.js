@@ -1,7 +1,4 @@
 "use strict";
-
-const { where } = require("sequelize");
-
 const Fridge = require("../models/index.js").Fridge;
 const User = require("../models/index.js").User;
 const UserFridge = require("../models/index.js").UserFridge;
