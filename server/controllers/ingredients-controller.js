@@ -78,6 +78,14 @@ const getIngredientsInfiniteScroll = async (req, res) => {
 
 // POST /api/fridges/:fridgeId/Ingredients
 const createIngredient = async (req, res) => {
+  const errors = validateIngredient(req.body);
+  if (errors.length > 0) {
+    return res.status(400).json({ errors });
+  }
+   const dateObj = new Date(req.body.expire_date);
+   const isoDate = dateObj.toISOString().slice(0, 10); 
+  req.body.expire_date = isoDate;
+  
   const fridgeId = req.fridgeId || req.params.fridge_id;
   if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
@@ -154,6 +162,24 @@ const createMultiIngredients = async (req, res) => {
       image_url: image ? image.relativePath : null,
       fridge_id: fridgeId,
     }));
+
+    const allErrors = [];
+    ingredients.forEach((ingredient, index) => {
+      const errors = validateIngredient(ingredient);
+      if (errors.length > 0) {
+        allErrors.push({ index, errors });
+      }
+      const dateObj = new Date(ingredient.expire_date);
+      const isoDate = dateObj.toISOString().slice(0, 10);
+      ingredient.expire_date = isoDate;
+    });
+
+    if (allErrors.length > 0) {
+      return res.status(400).json({
+        message: 'Batch Add ingredients validation failed:',
+        errors: allErrors,
+      });
+    }
     newIngredients = await Ingredient.bulkCreate(ingredients);
 
     const ingredientsWithImageUrl = newIngredients.map((ingredient) => ({
@@ -193,6 +219,10 @@ const updateIngredient = async (req, res) => {
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
+  const dateObj = new Date(req.body.expire_date);
+  const isoDate = dateObj.toISOString().slice(0, 10);
+  req.body.expire_date = isoDate;
+
   const lockIdentifier = req.fridgeLockIdentifier;
   if (!lockIdentifier) {
     return res
