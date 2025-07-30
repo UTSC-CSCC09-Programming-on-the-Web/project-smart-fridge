@@ -159,6 +159,29 @@ export class NotificationInfoCenterComponent {
         console.error('Error handling fridge lock notification:', err);
       },
     });
+    this.socketService.fromSocketEvent<any>('userJoinedFridge')
+    .pipe(
+      filter((data) => data.userId !== this.currUserId),
+    )
+    .subscribe({
+      next: (data) => {
+        const fridgeName =
+          this.fridgesList.find((f) => f.id === data.fridgeId)?.name ||
+          'fridge';
+        const message = `User ${data.userName} joined ${fridgeName}. You can refresh the page to see!`;
+        const notification: Notification = {
+          type: 'info',
+          source: 'fridge',
+          message: message,
+          fridgeId: data.fridgeId,
+          createdAt: new Date(),
+        };
+        this.notificationService.pushFridgeNotification(notification);
+      },
+      error: (err) => {
+        console.error('Error handling user joined fridge notification:', err);
+      }
+    });
   }
 
   get hasUserNotifications(): boolean {
