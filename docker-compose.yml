@@ -29,7 +29,7 @@ services:
     environment:
       - DEFAULT_EMAIL=jieying.gong@mail.utoronto.ca
   frontend:
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-client:deployment
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/smartfridge-client:main
     container_name: frontend
     restart: always
     expose:
