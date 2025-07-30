@@ -11,7 +11,6 @@ import { User } from '../models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  //endpoint = 'http://localhost:3000';
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   private userSubject = new BehaviorSubject<User | null>(null);

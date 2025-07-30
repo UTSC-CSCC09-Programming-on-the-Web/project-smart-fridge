@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class RecipeService {
-  //endpoint = 'http://localhost:3000';
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   constructor(

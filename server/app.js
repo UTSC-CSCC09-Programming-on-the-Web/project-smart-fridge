@@ -52,7 +52,6 @@ async function startServer() {
 
     app.use("/api/fridges", fridgesRouter);
 
-    // add routers here
     app.use("/api/fridges", ingredientsRouter);
     app.use("/api/ingredients", ingredientsRouter);
     app.use("/api/recipes", recipeRouter);

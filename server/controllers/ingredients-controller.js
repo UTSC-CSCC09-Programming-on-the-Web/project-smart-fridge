@@ -144,7 +144,6 @@ const createMultiIngredients = async (req, res) => {
   }
   await mutex.acquire();
   await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate some processing time for testing
-  // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
   let type;
   let error;
   let newIngredients = [];

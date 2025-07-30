@@ -39,7 +39,6 @@ async function callGpt({
     );
 
     const content = response.data.choices[0].message.content;
-    // const content = "Sample response from GPT"; // Simulated response for testing
     return content;
   } catch (err) {
     console.error(

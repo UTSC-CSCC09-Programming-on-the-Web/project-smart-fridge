@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AddMultiIngredientsService {
-  // endpoint = 'http://localhost:3000';
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
   constructor(
     private http: HttpClient,

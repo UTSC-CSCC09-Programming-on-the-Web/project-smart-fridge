@@ -22,7 +22,6 @@ const routes: Routes = [
     path: 'main',
     component: MainPageComponent,
     children: [
-      // alpha version implementation
       { path: '', redirectTo: 'ingredients', pathMatch: 'full' }, // default route for main page
       { path: 'ingredients', component: IngredientListPageComponent },
     ],

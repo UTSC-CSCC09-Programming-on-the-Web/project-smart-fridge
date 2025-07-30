@@ -108,6 +108,4 @@ export class IngredientService {
       { withCredentials: true },
     );
   }
-
-  // error handling will be implemented later
 }

@@ -256,7 +256,6 @@ export class IngredientListPageComponent {
 
   // following functions are helper
 
-  // temporary solution, in real application, it should be sorted by the server
   /**
    * Sorts ingredients by expire_date in ascending order.
    * @param ingredients Array of Ingredient objects

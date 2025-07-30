@@ -58,7 +58,6 @@ export class MainPageComponent {
 
     this.fridgeService.fridgesList$
       .pipe(
-        //filter(fridges => fridges && fridges.length > 0),
         pairwise(),
         filter(([prev, curr]) => {
           const prevIds = prev

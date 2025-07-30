@@ -23,7 +23,6 @@ const createFridge = async (req, res) => {
     }
     await fridge.addUser(userId);
 
-    // temporarily set is_first_login to false
     user.is_first_login = false; // Set first login to false
     await user.save(); // Save the user to update the first login status
     res
