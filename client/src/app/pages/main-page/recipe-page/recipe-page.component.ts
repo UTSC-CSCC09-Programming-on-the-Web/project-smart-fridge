@@ -41,7 +41,7 @@ export class RecipePageComponent {
         this.notificationService.pushUserNotification({
           type: 'error',
           message:
-            'Error generating recipe: ' + error + '. Please try again later.',
+            'Error generating recipe: ' +  error?.error?.error,
           source: 'user',
         });
         this.recipeCardDisplay = false;
@@ -80,9 +80,7 @@ export class RecipePageComponent {
         error: (err) => {
           if (err.status === 500) {
             this.notification.message =
-              'Error generating recipe failed: ' +
-              err.message +
-              '. Please try again later.';
+              'Error: generating recipe failed. Please try again later.';
             this.notification.type = 'error';
             this.finishGenerating = false;
             this.notificationService.pushUserNotification({

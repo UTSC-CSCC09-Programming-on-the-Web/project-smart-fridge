@@ -81,7 +81,6 @@ export class IngredientListPageComponent {
           !data.nextExpireCursor ||
           !data.nextIdCursor
         ) {
-          console.log('No more data to load');
           this.hasMoreData = false;
         }
         this.loading = false;
@@ -109,7 +108,6 @@ export class IngredientListPageComponent {
             return;
           }
           if (!data.ingredients || data.ingredients.length === 0) {
-            console.log('No more ingredients to load');
             this.loading = false;
             this.hasMoreData = false;
             return;
@@ -132,7 +130,6 @@ export class IngredientListPageComponent {
             !data.nextExpireCursor ||
             !data.nextIdCursor
           ) {
-            console.log('No more data to load');
             this.hasMoreData = false;
           }
         },
@@ -145,6 +142,8 @@ export class IngredientListPageComponent {
 
   handleNewIngredient(formData: FormData) {
     const fridge_id = this.fridgeService.getCurrentFridgeId();
+    this.showAddForm = false;
+    window.scrollBy({ top: -200, behavior: 'smooth' });
     if (!fridge_id) {
       console.error('Fridge ID is not available');
       return;

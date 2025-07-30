@@ -35,11 +35,6 @@ export class FridgeService {
         withCredentials: true,
       })
       .pipe(
-        tap((res) => {
-          if (res.success) {
-            console.log('Fridge created successfully:', res.message);
-          }
-        }),
         catchError((err) => {
           console.error('Error creating fridge:', err);
           return of(null);
@@ -55,11 +50,6 @@ export class FridgeService {
         withCredentials: true,
       })
       .pipe(
-        tap((res) => {
-          if (res.success) {
-            console.log('Joined fridge:', res.message);
-          }
-        }),
         catchError((err) => {
           console.error('Error joining fridge:', err);
           return of(null);

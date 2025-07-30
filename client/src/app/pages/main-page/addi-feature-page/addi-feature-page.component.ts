@@ -29,17 +29,11 @@ export class AddiFeaturePageComponent {
 
   onSubmitNewFridgeForm(): void {
     this.fridgeService.getUserFridges().subscribe({
-      next: () => {
-        console.log('New fridge added successfully');
-      },
       error: (err) => {
         console.error('Error adding new fridge:', err);
       },
     });
     this.authService.getCurrentUser().subscribe({
-      next: () => {
-        console.log('User data refreshed after adding new fridge');
-      },
       error: (err) => {
         console.error('Error refreshing user data:', err);
       },

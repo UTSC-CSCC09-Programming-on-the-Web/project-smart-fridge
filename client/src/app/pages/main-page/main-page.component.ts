@@ -111,7 +111,6 @@ export class MainPageComponent {
         }),
       )
       .subscribe({
-        next: (fridges) => console.log('Fridges list updated:', fridges),
         error: (err) => console.error('Error fetching fridges:', err),
       });
 
@@ -123,9 +122,6 @@ export class MainPageComponent {
         }),
       )
       .subscribe({
-        next: (fridge) => {
-          console.log('Current fridge updated:', fridge);
-        },
         error: (err) => {
           console.error('Error fetching current fridge:', err);
         },

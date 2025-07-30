@@ -82,6 +82,5 @@ export class MultiImageUploadComponent {
       return;
     }
     this.multiImagesUploaded.emit(this.selectedImages);
-    console.log('Uploading images:', this.selectedImages);
   }
 }

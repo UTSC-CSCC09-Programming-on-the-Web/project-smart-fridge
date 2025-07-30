@@ -33,7 +33,6 @@ export class IngredientInputPageComponent {
       formData.append(`images`, image);
     });
     this.addMultiIngredientsService.postImagesToServer(formData).subscribe({
-      next: (response) => console.log('Images uploaded successfully', response),
       error: (err) => console.error('Error uploading images:', err),
     });
   }
@@ -71,9 +70,6 @@ export class IngredientInputPageComponent {
 
         this.notification.taskCurrentCount = cvTaskCurrentCount;
         this.notification.taskTotalCount = cvTaskTotalCount;
-        console.log(
-          `Received CV Task Progress with type: ${this.notification.type} and message: ${this.notification.message}`,
-        );
         if (data?.finished && data.type === 'success') {
           this.showTempIngredientsOverlay.emit();
           this.notification.taskCurrentCount = 1;
