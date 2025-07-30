@@ -60,7 +60,7 @@ export class TempIngredientsListComponent {
           this.formalIngredients = this.tempIngredients.map((ing) => ({
             name: ing.name || 'default name', // temporary set
             quantity: parseFloat(ing.quantity) || 1, // temporary set
-            unit: ing.unit || 'pcs', // temporary set
+            unit: ing.unit || 'package/pcs', // temporary set
             expire_date: new Date(new Date().setDate(new Date().getDate() + 7))
               .toISOString()
               .split('T')[0],
