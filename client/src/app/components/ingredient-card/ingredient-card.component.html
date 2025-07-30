@@ -47,14 +47,23 @@
               Default Expire Date: {{ ingredientDisplay.expire_date }}
             </li>
             <li *ngIf="ingredientDisplay.type">
-              <strong>Type:</strong> {{ ingredientDisplay.type }}</li>
+              <strong>Type:</strong> {{ ingredientDisplay.type }}
+            </li>
           </ul>
         </mat-card-subtitle>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
-      <p *ngIf="mode === 'view'" class="expire-information" [ngClass]=" ingredientDisplay.is_expired ? 'expired' : 'fresh'">
-        {{ ingredientDisplay.is_expired ? "Already Expired!! Remember to clean it! " : "Fresh" }}
+      <p
+        *ngIf="mode === 'view'"
+        class="expire-information"
+        [ngClass]="ingredientDisplay.is_expired ? 'expired' : 'fresh'"
+      >
+        {{
+          ingredientDisplay.is_expired
+            ? "Already Expired!! Remember to clean it! "
+            : "Fresh"
+        }}
       </p>
     </mat-card-content>
     <mat-card-actions class="ingredient-actions">

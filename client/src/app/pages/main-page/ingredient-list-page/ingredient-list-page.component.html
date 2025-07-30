@@ -1,6 +1,8 @@
 <div *ngIf="currentFridge; else noFridge">
-  <div class="ingredient-list-page" >
-    <h3 style="margin-left: 10px; color: #642d00; font-size: 27px;">Ingredients List in the fridge</h3>
+  <div class="ingredient-list-page">
+    <h3 style="margin-left: 10px; color: #642d00; font-size: 27px">
+      Ingredients List in the fridge
+    </h3>
     <div class="button-wrapper">
       <button
         mat-fab
@@ -17,9 +19,7 @@
         Click to Refresh the Fridge
       </button>
     </div>
-    <app-toggle-container
-      [(open)]="showAddForm"
-    >
+    <app-toggle-container [(open)]="showAddForm">
       <div class="add-ingredient-form">
         <app-ingredient-form
           class="add-ingredient-form"
@@ -46,22 +46,24 @@
         ></app-ingredient-card>
         <!-- Show the edit form if the ingredient is being edited -->
         <!-- This checks if the current ingredient's id matches the editingIngredient's id -->
-        
-      <app-toggle-container
-        [open]="(editingIngredient && editingIngredient.id === ing.id) ? true : false"
+
+        <app-toggle-container
+          [open]="
+            editingIngredient && editingIngredient.id === ing.id ? true : false
+          "
         >
-        <div
-          class="edit-ingredient-form"
-          *ngIf="editingIngredient && editingIngredient?.id === ing.id"
-        >
-          <app-ingredient-form
-            [mode]="'edit'"
-            [ingredientToEdit]="editingIngredient"
-            (submitIngredient)="handleUpdateIngredient($event)"
-            (cancelEdit)="cancelEdit()"
-          ></app-ingredient-form>
-        </div>
-          </app-toggle-container>
+          <div
+            class="edit-ingredient-form"
+            *ngIf="editingIngredient && editingIngredient?.id === ing.id"
+          >
+            <app-ingredient-form
+              [mode]="'edit'"
+              [ingredientToEdit]="editingIngredient"
+              (submitIngredient)="handleUpdateIngredient($event)"
+              (cancelEdit)="cancelEdit()"
+            ></app-ingredient-form>
+          </div>
+        </app-toggle-container>
       </div>
 
       <div *ngIf="loading" class="loading-indicator">

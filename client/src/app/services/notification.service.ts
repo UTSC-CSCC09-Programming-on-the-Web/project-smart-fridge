@@ -5,7 +5,7 @@ import {
   of,
   ReplaySubject,
   switchMap,
-  tap
+  tap,
 } from 'rxjs';
 import { Notification } from '../models/notification.model';
 import { FridgeService } from './fridge.service';

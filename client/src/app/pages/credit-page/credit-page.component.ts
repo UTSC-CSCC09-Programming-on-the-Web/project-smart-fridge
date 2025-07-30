@@ -8,10 +8,9 @@ import { Router } from '@angular/router';
   styleUrl: './credit-page.component.scss',
 })
 export class CreditPageComponent {
-
   constructor(private router: Router) {}
 
-  goBack(){
+  goBack() {
     this.router.navigate(['/main']);
   }
 }

@@ -26,11 +26,11 @@ const routes: Routes = [
       { path: 'ingredients', component: IngredientListPageComponent },
     ],
   },
-  { path: 'credits', component: CreditPageComponent }
+  { path: 'credits', component: CreditPageComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)], 
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

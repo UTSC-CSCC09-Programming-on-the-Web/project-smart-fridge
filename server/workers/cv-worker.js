@@ -68,7 +68,7 @@ cvOCRWorker.on("failed", async (job, err) => {
     console.error("No userId found in job data:", job.data);
     return;
   }
-   await CvTask.update(
+  await CvTask.update(
     { status: "failed", error: err.message },
     { where: { trace_id: traceId } }
   );

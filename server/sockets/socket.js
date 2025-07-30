@@ -30,13 +30,13 @@ const setupSocket = async (app) => {
   );
 
   io.use((socket, next) => {
-  const user = socket.handshake.session?.passport?.user;
-  if (!user) {
-    return next();
-  }
-  socket.userId = user;
-  next();
-});
+    const user = socket.handshake.session?.passport?.user;
+    if (!user) {
+      return next();
+    }
+    socket.userId = user;
+    next();
+  });
 
   await connectSocketRedis();
   io.adapter(createAdapter(pubClient, subClient));

@@ -37,13 +37,14 @@ export class RecipePageComponent {
           response.message || 'Recipe generation in progress...Waiting...';
       },
       error: (error) => {
-         this.finishGenerating = false;
-            this.notificationService.pushUserNotification( {
-              type: 'error',
-              message: 'Error generating recipe: ' + error + '. Please try again later.',
-              source: 'user',
-            });
-          this.recipeCardDisplay = false;
+        this.finishGenerating = false;
+        this.notificationService.pushUserNotification({
+          type: 'error',
+          message:
+            'Error generating recipe: ' + error + '. Please try again later.',
+          source: 'user',
+        });
+        this.recipeCardDisplay = false;
       },
     });
   }
@@ -69,9 +70,10 @@ export class RecipePageComponent {
           this.notification.message = 'Recipe generated successfully!';
           this.notification.type = 'success';
           this.finishGenerating = true;
-          this.notificationService.pushUserNotification( {
+          this.notificationService.pushUserNotification({
             type: 'success',
-            message: 'Your recipe generated successfully! Please check the details.',
+            message:
+              'Your recipe generated successfully! Please check the details.',
             source: 'user',
           });
         },
@@ -83,7 +85,7 @@ export class RecipePageComponent {
               '. Please try again later.';
             this.notification.type = 'error';
             this.finishGenerating = false;
-            this.notificationService.pushUserNotification( {
+            this.notificationService.pushUserNotification({
               type: 'error',
               message: this.notification.message,
               source: 'user',

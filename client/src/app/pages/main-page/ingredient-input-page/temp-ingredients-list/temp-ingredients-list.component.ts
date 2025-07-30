@@ -5,9 +5,7 @@ import { Notification } from '../../../../models/notification.model';
 import { IngredientService } from '../../../../services/ingredient.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { SocketService } from '../../../../services/socket.service';
-import {
-  appendIngredientToFormDataWithIndex
-} from '../../../../utils/form-data.util';
+import { appendIngredientToFormDataWithIndex } from '../../../../utils/form-data.util';
 import { readImageAsDataUrl } from '../../../../utils/image.util';
 
 interface tempIngredient {

@@ -15,9 +15,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: smartfridge-worker 
+    image: smartfridge-worker
     container_name: smartfridge-worker
     restart: unless-stopped
     env_file:
       - .env
-  

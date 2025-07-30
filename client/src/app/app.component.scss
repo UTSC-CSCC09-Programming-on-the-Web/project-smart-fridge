@@ -1,6 +1,6 @@
 .app-header {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
   padding: 8px;
   border-bottom: 5px double #6d020274;
@@ -29,5 +29,5 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;     
+  overflow-x: hidden;
 }

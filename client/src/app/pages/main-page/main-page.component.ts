@@ -7,7 +7,7 @@ import {
   map,
   pairwise,
   switchMap,
-  tap
+  tap,
 } from 'rxjs';
 import { Fridge } from '../../models/fridge.model';
 import { Notification } from '../../models/notification.model';
@@ -27,7 +27,6 @@ export class MainPageComponent {
   private initialFridgeRooms: boolean = false;
   showOverlay: boolean = false;
   overlayMode: 'temp-ingredient-list' | 'recipe-generated' | null = null;
-
 
   constructor(
     private authService: AuthService,

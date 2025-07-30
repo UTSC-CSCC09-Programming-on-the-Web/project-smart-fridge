@@ -3,7 +3,9 @@ require("dotenv").config();
 
 const handleGoogleSuccess = (req, res) => {
   if (!req.user) {
-    return res.redirect(`${process.env.CLIENT_URL}/auth/google/failure?error=session_lost`);
+    return res.redirect(
+      `${process.env.CLIENT_URL}/auth/google/failure?error=session_lost`
+    );
   }
   console.log("Google authentication successful");
   res.redirect(`${process.env.CLIENT_URL}/auth/google/success`);

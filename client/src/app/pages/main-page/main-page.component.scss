@@ -14,7 +14,6 @@
   }
 }
 
-
 .header-container {
   display: flex;
   flex-direction: row;
@@ -37,7 +36,7 @@
   gap: 16px;
   width: 100%;
   max-width: 1800px;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 @media (max-width: 800px) {
@@ -58,7 +57,7 @@
 
 @media (max-width: 800px) {
   .info-col {
-     padding: 5px;
+    padding: 5px;
   }
 }
 
@@ -71,10 +70,9 @@
 
 @media (max-width: 800px) {
   .fridge-col {
-     padding: 5px;
+    padding: 5px;
   }
 }
-
 
 .fridge-col-container {
   display: flex;
@@ -87,7 +85,7 @@
 
 @media (max-width: 800px) {
   .fridge-col-container {
-     padding: 5px;
+    padding: 5px;
   }
 }
 .credits-link {

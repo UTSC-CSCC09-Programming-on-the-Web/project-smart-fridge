@@ -3,10 +3,7 @@
 const {
   getIngredientsForRecipe,
 } = require("../services/ingredient-service.js");
-const {
-  addLlmJob,
-  LLM_JOB_TYPES,
-} = require("../queues/llm-queue.js");
+const { addLlmJob, LLM_JOB_TYPES } = require("../queues/llm-queue.js");
 const { LlmTask, UserFridge } = require("../models");
 
 // POST /api/recipes/generate
@@ -73,13 +70,17 @@ const getRecipeResult = async (req, res) => {
     if (llmTask.status === "done") {
       return res.status(200).json(llmTask.result);
     } else if (llmTask.status === "failed") {
-      return res.status(500).json({ message: llmTask.error  || "LLM task failed" });
+      return res
+        .status(500)
+        .json({ message: llmTask.error || "LLM task failed" });
     } else {
       return res.status(202).json({ message: "Recipe generation in progress" });
     }
   } catch (error) {
     console.error("Error fetching recipe result:", error);
-    res.status(500).json({ message: error.message || "Failed to fetch recipe result" });
+    res
+      .status(500)
+      .json({ message: error.message || "Failed to fetch recipe result" });
   }
 };
 

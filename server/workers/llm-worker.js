@@ -119,7 +119,7 @@ llmRecipeWorker.on("failed", async (job, err) => {
     { status: "failed", error: err.message },
     { where: { trace_id: traceId } }
   );
-   if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
+  if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
     pubClient.publish(
       `recipeGenerated`,
       JSON.stringify({
@@ -135,7 +135,8 @@ llmRecipeWorker.on("failed", async (job, err) => {
         userId: userId,
         type: "error",
         message:
-          "LLM Task: Get ingredients from Recipe or Shopping record failed with error: " + err.message,
+          "LLM Task: Get ingredients from Recipe or Shopping record failed with error: " +
+          err.message,
       })
     );
   }

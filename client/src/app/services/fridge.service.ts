@@ -4,9 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Fridge } from '../models/fridge.model';
-import { environment } from '../../environments/environment';  
-
-
+import { environment } from '../../environments/environment';
 
 interface FridgeResponse {
   success: boolean;
@@ -17,14 +15,12 @@ interface FridgeResponse {
   providedIn: 'root',
 })
 export class FridgeService {
-
   private fridgesListSubject = new BehaviorSubject<Fridge[]>([]);
   public fridgesList$ = this.fridgesListSubject.asObservable();
   private currentFridgeSubject = new BehaviorSubject<Fridge | null>(null);
   public currentFridge$ = this.currentFridgeSubject.asObservable();
 
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
-
 
   constructor(
     private http: HttpClient,

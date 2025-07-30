@@ -165,7 +165,9 @@ export class NotificationInfoCenterComponent {
     return (
       this.userNotifiList &&
       this.userNotifiList.length > 0 &&
-      this.userNotifiList.some((notifi) => notifi.message && notifi.message !== '')
+      this.userNotifiList.some(
+        (notifi) => notifi.message && notifi.message !== '',
+      )
     );
   }
 
@@ -173,7 +175,9 @@ export class NotificationInfoCenterComponent {
     return (
       this.currFridgeNotifiList &&
       this.currFridgeNotifiList.length > 0 &&
-      this.currFridgeNotifiList.some((notifi) => notifi.message && notifi.message !== '')
+      this.currFridgeNotifiList.some(
+        (notifi) => notifi.message && notifi.message !== '',
+      )
     );
   }
 }

@@ -56,7 +56,7 @@ export class IngredientListPageComponent {
     this.showAddForm = !this.showAddForm;
     if (this.showAddForm) {
       window.scrollBy({ top: 200, behavior: 'smooth' });
-    }else{
+    } else {
       window.scrollBy({ top: -200, behavior: 'smooth' });
     }
   }
@@ -76,7 +76,11 @@ export class IngredientListPageComponent {
         this.expireDateCursor = data.nextExpireCursor;
         this.idCursor = data.nextIdCursor;
 
-        if (data.ingredients.length < 10 || !data.nextExpireCursor || !data.nextIdCursor) {
+        if (
+          data.ingredients.length < 10 ||
+          !data.nextExpireCursor ||
+          !data.nextIdCursor
+        ) {
           console.log('No more data to load');
           this.hasMoreData = false;
         }
@@ -235,8 +239,11 @@ export class IngredientListPageComponent {
   toggleEditForm(ingredient: Ingredient) {
     this.editingIngredient = ingredient;
     if (this.editingIngredient && this.editingIngredient.id === ingredient.id) {
-      this.containerRef.nativeElement.scrollBy({ top: 150, behavior: 'smooth' });
-    } 
+      this.containerRef.nativeElement.scrollBy({
+        top: 150,
+        behavior: 'smooth',
+      });
+    }
   }
 
   cancelEdit() {

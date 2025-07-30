@@ -64,7 +64,7 @@ import { ToggleContainerComponent } from './components/toggle-container/toggle-c
     ToggleContainerComponent,
     CreditPageComponent,
   ],
-  
+
   imports: [
     BrowserModule,
     AppRoutingModule,

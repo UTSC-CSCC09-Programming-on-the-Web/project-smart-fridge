@@ -31,7 +31,7 @@ app.use(
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "https://smartfridge.dev",  
+  origin: "https://smartfridge.dev",
   credentials: true,
 };
 
@@ -45,7 +45,9 @@ app.use(passport.session());
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log("app.js: [sequelize] Connection has been established successfully.");
+    console.log(
+      "app.js: [sequelize] Connection has been established successfully."
+    );
 
     app.use("/auth", authRouter);
     app.use("/api/stripe", stripeRouter);
@@ -65,7 +67,7 @@ async function startServer() {
     app.set("io", io);
     app.set("httpServer", httpServer);
 
-    httpServer.listen(PORT,"0.0.0.0", () => {
+    httpServer.listen(PORT, "0.0.0.0", () => {
       console.log(`app.js: HTTP server on ${PORT}`);
     });
   } catch (error) {

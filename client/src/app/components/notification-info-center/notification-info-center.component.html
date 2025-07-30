@@ -16,10 +16,7 @@
   <p>No currentfridge information available. Please log in.</p>
 </ng-template>
 
-<div
-  *ngIf="hasFridgeNotifications"
-  #fridgeNotification
->
+<div *ngIf="hasFridgeNotifications" #fridgeNotification>
   <h3>Fridge Notifications</h3>
   <div *ngFor="let notification of currFridgeNotifiList" #fridgeRoom>
     <app-notification-bar
@@ -39,7 +36,15 @@
   </div>
 </div>
 
-<div *ngIf="showLockNotif && fridgeLockNotif && fridgeLockNotif.message && fridgeLockNotif.fridgeId === currFridgeId" #fridgeLockRoom>
+<div
+  *ngIf="
+    showLockNotif &&
+    fridgeLockNotif &&
+    fridgeLockNotif.message &&
+    fridgeLockNotif.fridgeId === currFridgeId
+  "
+  #fridgeLockRoom
+>
   <h3>Fridge Lock Notifications</h3>
   <app-notification-bar
     *ngIf="fridgeLockNotif && fridgeLockNotif.message"

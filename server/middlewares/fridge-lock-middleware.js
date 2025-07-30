@@ -22,14 +22,12 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
       io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
         source: "lock",
-        type: 'error',
+        type: "error",
         message: `Fridge: ${fridge.name} is currently locked, please try again later`,
       });
-      return res
-        .status(423)
-        .json({
-          error: `Fridge: ${fridge.name} is currently locked, please try again later`,
-        });
+      return res.status(423).json({
+        error: `Fridge: ${fridge.name} is currently locked, please try again later`,
+      });
     }
     req.fridgeLockIdentifier = lockIdentifier;
     io.to(`fridge:${fridgeId}`).emit("fridgeLockEvent", {
@@ -47,7 +45,7 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
       io.to(`user:${req.user.id}`).emit("fridgeLockError", {
         fridgeId,
         source: "lock",
-        type: 'error',
+        type: "error",
         message: `Failed to update the fridge ${fridge.name} with lock, please wait and try again later.`,
       });
       const mutex = new Mutex(redisBullmq, `fridge:lock:${fridgeId}`, {
