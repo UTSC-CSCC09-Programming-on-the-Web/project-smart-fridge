@@ -5,6 +5,7 @@ const { where } = require("sequelize");
 const Fridge = require("../models/index.js").Fridge;
 const User = require("../models/index.js").User;
 const UserFridge = require("../models/index.js").UserFridge;
+const { notifyFridgeJoinEvent} = require("../utils/notify-event.js");
 
 const createFridge = async (req, res) => {
   const user = req.user;
@@ -36,11 +37,11 @@ const createFridge = async (req, res) => {
     // temporarily set is_first_login to false
     user.is_first_login = false; // Set first login to false
     await user.save(); // Save the user to update the first login status
-    res
+    return res
       .status(201)
       .json({ success: true, message: "Fridge created successfully" });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    return res.status(500).json({ success: false, error: err.message });
   }
 };
 
@@ -76,11 +77,14 @@ const joinFridge = async (req, res) => {
     // temporarily set is_first_login to false
     user.is_first_login = false; // Set first login to false
     await user.save(); // Save the user to update the first login status
-    res
+
+    notifyFridgeJoinEvent(userId, user?.name, fridge_id);
+    
+    return res
       .status(200)
       .json({ success: true, message: "Joined fridge successfully" });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    return res.status(500).json({ success: false, error: err.message });
   }
 };
 
