@@ -1,4 +1,4 @@
-// server/redis/redis-bullmq.js
+"use strict";
 const Redis = require("ioredis");
 require("dotenv").config();
 

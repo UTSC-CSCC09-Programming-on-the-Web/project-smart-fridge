@@ -1,3 +1,4 @@
+"use strict";
 const redisBullmq = require("../redis/redis-bullmq");
 const Mutex = require("redis-semaphore").Mutex;
 

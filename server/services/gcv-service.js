@@ -1,3 +1,4 @@
+"use strict";
 require("dotenv").config();
 const vision = require("@google-cloud/vision");
 const { getGCSUri } = require("../utils/image-url.js");

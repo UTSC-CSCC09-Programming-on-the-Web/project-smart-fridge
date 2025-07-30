@@ -1,4 +1,3 @@
-// File: server/controllers/ingredients-controller.js
 "use strict";
 const { Ingredient } = require("../models/index.js");
 const validateIngredient = require("../utils/validate-ingredient.js");

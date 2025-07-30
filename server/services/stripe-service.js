@@ -1,4 +1,3 @@
-// services/stripe-service.js
 "use strict";
 
 const dotenv = require("dotenv");

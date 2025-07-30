@@ -1,3 +1,4 @@
+"use strict";
 function parseIndexedFormData(req) {
   const resultMap = {};
 

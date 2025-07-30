@@ -1,3 +1,4 @@
+"use strict";
 const session = require("express-session");
 const redisBullmq = require("../redis/redis-bullmq.js");
 const RedisStore = require("connect-redis")(session);

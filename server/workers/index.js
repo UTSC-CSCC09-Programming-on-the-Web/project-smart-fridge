@@ -1,3 +1,4 @@
+"use strict";
 require("dotenv").config();
 const { sequelize } = require("../models");
 const { pubClient } = require("../redis/redis-socket");

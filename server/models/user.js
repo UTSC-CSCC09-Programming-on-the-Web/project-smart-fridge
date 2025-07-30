@@ -1,4 +1,4 @@
-// server/models/user.js
+"use strict";
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {

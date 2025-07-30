@@ -1,4 +1,4 @@
-
+"use strict";
 const { UserFridge } = require("../models");
 
 const userFridgeAccessChecker = async (userId, fridgeId) => {

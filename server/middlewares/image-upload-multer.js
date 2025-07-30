@@ -1,4 +1,3 @@
-// File: server/middlewares/image-upload-multer.js
 "use strict";
 const multer = require("multer");
 const path = require("path");

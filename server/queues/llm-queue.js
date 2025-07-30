@@ -1,3 +1,4 @@
+"use strict";
 const { Queue } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq");
 const LlmTask = require("../models/index.js").LlmTask;

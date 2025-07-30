@@ -1,3 +1,4 @@
+"use strict";
 const { Worker } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq");
 const { LlmTask } = require("../models");
