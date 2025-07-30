@@ -82,10 +82,10 @@ const createIngredient = async (req, res) => {
   if (errors.length > 0) {
     return res.status(400).json({ errors });
   }
-   const dateObj = new Date(req.body.expire_date);
-   const isoDate = dateObj.toISOString().slice(0, 10); 
+  const dateObj = new Date(req.body.expire_date);
+  const isoDate = dateObj.toISOString().slice(0, 10);
   req.body.expire_date = isoDate;
-  
+
   const fridgeId = req.fridgeId || req.params.fridge_id;
   if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
@@ -176,7 +176,7 @@ const createMultiIngredients = async (req, res) => {
 
     if (allErrors.length > 0) {
       return res.status(400).json({
-        message: 'Batch Add ingredients validation failed:',
+        message: "Batch Add ingredients validation failed:",
         errors: allErrors,
       });
     }

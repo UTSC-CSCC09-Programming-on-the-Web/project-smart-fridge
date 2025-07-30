@@ -35,10 +35,16 @@ const notifyFridgeUpdateEvent = (
 
 const notifyFridgeJoinEvent = (userId, userName, fridgeId) => {
   const io = getIO();
-  io.to(`fridge:${fridgeId}`).emit("userJoinedFridge", { userId, userName, fridgeId, type: "info", source: "fridge" });
+  io.to(`fridge:${fridgeId}`).emit("userJoinedFridge", {
+    userId,
+    userName,
+    fridgeId,
+    type: "info",
+    source: "fridge",
+  });
 };
 
 module.exports = {
   notifyFridgeUpdateEvent,
-  notifyFridgeJoinEvent
+  notifyFridgeJoinEvent,
 };

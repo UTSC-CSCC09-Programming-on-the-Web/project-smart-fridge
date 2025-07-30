@@ -40,8 +40,7 @@ export class RecipePageComponent {
         this.finishGenerating = false;
         this.notificationService.pushUserNotification({
           type: 'error',
-          message:
-            'Error generating recipe: ' +  error?.error?.error,
+          message: 'Error generating recipe: ' + error?.error?.error,
           source: 'user',
         });
         this.recipeCardDisplay = false;

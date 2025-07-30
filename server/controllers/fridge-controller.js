@@ -2,7 +2,7 @@
 const Fridge = require("../models/index.js").Fridge;
 const User = require("../models/index.js").User;
 const UserFridge = require("../models/index.js").UserFridge;
-const { notifyFridgeJoinEvent} = require("../utils/notify-event.js");
+const { notifyFridgeJoinEvent } = require("../utils/notify-event.js");
 
 const createFridge = async (req, res) => {
   const user = req.user;
@@ -67,7 +67,7 @@ const joinFridge = async (req, res) => {
     await user.save(); // Save the user to update the first login status
 
     notifyFridgeJoinEvent(userId, user?.name, fridge_id);
-    
+
     return res
       .status(200)
       .json({ success: true, message: "Joined fridge successfully" });
