@@ -81,7 +81,10 @@ export class IngredientListPageComponent {
         this.expireDateCursor = data.nextExpireCursor;
         this.idCursor = data.nextIdCursor;
 
-        this.hasMoreData = !!data.ingredients.length;
+        if (data.ingredients.length < 10 || !data.nextExpireCursor || !data.nextIdCursor) {
+          console.log('No more data to load');
+          this.hasMoreData = false;
+        }
         this.loading = false;
         console.log('Initial cursors set:', {
           expireDateCursor: this.expireDateCursor,
