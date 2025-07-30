@@ -2,7 +2,7 @@
 
 const { Worker } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq.js");
-const { CvTask, CvTaskImage } = require("../models/index.js");
+const { CvTask } = require("../models/index.js");
 const { pubClient } = require("../redis/redis-socket.js");
 const { CV_JOB_TYPES } = require("../queues/cv-queue.js");
 const { onCvOCRJobCompleted } = require("../services/cv-llm-orches-service.js");
@@ -16,7 +16,6 @@ const cvOCRWorker = new Worker(
     const cvTask = await CvTask.findOne({
       where: { trace_id: traceId },
     });
-    console.log(`CV Task found: ${cvTask ? cvTask.id : "not found"}`);
     if (!cvTask) {
       throw new Error(
         `CV Task not found for job ${job.id} with traceId ${traceId}`
@@ -43,7 +42,6 @@ const cvOCRWorker = new Worker(
 );
 
 cvOCRWorker.on("completed", async (job, returnvalue) => {
-  console.log(`cv OCR Job ${job.id} completed successfully`);
   const traceId = job.data.traceId;
   const userId = job.data?.user_id;
   if (!userId) {
@@ -60,7 +58,6 @@ cvOCRWorker.on("completed", async (job, returnvalue) => {
   );
   await new Promise((resolve) => setTimeout(resolve, 500));
   const { llmTaskRecord } = await onCvOCRJobCompleted(traceId);
-  console.log(`LLM Job created successfully for traceId ${traceId}`);
 });
 
 cvOCRWorker.on("failed", async (job, err) => {
@@ -71,7 +68,7 @@ cvOCRWorker.on("failed", async (job, err) => {
     console.error("No userId found in job data:", job.data);
     return;
   }
-   await CvTask.update(
+  await CvTask.update(
     { status: "failed", error: err.message },
     { where: { trace_id: traceId } }
   );

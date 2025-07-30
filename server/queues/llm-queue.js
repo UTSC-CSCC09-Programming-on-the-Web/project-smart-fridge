@@ -1,3 +1,4 @@
+"use strict";
 const { Queue } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq");
 const LlmTask = require("../models/index.js").LlmTask;
@@ -44,7 +45,6 @@ const addLlmJob = async (
   llmTaskRecord.task_id = job.id;
   await llmTaskRecord.save();
 
-  console.log(`Added job ${job.id} of type ${jobType} to the queue`);
   return { job, llmTaskRecord };
 };
 

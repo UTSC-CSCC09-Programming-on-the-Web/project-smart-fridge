@@ -4,9 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Fridge } from '../models/fridge.model';
-import { environment } from '../../environments/environment';  
-
-
+import { environment } from '../../environments/environment';
 
 interface FridgeResponse {
   success: boolean;
@@ -17,14 +15,12 @@ interface FridgeResponse {
   providedIn: 'root',
 })
 export class FridgeService {
-
   private fridgesListSubject = new BehaviorSubject<Fridge[]>([]);
   public fridgesList$ = this.fridgesListSubject.asObservable();
   private currentFridgeSubject = new BehaviorSubject<Fridge | null>(null);
   public currentFridge$ = this.currentFridgeSubject.asObservable();
 
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
-
 
   constructor(
     private http: HttpClient,
@@ -41,7 +37,7 @@ export class FridgeService {
       .pipe(
         tap((res) => {
           if (res.success) {
-            console.log('Fridge created:', res.message);
+            console.log('Fridge created successfully:', res.message);
           }
         }),
         catchError((err) => {
@@ -88,7 +84,6 @@ export class FridgeService {
           if (fridges.length > 0 && !this.currentFridgeSubject.value) {
             this.currentFridgeSubject.next(fridges[0]);
           }
-          console.log('User fridges retrieved:', fridges);
         }),
         catchError((err) => {
           console.error('Error retrieving user fridges:', err);
@@ -107,13 +102,7 @@ export class FridgeService {
       (!this.currentFridgeSubject.value ||
         fridge.id !== this.currentFridgeSubject.value.id)
     ) {
-      console.log('Setting next current fridge:', fridge);
       this.currentFridgeSubject.next(fridge);
-    }
-    if (fridge) {
-      console.log('Current fridge set:', fridge);
-    } else {
-      console.log('Current fridge cleared');
     }
   }
 }

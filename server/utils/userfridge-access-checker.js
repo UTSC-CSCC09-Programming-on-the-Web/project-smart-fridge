@@ -1,6 +1,5 @@
-const { WatchError } = require("redis");
+"use strict";
 const { UserFridge } = require("../models");
-const { where } = require("sequelize");
 
 const userFridgeAccessChecker = async (userId, fridgeId) => {
   if (!userId || !fridgeId) {

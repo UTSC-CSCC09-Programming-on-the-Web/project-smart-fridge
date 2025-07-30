@@ -1,4 +1,4 @@
-// File: server/datasource.js
+"use strict";
 const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
 dotenv.config();

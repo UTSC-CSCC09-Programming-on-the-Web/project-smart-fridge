@@ -3,7 +3,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const session = require("express-session");
 const passport = require("passport");
 require("./config/passport.js");
 const ingredientsRouter = require("./routers/ingredients-router.js");
@@ -20,7 +19,7 @@ const multiIngredientsRouter = require("./routers/add-multi-ingredients-router.j
 
 const { setupSocket } = require("./sockets/socket.js");
 const { sessionMiddleware } = require("./middlewares/session-middleware.js");
-//
+
 const PORT = 3000;
 const app = express();
 app.use(
@@ -32,7 +31,7 @@ app.use(
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin: "https://smartfridge.dev",  
+  origin: "https://smartfridge.dev",
   credentials: true,
 };
 
@@ -46,19 +45,15 @@ app.use(passport.session());
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log("app.js: [sequelize] Connection has been established successfully.");
+    console.log(
+      "app.js: [sequelize] Connection has been established successfully."
+    );
 
     app.use("/auth", authRouter);
     app.use("/api/stripe", stripeRouter);
 
-    // temporary for get image upload working, uploads folder are public as static resources
-    // in the future, we will move the images under each fridge's own uploads folder
-    // and make the uploads folder private, so that only the fridge owner can access it
-    app.use("/uploads", express.static("uploads"));
-
     app.use("/api/fridges", fridgesRouter);
 
-    // add routers here
     app.use("/api/fridges", ingredientsRouter);
     app.use("/api/ingredients", ingredientsRouter);
     app.use("/api/recipes", recipeRouter);
@@ -72,8 +67,8 @@ async function startServer() {
     app.set("io", io);
     app.set("httpServer", httpServer);
 
-    httpServer.listen(PORT,"0.0.0.0", () => {
-      console.log(`app.js: HTTP server on http://localhost:${PORT}`);
+    httpServer.listen(PORT, "0.0.0.0", () => {
+      console.log(`app.js: HTTP server on ${PORT}`);
     });
   } catch (error) {
     console.error("app.js: Unable to connect to the database:", error);

@@ -1,30 +1,53 @@
-
 <div *ngIf="currFridgeInfo as fridge; else noFridge">
-    <h2>Current Fridge Information</h2>
-    <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
-    <p><strong>description:</strong> {{ fridge.description }}</p>
-    <p>Fridge Id: {{ fridge.id }}</p>
-    <p>Fridge Users:</p>
-    <ul>
+  <h3>Current Fridge Information</h3>
+  <p><strong>Fridge Name:</strong> {{ fridge.name }}</p>
+  <div class="description-wrapper" *ngIf="fridge.description">
+    <p><strong>Description:</strong></p>
+    <p style="margin: 0 20px">{{ fridge.description }}</p>
+  </div>
+  <p><strong>Fridge Id:</strong> {{ fridge.id }}</p>
+  <p><strong>Fridge Users:</strong></p>
+  <ul>
     <li *ngFor="let user of fridge.users">{{ user.name }}</li>
-    </ul>
+  </ul>
 </div>
 
-  <ng-template #noFridge>
-    <p>No currentfridge information available. Please log in.</p>
-  </ng-template>
+<ng-template #noFridge>
+  <p>No currentfridge information available. Please log in.</p>
+</ng-template>
 
-<div *ngFor="let notification of currFridgeNotifiList" #fridgeRoom>
-  <p>Fridge Notification:</p>
-  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+<div *ngIf="hasFridgeNotifications" #fridgeNotification>
+  <h3>Fridge Notifications</h3>
+  <div *ngFor="let notification of currFridgeNotifiList" #fridgeRoom>
+    <app-notification-bar
+      *ngIf="notification.message"
+      [notification]="notification"
+    ></app-notification-bar>
+  </div>
 </div>
 
-<div *ngFor="let notification of userNotifiList" #userRoom>
-  <p>User Notification:</p>
-  <app-notification-bar *ngIf="notification.message" [notification]="notification"></app-notification-bar>
+<div *ngIf="hasUserNotifications" #userNotification>
+  <h3>User Notifications</h3>
+  <div *ngFor="let notification of userNotifiList" #userRoom>
+    <app-notification-bar
+      *ngIf="notification.message"
+      [notification]="notification"
+    ></app-notification-bar>
+  </div>
 </div>
 
-<div *ngIf="showLockNotif" #fridgeLockRoom>
-  <p>Fridge Lock Notification:</p>
-  <app-notification-bar *ngIf="fridgeLockNotif && fridgeLockNotif.message" [notification]="fridgeLockNotif"></app-notification-bar>
+<div
+  *ngIf="
+    showLockNotif &&
+    fridgeLockNotif &&
+    fridgeLockNotif.message &&
+    fridgeLockNotif.fridgeId === currFridgeId
+  "
+  #fridgeLockRoom
+>
+  <h3>Fridge Lock Notifications</h3>
+  <app-notification-bar
+    *ngIf="fridgeLockNotif && fridgeLockNotif.message"
+    [notification]="fridgeLockNotif"
+  ></app-notification-bar>
 </div>

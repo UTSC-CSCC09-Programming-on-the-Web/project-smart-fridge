@@ -1,4 +1,3 @@
-// File: server/models/ingredient.js
 "use strict";
 const { DataTypes, Model } = require("sequelize");
 

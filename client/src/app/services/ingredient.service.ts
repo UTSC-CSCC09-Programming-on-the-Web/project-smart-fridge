@@ -45,7 +45,6 @@ export class IngredientService {
     if (expireDateCursor)
       params = params.set('expireDateCursor', expireDateCursor);
     if (idCursor) params = params.set('idCursor', idCursor.toString());
-    console.log('Fetching ingredients with params:', params.toString());
     return this.http.get<IngredientPaginationResponse>(
       `${this.endpoint}/api/fridges/${fridge_id}/ingredients`,
       { params, withCredentials: true },
@@ -109,6 +108,4 @@ export class IngredientService {
       { withCredentials: true },
     );
   }
-
-  // error handling will be implemented later
 }

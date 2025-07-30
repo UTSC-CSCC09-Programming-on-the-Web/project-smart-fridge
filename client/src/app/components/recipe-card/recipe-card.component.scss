@@ -1,16 +1,24 @@
 // simpe generate class=recipe-info
 
 .recipe-info {
-  background-color: #f5dede;
+  background-color: #fffcea;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .recipe-message {
-  background-color: #f3ebef;
   padding: 10px;
   border-radius: 5px;
-  color: #e2377b;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-message.success {
+  background-color: #e6f6d1e5;
+  color: #0f672b;
+}
+
+.recipe-message.loading {
+  background-color: #fbeed1e5;
+  color: #67450f;
 }

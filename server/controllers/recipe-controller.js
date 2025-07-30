@@ -3,16 +3,11 @@
 const {
   getIngredientsForRecipe,
 } = require("../services/ingredient-service.js");
-const {
-  llmQueue,
-  addLlmJob,
-  LLM_JOB_TYPES,
-} = require("../queues/llm-queue.js");
+const { addLlmJob, LLM_JOB_TYPES } = require("../queues/llm-queue.js");
 const { LlmTask, UserFridge } = require("../models");
 
 // POST /api/recipes/generate
 const postGenerateRecipe = async (req, res) => {
-  console.log("Generating recipe in controller...");
   try {
     const fridgeId = req.fridgeId || req.body.fridgeId; // for single fridge right now
     const ingredients = await getIngredientsForRecipe(fridgeId);
@@ -64,7 +59,6 @@ const getRecipeResult = async (req, res) => {
     const fridges = await UserFridge.findAll({
       where: { user_id: userId, fridge_id: llmTask.fridge_id },
     });
-    //  console.log(`Fridges for user ${userId}:`, fridges);
     if (llmTask.fridge_id && fridges.length == 0) {
       console.error(
         `Unauthorized access attempt by user ${userId} for fridge with id ${llmTask.fridge_id}`
@@ -76,13 +70,17 @@ const getRecipeResult = async (req, res) => {
     if (llmTask.status === "done") {
       return res.status(200).json(llmTask.result);
     } else if (llmTask.status === "failed") {
-      return res.status(500).json({ message: llmTask.error  || "LLM task failed" });
+      return res
+        .status(500)
+        .json({ message: llmTask.error || "LLM task failed" });
     } else {
       return res.status(202).json({ message: "Recipe generation in progress" });
     }
   } catch (error) {
     console.error("Error fetching recipe result:", error);
-    res.status(500).json({ message: error.message || "Failed to fetch recipe result" });
+    res
+      .status(500)
+      .json({ message: error.message || "Failed to fetch recipe result" });
   }
 };
 

@@ -1,4 +1,3 @@
-// File: server/middlewares/image-upload-multer.js
 "use strict";
 const multer = require("multer");
 const path = require("path");
@@ -10,8 +9,6 @@ function createStorage(folder) {
   return multer.diskStorage({
     destination: function (req, file, cb) {
       const targetPath = path.join(__dirname, `../uploads/${folder}`);
-      // if the target path does not exist, create it
-      // for future, we move the images under each fridge's own uploads folder
       if (!fs.existsSync(targetPath)) {
         fs.mkdirSync(targetPath, { recursive: true });
       }
@@ -43,13 +40,9 @@ function getDiskImageUploadMiddleware({
       }
     },
   });
-  console.log(
-    `Image upload middleware configured for folder: ${folder}, multiple: ${multiple}, maxCount: ${maxCount}, maxSizeMB: ${maxSizeMB}`
-  );
   if (multiple) {
     return upload.array("images", maxCount);
   } else {
-    console.log("Using single image upload middleware");
     return upload.single("image");
   }
 }
@@ -90,9 +83,7 @@ function getGCSImageUploadMiddleware({
         console.error("Multer error:", err);
         return res.status(400).json({ error: err.message });
       }
-      console.log("[gcs multer] Uploaded file(s):", req.file || req.files);
       req.uploadFolderName = folderName;
-      console.log("[gcs multer] upload foldername:", req.uploadFolderName);
       next();
     });
   };

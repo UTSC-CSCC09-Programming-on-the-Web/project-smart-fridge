@@ -4,6 +4,7 @@ import { SocketService } from '../../../services/socket.service';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { Recipe } from '../../../models/recipe.model';
 import { Notification } from '../../../models/notification.model';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-recipe-page',
@@ -16,27 +17,34 @@ export class RecipePageComponent {
   notification: Notification = {
     type: 'info',
     message: '',
-    source: 'task'
+    source: 'task',
   };
+  finishGenerating: boolean = false;
   constructor(
     private recipeService: RecipeService,
     private socketService: SocketService,
+    private notificationService: NotificationService,
   ) {}
 
   recipeCardDisplay: boolean = false;
 
   onGenerateRecipe(): void {
     this.recipeCardDisplay = true;
-    console.log('Recipe generation triggered');
-    console.log('Generated recipe:', this.recipe);
+    this.finishGenerating = false;
     this.recipeService.postGenerateRecipe().subscribe({
       next: (response) => {
-        console.log('Recipe generated successfully:', response);
         this.notification.message =
           response.message || 'Recipe generation in progress...Waiting...';
       },
       error: (error) => {
-        console.error('Error generating recipe:', error);
+        this.finishGenerating = false;
+        this.notificationService.pushUserNotification({
+          type: 'error',
+          message:
+            'Error generating recipe: ' + error + '. Please try again later.',
+          source: 'user',
+        });
+        this.recipeCardDisplay = false;
       },
     });
   }
@@ -46,13 +54,11 @@ export class RecipePageComponent {
       .fromSocketEvent<string>('recipeGenerated')
       .pipe(
         switchMap((traceId: string) => {
-          console.log('Subscribing to recipe result with traceId:', traceId);
           return this.recipeService.getRecipeResult(traceId);
         }),
       )
       .subscribe({
         next: (raw: string) => {
-          console.log('Recipe received:', raw);
           let clean = raw.trim();
           if (clean.startsWith('```json')) {
             clean = clean
@@ -63,11 +69,28 @@ export class RecipePageComponent {
           this.recipe = JSON.parse(clean) as Recipe;
           this.notification.message = 'Recipe generated successfully!';
           this.notification.type = 'success';
+          this.finishGenerating = true;
+          this.notificationService.pushUserNotification({
+            type: 'success',
+            message:
+              'Your recipe generated successfully! Please check the details.',
+            source: 'user',
+          });
         },
         error: (err) => {
-          if (err.status === 500){
-            this.notification.message = 'Error generating recipe failed: ' + err.message + '. Please try again later.';
+          if (err.status === 500) {
+            this.notification.message =
+              'Error generating recipe failed: ' +
+              err.message +
+              '. Please try again later.';
             this.notification.type = 'error';
+            this.finishGenerating = false;
+            this.notificationService.pushUserNotification({
+              type: 'error',
+              message: this.notification.message,
+              source: 'user',
+            });
+            this.recipeCardDisplay = false;
           }
           console.error('Error:', err);
         },

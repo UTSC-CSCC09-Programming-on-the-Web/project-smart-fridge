@@ -1,5 +1,5 @@
 "use strict";
-const { CvTask, CvTaskImage } = require("../../models/index.js");
+const { CvTaskImage } = require("../../models/index.js");
 const { pubClient } = require("../../redis/redis-socket.js");
 const { extractTextFromImage } = require("../../services/gcv-service.js");
 
@@ -16,22 +16,14 @@ async function handleMultiReceiptsOCR(images, cvTask) {
     }
     cvTaskImage.status = "processing";
     await cvTaskImage.save();
-    console.log(
-      `Processing image ${image.original_filename} for CV Task ${cvTask.id} with image url ${image.image_url}`
-    );
 
     const ocrResult = await extractTextFromImage(image.image_url);
-
-    console.log(`OCR result for image ${image.original_filename}:`, ocrResult);
 
     cvTaskImage.status = "done";
     cvTaskImage.result = {
       text: ocrResult,
     };
     await cvTaskImage.save();
-    console.log(
-      `cvTaskImage ${cvTaskImage.original_filename} result is: ${cvTaskImage.result.text}`
-    );
 
     // update the cvTask done_images_count
     const images_done = (cvTask.done_images_count += 1);
@@ -48,6 +40,8 @@ async function handleMultiReceiptsOCR(images, cvTask) {
           images_done +
           "/" +
           cvTask.images_count,
+        taskCurrentCount: images_done, // +1 for cv start
+        taskTotalCount: cvTask.images_count + 5, // cv images + finish cv + start llm + working llm(2) + finish llm
       })
     );
     console.log(`Image ${image.original_filename} processed successfully`);

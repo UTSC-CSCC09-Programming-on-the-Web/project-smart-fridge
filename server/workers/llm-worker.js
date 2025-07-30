@@ -1,3 +1,4 @@
+"use strict";
 const { Worker } = require("bullmq");
 const redisBullmq = require("../redis/redis-bullmq");
 const { LlmTask } = require("../models");
@@ -22,7 +23,6 @@ const llmRecipeWorker = new Worker(
     let result;
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
       const { ingredients } = job.data;
-      console.log("Generating recipe with data:", job.data);
       result = await handleRecipeGeneration(ingredients);
     }
 
@@ -68,7 +68,6 @@ const llmRecipeWorker = new Worker(
 );
 
 llmRecipeWorker.on("completed", async (job, returnvalue) => {
-  console.log(`Job ${job.id} completed successfully`);
   const traceId = job.data.traceId;
   const userId = job.data?.user_id;
   if (!userId) {
@@ -76,22 +75,22 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
     return;
   }
   if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
-    console.log(`Publishing recipeGenerated to user:${userId}`);
     pubClient.publish(
       `recipeGenerated`,
       JSON.stringify({
         traceId: traceId,
         userId: userId,
+        finished: true,
       })
     );
   }
   if (job.name === LLM_JOB_TYPES.OCRextract) {
-    console.log(`Publishing llmOCRExtractTaskCreated to user:${userId}`);
     pubClient.publish(
       "cvTaskProgress",
       JSON.stringify({
         userId: userId,
         type: "success",
+        finished: true,
         message:
           "Get ingredients from Recipe or Shopping record task completed successfully! ",
       })
@@ -120,7 +119,7 @@ llmRecipeWorker.on("failed", async (job, err) => {
     { status: "failed", error: err.message },
     { where: { trace_id: traceId } }
   );
-   if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
+  if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
     pubClient.publish(
       `recipeGenerated`,
       JSON.stringify({
@@ -136,7 +135,8 @@ llmRecipeWorker.on("failed", async (job, err) => {
         userId: userId,
         type: "error",
         message:
-          "LLM Task: Get ingredients from Recipe or Shopping record failed with error: " + err.message,
+          "LLM Task: Get ingredients from Recipe or Shopping record failed with error: " +
+          err.message,
       })
     );
   }

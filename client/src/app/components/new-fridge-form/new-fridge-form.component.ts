@@ -39,6 +39,12 @@ export class NewFridgeFormComponent {
     this.message = '';
   }
 
+  clearForm() {
+    this.createForm.reset();
+    this.joinForm.reset();
+    this.loading = false;
+  }
+
   onSubmit() {
     this.loading = true;
     this.message = '';
@@ -51,6 +57,7 @@ export class NewFridgeFormComponent {
           this.message = res.message || 'Fridge created successfully!';
           if (res?.success) {
             this.submitForm.emit();
+            this.clearForm();
           }
         },
         (err) => {
@@ -68,6 +75,7 @@ export class NewFridgeFormComponent {
         this.message = res.message || 'Joined fridge successfully!';
         if (res?.success) {
           this.submitForm.emit();
+          this.clearForm();
         }
       });
     }

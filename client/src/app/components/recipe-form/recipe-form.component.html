@@ -1,2 +1,8 @@
-<h2>Generate Your Recipe</h2>
-<button class="btn" (click)="generateRecipe.emit()">Generate</button>
+<button
+  mat-flat-button
+  style="background-color: #2c8949; color: white"
+  (click)="generateRecipe.emit()"
+>
+  <mat-icon>auto_stories</mat-icon>
+  Generate
+</button>

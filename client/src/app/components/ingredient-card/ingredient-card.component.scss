@@ -2,18 +2,14 @@
 
 .ingredient-card {
   display: flex;
+  width: 95%;
+  margin: 0 auto;
   flex-direction: column;
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 16px;
+  margin-top: 16px;
 }
 
 .multi-add {
-  background-color: #fffeef;
   margin-top: 3px;
-  border: 1px dashed #ffcc00;
   flex-direction: row;
   margin-left: 5px;
   margin-right: 5px;
@@ -40,14 +36,24 @@
 
 .ingredient-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-top: 10px;
+  margin-left: 15px;
 }
 
-.btn {
-  border: solid 1px #000000;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px 5px;
+.expired {
+  color: rgb(209, 3, 3);
+  font-weight: bold;
+}
+
+.fresh {
+  color: rgb(0, 107, 0);
+}
+
+.expire-information {
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 500px;
+  margin: 0 20px;
 }

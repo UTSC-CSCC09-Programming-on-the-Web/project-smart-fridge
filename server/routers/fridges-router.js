@@ -1,7 +1,6 @@
 "use strict";
 
 const express = require("express");
-const { Model } = require("sequelize");
 const {
   createFridge,
   joinFridge,

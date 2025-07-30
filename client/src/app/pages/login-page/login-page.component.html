@@ -1,5 +1,10 @@
-<header>
-  <h1>Login</h1>
-</header>
+<h1 style="margin-left: 50px">Login / Sign up</h1>
 
-<button class="btn" (click)="goToGoogleLogin()">Login with Google OAuth</button>
+<div class="login-container">
+  <button mat-flat-button class="login-button" (click)="goToGoogleLogin()">
+    Login with Google OAuth
+  </button>
+  <p class="login-message">
+    If you don't have an account, you can create one by logging in with Google.
+  </p>
+</div>

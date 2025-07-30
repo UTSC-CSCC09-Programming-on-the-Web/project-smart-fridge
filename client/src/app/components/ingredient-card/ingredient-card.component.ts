@@ -53,7 +53,6 @@ export class IngredientCardComponent {
     } else {
       this.editRequest.emit(this.ingredient);
     }
-    console.log('ingredient to edit:', this.ingredient);
   }
 
   constructor(private dialog: MatDialog) {}
@@ -76,7 +75,6 @@ export class IngredientCardComponent {
         } else {
           this.deleteIngredient.emit(this.ingredient);
         }
-        console.log('Confirmed deletion of ingredient:', this.ingredient);
       }
     });
   }

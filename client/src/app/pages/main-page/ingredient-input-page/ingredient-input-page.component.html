@@ -2,47 +2,7 @@
   <app-multi-image-upload
     (multiImagesUploaded)="handleMultiImagesUploaded($event)"
   ></app-multi-image-upload>
-  <app-notification-bar
+  <app-task-loading-notification
     [notification]="notification"
-  ></app-notification-bar>
-
-  <div class="temp-ingredients-list">
-    <div *ngFor="let partialIngredient of formalIngredients; let i = index">
-      <app-ingredient-card
-        [partialIngredient]="partialIngredient"
-        [mode]="'multi-add'"
-        (editTempIngredient)="toggleEditForm(partialIngredient, i)"
-        (deleteTempIngredient)="deleteTempIngredient($event)"
-        (addIngredientImage)="addTempIngredientImage(i)"
-      ></app-ingredient-card>
-      <app-ingredient-form
-        *ngIf="
-          editingTempIngredient &&
-          editingTempIngredientsIndex !== null &&
-          editingTempIngredientsIndex === i
-        "
-        [mode]="'edit'"
-        [ingredientToEdit]="editingTempIngredient"
-        (submitIngredient)="editTempIngredient($event)"
-        (cancelEdit)="cancelEdit()"
-      ></app-ingredient-form>
-      <app-ingredient-form
-        *ngIf="
-          addingTempIngredientImage &&
-          addingTempIngredientsIndex !== null &&
-          addingTempIngredientsIndex === i
-        "
-        [mode]="'image'"
-        (submitImage)="submitTempIngredientImageFile($event, i)"
-        (cancelEdit)="cancelAddTempIngredientImage()"
-      ></app-ingredient-form>
-    </div>
-    <button
-      *ngIf="formalIngredients.length > 0"
-      class="add-all-button"
-      (click)="addAllIngredients()"
-    >
-      Add All Ingredients
-    </button>
-  </div>
+  ></app-task-loading-notification>
 </div>

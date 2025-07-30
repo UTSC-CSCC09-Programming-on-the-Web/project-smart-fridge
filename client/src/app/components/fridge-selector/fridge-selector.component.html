@@ -1,9 +1,17 @@
-<ul class="fridge-list">
-  <li
+<mat-action-list class="fridge-list">
+  <h2 mat-subheader style="color: #333">Select a Fridge</h2>
+  <button
+    mat-list-item
     *ngFor="let fridge of fridges"
     [class.selected]="fridge.id === currentFridge?.id"
     (click)="onFridgeSelect(fridge)"
+    style="border-bottom: solid 0.5px #216837d1"
   >
-    {{ fridge.name }}
-  </li>
-</ul>
+    <div matListItemMeta>
+      <mat-icon>{{
+        fridge.id === currentFridge?.id ? "check" : "kitchen"
+      }}</mat-icon>
+    </div>
+    <div mat-line>{{ fridge.name }}</div>
+  </button>
+</mat-action-list>

@@ -1,19 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { HttpParams } from '@angular/common/http';
-import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
 import { environment } from '../../environments/environment';
-
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  //endpoint = 'http://localhost:3000';
   endpoint = environment.apiEndpoint || 'http://localhost:3000';
 
   private userSubject = new BehaviorSubject<User | null>(null);
@@ -35,7 +31,6 @@ export class AuthService {
         tap((res) => {
           if (res.success) {
             this.userSubject.next(res.user);
-            console.log('Current user retrieved:', res.user);
           }
         }),
         catchError((err) => {

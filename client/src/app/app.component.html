@@ -1,12 +1,15 @@
-<header class="app-header">
-  <img src="assets/smart-fridge-icon.png" alt="Smart Fridge" class="logo" />
-  <div class="slogan">
-    <p>Smart Fridge: Save your ingredients from spoiling in the fridge!</p>
-  </div>
-</header>
-
 <div class="app-container">
-  <div class="app-content">
-    <router-outlet></router-outlet>
+  <div class="app-header">
+    <div class="right-container">
+      <div class="slogan">
+        <p>Save your ingredients from spoiling in the fridge!</p>
+      </div>
+      <img
+        src="assets/smart-fridge-icon.webp"
+        alt="Smart Fridge"
+        class="logo"
+      />
+    </div>
   </div>
+  <router-outlet></router-outlet>
 </div>

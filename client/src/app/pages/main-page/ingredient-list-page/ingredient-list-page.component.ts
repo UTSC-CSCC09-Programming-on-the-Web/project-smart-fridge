@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
-import { Ingredient } from '../../../models/ingredient.model';
-import { IngredientService } from '../../../services/ingredient.service';
-import { FridgeService } from '../../../services/fridge.service';
-import { Observable } from 'rxjs';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Fridge } from '../../../models/fridge.model';
+import { Ingredient } from '../../../models/ingredient.model';
+import { FridgeService } from '../../../services/fridge.service';
+import { IngredientService } from '../../../services/ingredient.service';
 import { NotificationService } from '../../../services/notification.service';
-import { Notification } from '../../../models/notification.model';
 
 @Component({
   selector: 'app-ingredient-list-page',
@@ -24,6 +22,9 @@ export class IngredientListPageComponent {
   expireDateCursor: string | null = null; // Cursor for expire_date
   idCursor: number | null = null;
 
+  showAddForm = false;
+  @ViewChild('scrollableDiv') containerRef!: ElementRef;
+
   constructor(
     private ingredientService: IngredientService,
     private fridgeService: FridgeService,
@@ -38,7 +39,6 @@ export class IngredientListPageComponent {
       }
     });
     this.ingredientService.ingredientUpdated$.subscribe(() => {
-      console.log('Ingredients updated, reloading...');
       this.ingredients = [];
       this.expireDateCursor = null;
       this.idCursor = null;
@@ -48,9 +48,22 @@ export class IngredientListPageComponent {
     });
   }
 
+  refreshIngredients() {
+    this.ingredientService.notifyIngredientsUpdated();
+  }
+
+  toggleAddForm() {
+    this.showAddForm = !this.showAddForm;
+    if (this.showAddForm) {
+      window.scrollBy({ top: 200, behavior: 'smooth' });
+    } else {
+      window.scrollBy({ top: -200, behavior: 'smooth' });
+    }
+  }
+
   loadInitialIngredients(): void {
-    console.log('Loading initial ingredients...');
     this.loading = true;
+    this.hasMoreData = true;
     this.ingredientService.getIngredients().subscribe({
       next: (data) => {
         if (!data || !data.ingredients) {
@@ -58,18 +71,20 @@ export class IngredientListPageComponent {
           this.loading = false;
           return;
         }
-        console.log('Initial ingredients loaded:', data);
         this.ingredients = this.sortIngredientsByExpireDate(data.ingredients);
 
         this.expireDateCursor = data.nextExpireCursor;
         this.idCursor = data.nextIdCursor;
 
-        this.hasMoreData = !!data.ingredients.length;
+        if (
+          data.ingredients.length < 10 ||
+          !data.nextExpireCursor ||
+          !data.nextIdCursor
+        ) {
+          console.log('No more data to load');
+          this.hasMoreData = false;
+        }
         this.loading = false;
-        console.log('Initial cursors set:', {
-          expireDateCursor: this.expireDateCursor,
-          idCursor: this.idCursor,
-        });
       },
       error: (err) => {
         console.error('Failed to load initial ingredients', err);
@@ -79,10 +94,6 @@ export class IngredientListPageComponent {
   }
 
   fetchMoreIngredients(): void {
-    console.log('Fetching more ingredients... with cursors:', {
-      expireDateCursor: this.expireDateCursor,
-      idCursor: this.idCursor,
-    });
     this.loading = true;
 
     this.ingredientService
@@ -116,15 +127,12 @@ export class IngredientListPageComponent {
           this.expireDateCursor = data.nextExpireCursor;
           this.idCursor = data.nextIdCursor;
           this.loading = false;
-          console.log('fetch more cursors set:', {
-            expireDateCursor: this.expireDateCursor,
-            idCursor: this.idCursor,
-          });
           if (
             data.ingredients.length < 10 ||
             !data.nextExpireCursor ||
             !data.nextIdCursor
           ) {
+            console.log('No more data to load');
             this.hasMoreData = false;
           }
         },
@@ -149,7 +157,6 @@ export class IngredientListPageComponent {
           return;
         }
         if (!this.shouldAppendToCurrentList(created)) {
-          console.log('Ingredient not appended to current list:', created);
           this.ingredients = this.ingredients.filter(
             (ing) => ing.id !== created.id,
           );
@@ -186,7 +193,6 @@ export class IngredientListPageComponent {
             return;
           }
           if (!this.shouldAppendToCurrentList(updated)) {
-            console.log('Ingredient not appended to current list:', updated);
             this.ingredients = this.ingredients.filter(
               (ing) => ing.id !== updated.id,
             );
@@ -231,8 +237,13 @@ export class IngredientListPageComponent {
   editingIngredient: Ingredient | null = null;
 
   toggleEditForm(ingredient: Ingredient) {
-    console.log('Toggling edit form for ingredient:', ingredient);
     this.editingIngredient = ingredient;
+    if (this.editingIngredient && this.editingIngredient.id === ingredient.id) {
+      this.containerRef.nativeElement.scrollBy({
+        top: 150,
+        behavior: 'smooth',
+      });
+    }
   }
 
   cancelEdit() {
@@ -246,12 +257,12 @@ export class IngredientListPageComponent {
   }
 
   scrollToTop(): void {
-    window.scrollTo({ top: 10, behavior: 'smooth' });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+    this.containerRef.nativeElement.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // following functions are helper
 
-  // temporary solution, in real application, it should be sorted by the server
   /**
    * Sorts ingredients by expire_date in ascending order.
    * @param ingredients Array of Ingredient objects

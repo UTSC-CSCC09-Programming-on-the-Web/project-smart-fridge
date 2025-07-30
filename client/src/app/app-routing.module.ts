@@ -9,6 +9,8 @@ import { GoogleSuccessPageComponent } from './pages/login-page/google-success-pa
 import { GoogleFailurePageComponent } from './pages/login-page/google-failure-page/google-failure-page.component';
 import { SubscribePageComponent } from './pages/login-page/subscribe-page/subscribe-page';
 import { FristLoginComponent } from './pages/login-page/frist-login/frist-login.component';
+import { CreditPageComponent } from './pages/credit-page/credit-page.component';
+
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // default route to redirect to login page
   { path: 'login', component: LoginPageComponent },
@@ -20,15 +22,15 @@ const routes: Routes = [
     path: 'main',
     component: MainPageComponent,
     children: [
-      // alpha version implementation
       { path: '', redirectTo: 'ingredients', pathMatch: 'full' }, // default route for main page
       { path: 'ingredients', component: IngredientListPageComponent },
     ],
   },
+  { path: 'credits', component: CreditPageComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)], 
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

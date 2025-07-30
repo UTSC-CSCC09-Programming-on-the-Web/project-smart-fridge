@@ -1,28 +1,91 @@
 // generate simple scss for class="ingredient-list-page" and class="ingredient-list"
+@use "@angular/material" as mat;
 
 .ingredient-list-page {
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin-top: 10px;
+  position: relative;
 }
 
 .ingredient-list {
   display: flex;
   flex-direction: column;
+  max-height: 1500px;
+  overflow-y: auto;
   gap: 10px;
+  margin: 0 auto;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 7px 5px;
+}
+
+@media (max-width: 800px) {
+  .button-wrapper {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
 .scroll-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
   z-index: 1000;
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #3f51b5;
+  background-color: #4b4941b5;
   color: white;
   border: none;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: opacity 0.3s ease;
+}
+
+.add-ingredient-form {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.edit-ingredient-form {
+  width: 80%;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 50px;
+  gap: 8px;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.no-more-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #6c757d;
+  margin: 10px;
+  padding: 10px;
+  border-top: 1px dotted #6c757d;
+}
+
+.no-fridge-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #6a0707;
+  gap: 10px;
 }

@@ -1,0 +1,53 @@
+<div class="addi-feature-page">
+  <div class="addi-feature-nav-bar">
+    <mat-tab-group [preserveContent]="true">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="custom-tab-label">🏷️ Batch Input</span>
+        </ng-template>
+        <div class="tab-subpage">
+          <app-ingredient-input-page
+            (showTempIngredientsOverlay)="handleShowTempIngredientsBtn()"
+          ></app-ingredient-input-page>
+          <button
+            *ngIf="showTempIngredientsBtn"
+            mat-flat-button
+            (click)="onShowTempIngredientsOverlay()"
+            style="margin: 10px 0"
+          >
+            Show Temporary Ingredients
+          </button>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="custom-tab-label">🍳 Generate Recipe</span>
+        </ng-template>
+        <div class="tab-subpage">
+          <app-recipe-page></app-recipe-page>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="custom-tab-label">🔄 Switch Fridge</span>
+        </ng-template>
+        <div class="tab-subpage">
+          <app-fridge-selector></app-fridge-selector>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="custom-tab-label">➕ Create/Join Fridge</span>
+        </ng-template>
+        <div class="tab-subpage">
+          <app-new-fridge-form
+            (submitForm)="onSubmitNewFridgeForm()"
+          ></app-new-fridge-form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

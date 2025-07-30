@@ -3,8 +3,9 @@
 .ingredient-form {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  background-color: #f9f9f9;
+  padding: 10px 20px;
+  margin: 10px auto;
+  width: 85%;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -12,45 +13,95 @@
 .ingredient-form-title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 16px;
-  color: #333;
+  text-align: start;
+  margin: 20px auto;
+  color: #444;
 }
 
 .add-form {
-  background-color: #bdd8ef;
+  background-color: #ffeeec;
 }
 
 .edit-form {
-  background-color: #fff3e0;
+  background-color: #fffaec;
 }
 
-.image-container {
+.image-form {
+  background-color: #e8f0fe;
+}
+
+.ingredient-grid-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 5px;
+  margin: auto;
+  padding: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+.grid-col-span-2 {
+  grid-column: span 2;
+}
+
+.grid-col-2 {
+  grid-column: 1;
+}
+
+.grid-col-1 {
+  grid-column: 2;
+}
+
+.upload-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.upload-row {
+  display: flex;
   align-items: center;
-  margin-top: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.upload-label {
+  font-weight: 600;
+  font-size: 16px;
+  color: #444;
+}
+
+.choose-file-btn {
+  padding: 8px 16px;
+  border: solid 1px #666;
+  border-radius: 4px;
+  height: 32px;
+  width: 120px;
+  color: #671903;
+  cursor: pointer;
+  background-color: #faebe7;
+}
+
+.file-name {
+  font-style: italic;
+  font-size: 13px;
+  color: #666;
+}
+
+.preview-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
 }
 
 .image-preview {
+  max-width: 100%;
   width: 400px;
   height: 300px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   object-fit: contain;
-  background-color: #f8f8f8;
-}
-
-.btn {
-  border: solid 1px #000000;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px 5px;
-}
-
-.form-field {
-  margin-bottom: 5px;
-  gap: 3px;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -29,6 +29,7 @@ export class IngredientFormComponent {
   @Output() addIngredient = new EventEmitter<FormData>();
   @Output() submitIngredient = new EventEmitter<Partial<Ingredient>>();
   @Output() cancelEdit = new EventEmitter<void>();
+  @Output() cancelImageUpload = new EventEmitter<void>();
   @Output() submitImage = new EventEmitter<File>();
 
   selectedImage: File | null = null;
@@ -46,6 +47,7 @@ export class IngredientFormComponent {
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
   imagePreviewUrl: string | null = null;
+  selectedFileName: string | null = null;
 
   onFileSelected(event: Event): void {
     if (!this.fileInput || !this.fileInput.nativeElement) {
@@ -64,6 +66,7 @@ export class IngredientFormComponent {
 
       this.selectedImage = image;
       this.imagePreviewUrl = null;
+      this.selectedFileName = image.name;
       readImageAsDataUrl(image)
         .then((dataUrl) => {
           this.imagePreviewUrl = dataUrl;
@@ -96,13 +99,18 @@ export class IngredientFormComponent {
 
   ngOnInit(): void {}
 
-  clearForm(): void {
-    this.ingredientForm.reset();
+  removeImage(): void {
     this.selectedImage = null;
+    this.imagePreviewUrl = null;
+    this.selectedFileName = null;
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
-    this.imagePreviewUrl = null;
+  }
+
+  clearForm(): void {
+    this.ingredientForm.reset();
+    this.removeImage();
   }
 
   postIngredient(): void {
@@ -138,6 +146,16 @@ export class IngredientFormComponent {
       this.clearForm();
     } else {
       console.error('No image selected for upload');
+    }
+  }
+
+  cancel(): void {
+    if (this.mode === 'image') {
+      this.removeImage();
+      this.cancelImageUpload.emit();
+    } else if (this.mode === 'edit') {
+      this.cancelEdit.emit();
+      this.clearForm();
     }
   }
 }

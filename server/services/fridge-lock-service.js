@@ -1,3 +1,4 @@
+"use strict";
 const redisBullmq = require("../redis/redis-bullmq");
 const Mutex = require("redis-semaphore").Mutex;
 
@@ -14,10 +15,6 @@ const tryAcquireFridgeLock = async (fridgeId) => {
   });
   const lockAcquire = await mutex.tryAcquire();
   if (!lockAcquire) return null;
-  console.log(
-    "[fridge lock service] Acquired lock for fridge with identifier:",
-    mutex.identifier
-  );
   return mutex.identifier;
 };
 

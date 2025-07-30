@@ -17,8 +17,4 @@ export class LoginPageComponent {
   goToGoogleLogin(): void {
     this.authService.loginWithGoogle();
   }
-
-  goToMain(): void {
-    this.router.navigate(['/first-login']); // use for test
-  }
 }

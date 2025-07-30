@@ -1,5 +1,5 @@
 "use strict";
-const { cvQueue, addCvJob, CV_JOB_TYPES } = require("../queues/cv-queue.js");
+const { addCvJob, CV_JOB_TYPES } = require("../queues/cv-queue.js");
 const { CvTask, CvTaskImage } = require("../models");
 const { randomUUID } = require("crypto");
 const { addLlmJob, LLM_JOB_TYPES } = require("../queues/llm-queue.js");
@@ -12,7 +12,6 @@ async function startOCRReceiptOrchestrator(cvJobData) {
 }
 
 async function onCvOCRJobCompleted(traceId) {
-  console.log(`Job with traceId ${traceId} completed successfully`);
   const cvTask = await CvTask.findOne({ where: { trace_id: traceId } });
   if (!cvTask || cvTask.status !== "done") {
     console.error(
@@ -40,7 +39,6 @@ async function onCvOCRJobCompleted(traceId) {
     llmJobData,
     traceId
   );
-  console.log(`cv-llm-orchestrator: LLM Job ${job.id} created successfully`);
   return { job, llmTaskRecord };
 }
 

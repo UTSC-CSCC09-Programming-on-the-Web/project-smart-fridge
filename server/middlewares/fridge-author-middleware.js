@@ -1,13 +1,10 @@
 "use strict";
 const UserFridge = require("../models/index.js").UserFridge;
-const User = require("../models/index.js").User;
 
 const fridgeAuthMiddle = async (req, res, next) => {
   const fridgeId =
     req.params.fridge_id || req.body.fridgeId || req.query.fridgeId;
   const user = req.user;
-  console.log("fridgeId:", fridgeId);
-  console.log("user:", user);
 
   if (!user || !user.id) {
     console.error("Unauthorized access attempt to fridge:", fridgeId);
@@ -30,7 +27,6 @@ const fridgeAuthMiddle = async (req, res, next) => {
         .status(403)
         .json({ error: "Forbidden: You do not have access to this fridge" });
     }
-    console.log(`User ${userId} has access to fridge ${fridgeId}`);
     req.fridgeId = fridgeId;
     next();
   } catch (error) {

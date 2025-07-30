@@ -1,4 +1,3 @@
-// File: server/confjg/passport.js
 "use strict";
 
 const passport = require("passport");
