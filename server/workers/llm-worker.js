@@ -22,7 +22,6 @@ const llmRecipeWorker = new Worker(
     let result;
     if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
       const { ingredients } = job.data;
-      console.log("Generating recipe with data:", job.data);
       result = await handleRecipeGeneration(ingredients);
     }
 
@@ -68,7 +67,6 @@ const llmRecipeWorker = new Worker(
 );
 
 llmRecipeWorker.on("completed", async (job, returnvalue) => {
-  console.log(`Job ${job.id} completed successfully`);
   const traceId = job.data.traceId;
   const userId = job.data?.user_id;
   if (!userId) {
@@ -76,7 +74,6 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
     return;
   }
   if (job.name === LLM_JOB_TYPES.RecipeGenerate) {
-    console.log(`Publishing recipeGenerated to user:${userId}`);
     pubClient.publish(
       `recipeGenerated`,
       JSON.stringify({
@@ -87,7 +84,6 @@ llmRecipeWorker.on("completed", async (job, returnvalue) => {
     );
   }
   if (job.name === LLM_JOB_TYPES.OCRextract) {
-    console.log(`Publishing llmOCRExtractTaskCreated to user:${userId}`);
     pubClient.publish(
       "cvTaskProgress",
       JSON.stringify({

@@ -37,7 +37,6 @@ export class IngredientInputPageComponent {
 
   handleMultiImagesUploaded(images: File[]): void {
     this.notification.message = '';
-    console.log('Ingredient Input Page: Images uploaded:', images);
     const formData = new FormData();
     images.forEach((image) => {
       formData.append(`images`, image);
@@ -98,7 +97,6 @@ export class IngredientInputPageComponent {
       },
     });
     this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
-      console.log('Batch adding finished');
       this.notification = {
         type: 'info',
         message: '',

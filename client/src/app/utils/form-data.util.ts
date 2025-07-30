@@ -20,7 +20,6 @@ export function ingredientToFormData(
       formData.append(key, String(value));
     }
   }
-  // console.log("FormData keys:", Array.from(formData.keys()));
   if (imageFile) {
     formData.append('image', imageFile);
   }

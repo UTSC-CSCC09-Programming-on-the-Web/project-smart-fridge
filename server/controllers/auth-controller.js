@@ -5,12 +5,12 @@ const handleGoogleSuccess = (req, res) => {
   if (!req.user) {
     return res.redirect(`${process.env.CLIENT_URL}/auth/google/failure?error=session_lost`);
   }
-  console.log("Google authentication successful", req.user);
+  console.log("Google authentication successful");
   res.redirect(`${process.env.CLIENT_URL}/auth/google/success`);
 };
 
 const handleGoogleFailure = (req, res) => {
-  console.error("Google authentication failed", req.query);
+  console.error("Google authentication failed");
   res.redirect(
     `${process.env.CLIENT_URL}/auth/google/failure?error=${encodeURIComponent(
       "Google authentication failed"
@@ -23,7 +23,6 @@ const getCurrentUser = (req, res) => {
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
   const { id, name, email, is_subscribe, is_first_login, fridges } = req.user;
-  console.log("[Controller] Current user fridges:", fridges);
   let user_status = "active";
   if (!is_subscribe) {
     user_status = "need_subscription";

@@ -18,7 +18,6 @@ export class SocketService {
 
       this.connectPromise = new Promise((resolve) => {
         this.socket!.on('connect', () => {
-          console.log('Socket connected:', this.socket?.id);
           resolve();
         });
       });
@@ -28,20 +27,16 @@ export class SocketService {
 
   async on(eventName: string, callback: (...args: any[]) => void) {
     await this.connectSocket();
-    console.log('Listening for event:', eventName);
-    console.log('Socket ID:', this.socket?.id);
     this.socket?.on(eventName, callback);
   }
 
   private listenToEvent<T>(eventName: string): Observable<T> {
     return new Observable((observer) => {
       const eventHandler = (data: T) => {
-        console.log(`Event received: ${eventName}`, data);
         observer.next(data);
       };
       this.socket?.on(eventName, eventHandler);
       return () => {
-        console.log(`Unsubscribing from event: ${eventName}`);
         this.socket?.off(eventName, eventHandler);
       };
     });
@@ -57,7 +52,6 @@ export class SocketService {
 
   async emit(eventName: string, data: any): Promise<void> {
     await this.connectSocket();
-    console.log(`Emitting event: ${eventName}`, data);
     this.socket!.emit(eventName, data);
   }
 

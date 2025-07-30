@@ -15,7 +15,6 @@ async function callGpt({
 }) {
   const messages = buildPrompt(taskType, data);
   const endpoint = modelSettings[model]?.endpoint;
-  console.log("check messages:", messages);
 
   if (!endpoint)
     throw new Error(`Unknown model or missing endpoint for: ${model}`);

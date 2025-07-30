@@ -52,7 +52,6 @@ const handleStripeWebhook = async (req, res) => {
             where: { stripe_customer_id: data.customer },
           }
         );
-        console.log("Subscription created:", data.id);
         break;
 
       case "customer.subscription.updated":
@@ -64,7 +63,6 @@ const handleStripeWebhook = async (req, res) => {
             where: { stripe_customer_id: data.customer },
           }
         );
-        console.log("Subscription updated:", data.id);
         break;
 
       case "customer.subscription.deleted":
@@ -76,7 +74,6 @@ const handleStripeWebhook = async (req, res) => {
             where: { stripe_customer_id: data.customer },
           }
         );
-        console.log("Subscription canceled:", data.id);
         break;
       case "checkout.session.completed":
         const session = data;
@@ -84,16 +81,13 @@ const handleStripeWebhook = async (req, res) => {
           const userId = session.metadata.user_id;
           const user = await User.findByPk(userId);
           if (user) {
-            console.log(`Updating subscription for user `, user);
             user.set("subscription_status", "active");
             user.set("stripe_subscription_id", session.subscription);
             await user.save();
-            console.log(`User ${userId} subscription updated to active.`);
           } else {
             console.error(`User with ID ${userId} not found.`);
           }
         }
-        console.log("Checkout session completed:", session.id);
         break;
       default:
         console.log(`Unhandled event type: ${type}`);

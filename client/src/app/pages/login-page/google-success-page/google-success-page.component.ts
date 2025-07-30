@@ -17,7 +17,6 @@ export class GoogleSuccessPageComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe({
       next: (user: any) => {
-        console.log('User retrieved successfully:', user);
         if (user.user_status === 'need_subscription') {
           this.router.navigate(['/subscribe']);
         } else if (user.user_status === 'first_login') {
@@ -25,9 +24,6 @@ export class GoogleSuccessPageComponent implements OnInit {
         } else {
           this.router.navigate(['/main']);
         }
-        // if (user.user_status === 'need_subscription') {
-        //     this.router.navigate(['/subscribe']);
-        console.log('User status:', user.user_status);
       },
       error: () => {
         this.router.navigate(['/auth/google/failure'], {

@@ -73,7 +73,7 @@ async function startServer() {
     app.set("httpServer", httpServer);
 
     httpServer.listen(PORT,"0.0.0.0", () => {
-      console.log(`app.js: HTTP server on http://localhost:${PORT}`);
+      console.log(`app.js: HTTP server on ${PORT}`);
     });
   } catch (error) {
     console.error("app.js: Unable to connect to the database:", error);

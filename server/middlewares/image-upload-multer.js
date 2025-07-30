@@ -43,13 +43,9 @@ function getDiskImageUploadMiddleware({
       }
     },
   });
-  console.log(
-    `Image upload middleware configured for folder: ${folder}, multiple: ${multiple}, maxCount: ${maxCount}, maxSizeMB: ${maxSizeMB}`
-  );
   if (multiple) {
     return upload.array("images", maxCount);
   } else {
-    console.log("Using single image upload middleware");
     return upload.single("image");
   }
 }
@@ -90,9 +86,7 @@ function getGCSImageUploadMiddleware({
         console.error("Multer error:", err);
         return res.status(400).json({ error: err.message });
       }
-      console.log("[gcs multer] Uploaded file(s):", req.file || req.files);
       req.uploadFolderName = folderName;
-      console.log("[gcs multer] upload foldername:", req.uploadFolderName);
       next();
     });
   };

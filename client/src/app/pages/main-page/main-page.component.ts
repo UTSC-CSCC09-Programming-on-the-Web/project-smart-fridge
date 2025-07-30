@@ -44,7 +44,6 @@ export class MainPageComponent {
   }
 
   onLogout(): void {
-    console.log('User logged out');
     this.initialFridgeRooms = false;
 
     this.socketService.disconnect();
@@ -89,10 +88,6 @@ export class MainPageComponent {
         }),
         switchMap(({ added, removed, current }) => {
           if (removed.length > 0) {
-            console.log(
-              'Leaving rooms for removed fridges:',
-              removed.map((f) => f.id),
-            );
             return forkJoin(
               removed.map((fridge) =>
                 from(this.socketService.emit('leaveFridgeRoom', fridge.id)),
@@ -100,20 +95,12 @@ export class MainPageComponent {
             );
           }
           if (added.length > 0) {
-            console.log(
-              'Joining rooms for added fridges:',
-              added.map((f) => f.id),
-            );
             return forkJoin(
               added.map((fridge) =>
                 from(this.socketService.emit('joinFridgeRoom', fridge.id)),
               ),
             ).pipe(
               tap(() => {
-                console.log(
-                  'Joined rooms for added fridges:',
-                  added.map((f) => f.id),
-                );
                 added.forEach((fridge) => {
                   this.notificationService.pushFridgeNotification({
                     message: `[Fridge ${fridge.name}] Initialized fridge.`,

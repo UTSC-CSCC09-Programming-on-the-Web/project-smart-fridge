@@ -16,22 +16,14 @@ async function handleMultiReceiptsOCR(images, cvTask) {
     }
     cvTaskImage.status = "processing";
     await cvTaskImage.save();
-    console.log(
-      `Processing image ${image.original_filename} for CV Task ${cvTask.id} with image url ${image.image_url}`
-    );
 
     const ocrResult = await extractTextFromImage(image.image_url);
-
-    console.log(`OCR result for image ${image.original_filename}:`, ocrResult);
 
     cvTaskImage.status = "done";
     cvTaskImage.result = {
       text: ocrResult,
     };
     await cvTaskImage.save();
-    console.log(
-      `cvTaskImage ${cvTaskImage.original_filename} result is: ${cvTaskImage.result.text}`
-    );
 
     // update the cvTask done_images_count
     const images_done = (cvTask.done_images_count += 1);

@@ -35,7 +35,6 @@ export class AuthService {
         tap((res) => {
           if (res.success) {
             this.userSubject.next(res.user);
-            console.log('Current user retrieved:', res.user);
           }
         }),
         catchError((err) => {

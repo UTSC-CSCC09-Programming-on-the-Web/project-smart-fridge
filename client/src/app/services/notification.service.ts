@@ -81,10 +81,6 @@ export class NotificationService {
     }
 
     if (!this.fridgeNotificationMap.has(fridgeId)) {
-      console.log(
-        'Service: Creating new notification stream for fridge:',
-        fridgeId,
-      );
       this.fridgeNotificationMap.set(
         fridgeId,
         new ReplaySubject<Notification>(5),
@@ -103,14 +99,12 @@ export class NotificationService {
         .subscribe((notif) => {
           buffer.push(notif);
           if (buffer.length > 5) buffer.shift();
-          console.log('Service: Buffering fridge notifications:', buffer);
           this.fridgeListMap.get(fridgeId)!.next([...buffer]);
           if (fridgeId === this.currentFridgeId) {
             this.currentFridgeNotificationsSubject$.next([...buffer]);
           }
         });
     }
-    console.log('Service: Pushing fridge notification:', notification);
     this.fridgeNotificationMap.get(fridgeId)!.next(notification);
   }
 
@@ -122,7 +116,6 @@ export class NotificationService {
     if (!notification.createdAt) {
       notification.createdAt = new Date();
     }
-    console.log('Service: Pushing user notification:', notification);
     this.userNotifiReplaySubject$.next(notification);
   }
 }

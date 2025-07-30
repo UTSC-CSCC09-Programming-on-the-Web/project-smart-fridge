@@ -39,9 +39,6 @@ const tryAcquireFridgeLockMiddleware = async (req, res, next) => {
       lock: true,
       message: `User ${req.user.name} is updating the fridge ${fridge.name}, please wait...`,
     });
-    console.log(
-      `Fridge lock acquired for fridgeId: ${fridgeId} by user: ${req.user.name}`
-    );
     return next();
   } catch (error) {
     console.error("Error acquiring fridge lock:", error);

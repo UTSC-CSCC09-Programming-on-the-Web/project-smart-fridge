@@ -23,7 +23,6 @@ export class AddiFeaturePageComponent {
 
   ngOnInit(): void {
     this.addMultiIngredientsService.finishBatchAdding$.subscribe(() => {
-      console.log('Batch adding finished');
       this.showTempIngredientsBtn = false;
     });
   }
@@ -52,9 +51,6 @@ export class AddiFeaturePageComponent {
   }
 
   onShowTempIngredientsOverlay(): void {
-    console.log(
-      'Showing temporary ingredients overlay from AddiFeaturePageComponent',
-    );
     this.overlayMode.emit('temp-ingredient-list');
     this.showOverlay.emit();
   }

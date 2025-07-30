@@ -39,9 +39,6 @@ const addCvJob = async (
       original_filename: image.original_filename,
       image_url: image.image_url,
     }));
-    console.log(
-      `Prepared ${cvTaskImages.length} images for CV task with traceId: ${traceId}`
-    );
   }
 
   const fullJobData = {
@@ -71,8 +68,6 @@ const addCvJob = async (
   const job = await cvQueue.add(jobType, fullJobData, options);
   cvTaskRecord.task_id = job.id;
   await cvTaskRecord.save();
-
-  console.log(`Added job ${job.id} of type ${jobType} to the cv queue`);
   return { job, cvTaskRecord };
 };
 

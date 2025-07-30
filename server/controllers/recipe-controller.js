@@ -12,7 +12,6 @@ const { LlmTask, UserFridge } = require("../models");
 
 // POST /api/recipes/generate
 const postGenerateRecipe = async (req, res) => {
-  console.log("Generating recipe in controller...");
   try {
     const fridgeId = req.fridgeId || req.body.fridgeId; // for single fridge right now
     const ingredients = await getIngredientsForRecipe(fridgeId);
@@ -64,7 +63,6 @@ const getRecipeResult = async (req, res) => {
     const fridges = await UserFridge.findAll({
       where: { user_id: userId, fridge_id: llmTask.fridge_id },
     });
-    //  console.log(`Fridges for user ${userId}:`, fridges);
     if (llmTask.fridge_id && fridges.length == 0) {
       console.error(
         `Unauthorized access attempt by user ${userId} for fridge with id ${llmTask.fridge_id}`

@@ -28,7 +28,6 @@ export class TaskLoadingNotificationComponent {
 
   getClass(): string {
     if (this.notification.type === 'success' && this.isFinished) {
-      console.log('Task finished notification');
       return 'notification-task-finished';
     } else {
       return 'notification-info';

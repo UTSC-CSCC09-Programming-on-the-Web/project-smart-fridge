@@ -19,7 +19,6 @@ export class RecipeService {
 
   // POST /api/recipes/generate
   postGenerateRecipe(): Observable<any> {
-    console.log('Generating recipe in recipe service...');
     const fridgeId = getFridgeIdOrFallback(this.fridgeService);
     return this.http.post(
       `${this.endpoint}/api/recipes/generate`,
@@ -30,7 +29,6 @@ export class RecipeService {
 
   // GET /api/recipes/result/:traceId
   getRecipeResult(traceId: string): Observable<any> {
-    console.log('Fetching recipe result with traceId:', traceId);
     return this.http.get(`${this.endpoint}/api/recipes/result/${traceId}`, {
       withCredentials: true,
     });

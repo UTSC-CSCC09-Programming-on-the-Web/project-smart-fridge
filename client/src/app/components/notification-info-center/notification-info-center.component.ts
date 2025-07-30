@@ -72,7 +72,6 @@ export class NotificationInfoCenterComponent {
 
     this.socketService.fromSocketEvent<any>('fridgeUpdatedToUser').subscribe({
       next: (data) => {
-        console.log('Received fridge update notification:', data);
         const fridgeName =
           this.fridgesList.find((f) => f.id === data.fridgeId)?.name ||
           'fridge';
@@ -103,7 +102,6 @@ export class NotificationInfoCenterComponent {
       )
       .subscribe({
         next: (data) => {
-          console.log('Received fridge update notification:', data);
           let message = `User ${data.userName ? data.userName : ''} updated this fridge: ${data.operation} ${data.ingredientsQty ? data.ingredientsQty + ' ingredients' : 'ingredient'} ${data?.ingredientName || ''} `;
           const notification: Notification = {
             type: data.type,

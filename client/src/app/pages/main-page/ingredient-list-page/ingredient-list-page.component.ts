@@ -41,7 +41,6 @@ export class IngredientListPageComponent {
       }
     });
     this.ingredientService.ingredientUpdated$.subscribe(() => {
-      console.log('Ingredients updated, reloading...');
       this.ingredients = [];
       this.expireDateCursor = null;
       this.idCursor = null;
@@ -65,7 +64,6 @@ export class IngredientListPageComponent {
   }
 
   loadInitialIngredients(): void {
-    console.log('Loading initial ingredients...');
     this.loading = true;
     this.hasMoreData = true;
     this.ingredientService.getIngredients().subscribe({
@@ -75,7 +73,6 @@ export class IngredientListPageComponent {
           this.loading = false;
           return;
         }
-        console.log('Initial ingredients loaded:', data);
         this.ingredients = this.sortIngredientsByExpireDate(data.ingredients);
 
         this.expireDateCursor = data.nextExpireCursor;
@@ -86,10 +83,6 @@ export class IngredientListPageComponent {
           this.hasMoreData = false;
         }
         this.loading = false;
-        console.log('Initial cursors set:', {
-          expireDateCursor: this.expireDateCursor,
-          idCursor: this.idCursor,
-        });
       },
       error: (err) => {
         console.error('Failed to load initial ingredients', err);
@@ -99,10 +92,6 @@ export class IngredientListPageComponent {
   }
 
   fetchMoreIngredients(): void {
-    console.log('Fetching more ingredients... with cursors:', {
-      expireDateCursor: this.expireDateCursor,
-      idCursor: this.idCursor,
-    });
     this.loading = true;
 
     this.ingredientService
@@ -136,13 +125,6 @@ export class IngredientListPageComponent {
           this.expireDateCursor = data.nextExpireCursor;
           this.idCursor = data.nextIdCursor;
           this.loading = false;
-          console.log('fetch more cursors set:', {
-            expireDateCursor: this.expireDateCursor,
-            idCursor: this.idCursor,
-            ingredientscount: data.ingredients.length,
-            dataingredients: data.ingredients,
-            ingredients: this.ingredients,
-          });
           if (
             data.ingredients.length < 10 ||
             !data.nextExpireCursor ||
@@ -173,7 +155,6 @@ export class IngredientListPageComponent {
           return;
         }
         if (!this.shouldAppendToCurrentList(created)) {
-          console.log('Ingredient not appended to current list:', created);
           this.ingredients = this.ingredients.filter(
             (ing) => ing.id !== created.id,
           );
@@ -210,7 +191,6 @@ export class IngredientListPageComponent {
             return;
           }
           if (!this.shouldAppendToCurrentList(updated)) {
-            console.log('Ingredient not appended to current list:', updated);
             this.ingredients = this.ingredients.filter(
               (ing) => ing.id !== updated.id,
             );
@@ -255,7 +235,6 @@ export class IngredientListPageComponent {
   editingIngredient: Ingredient | null = null;
 
   toggleEditForm(ingredient: Ingredient) {
-    console.log('Toggling edit form for ingredient:', ingredient);
     this.editingIngredient = ingredient;
     if (this.editingIngredient && this.editingIngredient.id === ingredient.id) {
       this.containerRef.nativeElement.scrollBy({ top: 150, behavior: 'smooth' });
@@ -268,7 +247,6 @@ export class IngredientListPageComponent {
 
   onScrollDown() {
     if (this.hasMoreData && !this.loading) {
-      console.log('Scrolling down, fetching more ingredients...');
       this.fetchMoreIngredients();
     }
   }

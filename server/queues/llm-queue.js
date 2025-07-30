@@ -44,7 +44,6 @@ const addLlmJob = async (
   llmTaskRecord.task_id = job.id;
   await llmTaskRecord.save();
 
-  console.log(`Added job ${job.id} of type ${jobType} to the queue`);
   return { job, llmTaskRecord };
 };
 

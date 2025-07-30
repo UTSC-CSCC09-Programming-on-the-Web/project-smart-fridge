@@ -24,7 +24,6 @@ const dayjs = require("dayjs");
 // GET /api/fridges/:fridgeId/ingredients?limit=10&expireDateCursor=2025-07-01&idCursor=123
 const getIngredientsInfiniteScroll = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  console.log("Checking req.query.expireDateCursor:", req.query.expireDateCursor);
   const expireCursor = req.query.expireDateCursor ? dayjs(req.query.expireDateCursor).format('YYYY-MM-DD') : null;
   const idCursor = req.query.idCursor ? parseInt(req.query.idCursor) : null;
   const fridgeId = req.fridgeId || req.params.fridge_id;
@@ -85,13 +84,6 @@ const getIngredientsInfiniteScroll = async (req, res) => {
 
 // POST /api/fridges/:fridgeId/Ingredients
 const createIngredient = async (req, res) => {
-  // console.log("Creating ingredient with body:", req.body);
-
-  // the req body we get for now are all stings, later we will handle this type and validation problem
-  // const errors = validateIngredient(req.body);
-  // if (errors.length > 0) {
-  //   return res.status(400).json({ errors });
-  // }
   const fridgeId = req.fridgeId || req.params.fridge_id;
   if (!fridgeId) {
     return res.status(400).json({ error: "Invalid fridge ID" });
@@ -107,31 +99,23 @@ const createIngredient = async (req, res) => {
   if (!mutex) {
     return res.status(500).json({ error: "Failed to create ingredient mutex" });
   }
-  console.log(
-    "Acquiring mutex for fridge lock with identifier:",
-    lockIdentifier
-  );
   await mutex.acquire();
-  // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
 
   let type;
   let error;
   try {
     const relativePath = req.file ? req.file.relativePath : null;
-    //  console.log("Image URL:", image_url);
 
     const newIngredient = await Ingredient.create({
       ...req.body,
       fridge_id: fridgeId,
       image_url: relativePath, // Store the relative path to the image
     });
-    // console.log("New ingredient created at:", relativePath);
 
     const ingredientWithImageUrl = {
       ...newIngredient.toJSON(),
       image_url: getImageUrl(newIngredient.image_url),
     };
-    console.log("Ingredient with image URL:", ingredientWithImageUrl.image_url);
     type = 'success';
     res.status(201).json(ingredientWithImageUrl);
   } catch (err) {
@@ -140,10 +124,6 @@ const createIngredient = async (req, res) => {
     error = err?.message || "Failed to create ingredient";
     res.status(400).json({ error: "Failed to create ingredient" });
   } finally {
-    console.log(
-      "Releasing mutex for fridge lock with identifier:",
-      lockIdentifier
-    );
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Add single', {
       ingredientName: req.body.name || null,
@@ -168,10 +148,6 @@ const createMultiIngredients = async (req, res) => {
   if (!mutex) {
     return res.status(500).json({ error: "Failed to create ingredient mutex" });
   }
-  console.log(
-    "Acquiring mutex for fridge lock with identifier:",
-    lockIdentifier
-  );
   await mutex.acquire();
   await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate some processing time for testing
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // Simulate some processing time
@@ -199,10 +175,6 @@ const createMultiIngredients = async (req, res) => {
     error = err?.message || "Failed to add multi ingredients";
     res.status(400).json({ error: "Failed to create ingredient" });
   } finally {
-    console.log(
-      "Releasing mutex for fridge lock with identifier:",
-      lockIdentifier
-    );
     await mutex.release();
     notifyFridgeUpdateEvent(req.user.id, fridgeId, type, 'Batch add', {
       ingredientsQty: newIngredients.length || 0,
@@ -238,10 +210,6 @@ const updateIngredient = async (req, res) => {
   if (!mutex) {
     return res.status(500).json({ error: "Failed to create ingredient mutex" });
   }
-  console.log(
-    "[Ingredient controller] Acquiring mutex for fridge lock with identifier:",
-    lockIdentifier
-  );
   await mutex.acquire();
   let type;
   let error;
@@ -303,10 +271,8 @@ const deleteIngredient = async (req, res) => {
 
     if (ingredient.image_url) {
       const imagePath = ingredient.image_url;
-      console.log("Deleting image at:", imagePath);
       try {
         await deleteFileFromGCS(imagePath);
-        console.log(`Image deleted: ${imagePath}`);
       } catch (err) {
         console.warn(`Warning: Failed to delete image: ${imagePath}`, err);
       }

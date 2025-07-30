@@ -19,7 +19,6 @@ const corsOptions = {
 let io;
 
 const setupSocket = async (app) => {
-  console.log("Setting up set up Socket...");
   const httpServer = http.createServer(app);
   io = new Server(httpServer, { cors: corsOptions });
 
@@ -42,7 +41,6 @@ const setupSocket = async (app) => {
   io.adapter(createAdapter(pubClient, subClient));
 
   io.on("connection", (socket) => {
-    console.log("socket connect to", socket.id);
     const userId = socket.userId;
     if (userId) {
       socket.join(`user:${userId}`);
@@ -60,12 +58,10 @@ const setupSocket = async (app) => {
         );
         return socket.emit("error", "You do not have access to this fridge");
       }
-      console.log(`User ${userId} joining fridge room: fridge:${fridgeId}`);
       socket.join(`fridge:${fridgeId}`);
     });
 
     socket.on("leaveFridgeRoom", (fridgeId) => {
-      console.log(`User ${userId} leaving fridge room: fridge:${fridgeId}`);
       socket.leave(`fridge:${fridgeId}`);
     });
 
@@ -90,7 +86,6 @@ const setupSocket = async (app) => {
       console.error("No userId in message data:", data);
       return;
     }
-    console.log(`Publishing recipeGenerated to user:${data.userId}`);
     io.to(`user:${data.userId}`).emit("recipeGenerated", traceId);
   });
 
@@ -98,12 +93,9 @@ const setupSocket = async (app) => {
     const data = JSON.parse(msg);
     const message = data.message;
     if (!data.userId) {
-      console.log("No userId in message data:", data);
+      console.error("No userId in message data:", data);
       return;
     }
-    console.log(
-      `Publishing cvTaskProgress to user:${data.userId} with message: ${message}`
-    );
 
     io.to(`user:${data.userId}`).emit("cvTaskProgress", {
       source: "task",
@@ -122,9 +114,6 @@ const setupSocket = async (app) => {
       console.error("No userId in message data:", data);
       return;
     }
-    console.log(
-      `Publishing addMultiIngredientsFinished to user:${data.userId}`
-    );
     io.to(`user:${data.userId}`).emit("addMultiIngredientsFinished", {
       source: "task",
       traceId: traceId,

@@ -31,11 +31,8 @@ export class RecipePageComponent {
   onGenerateRecipe(): void {
     this.recipeCardDisplay = true;
     this.finishGenerating = false;
-    console.log('Recipe generation triggered');
-    console.log('Generated recipe:', this.recipe);
     this.recipeService.postGenerateRecipe().subscribe({
       next: (response) => {
-        console.log('Recipe generated successfully:', response);
         this.notification.message =
           response.message || 'Recipe generation in progress...Waiting...';
       },
@@ -56,13 +53,11 @@ export class RecipePageComponent {
       .fromSocketEvent<string>('recipeGenerated')
       .pipe(
         switchMap((traceId: string) => {
-          console.log('Subscribing to recipe result with traceId:', traceId);
           return this.recipeService.getRecipeResult(traceId);
         }),
       )
       .subscribe({
         next: (raw: string) => {
-          console.log('Recipe received:', raw);
           let clean = raw.trim();
           if (clean.startsWith('```json')) {
             clean = clean

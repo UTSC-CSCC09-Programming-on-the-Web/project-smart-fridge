@@ -45,10 +45,6 @@ export class TempIngredientsListComponent {
       }>('addMultiIngredientsFinished')
       .subscribe({
         next: (data) => {
-          console.log(
-            `Received addMultiIngredientsFinished with traceId: ${data.traceId} and result:`,
-            data.result,
-          );
           let clean = data.result.trim();
           if (clean.startsWith('```json')) {
             clean = clean
@@ -73,7 +69,6 @@ export class TempIngredientsListComponent {
             source: 'user',
           };
           this.notificationService.pushUserNotification(notification);
-          console.log('Parsed ingredients:', this.formalIngredients);
         },
         error: (err) => {
           console.error('Error receiving addMultiIngredientsFinished:', err);
@@ -96,7 +91,6 @@ export class TempIngredientsListComponent {
     });
     this.ingredientService.createMultiIngredients(allFormData).subscribe({
       next: (responses) => {
-        console.log('All ingredients added successfully:', responses);
         this.tempIngredients = [];
         this.formalIngredients = [];
         this.ingredientService.notifyIngredientsUpdated();
@@ -117,7 +111,6 @@ export class TempIngredientsListComponent {
   editingTempIngredientsIndex: number | null = null;
 
   toggleEditForm(ingredient: Partial<Ingredient>, index: number): void {
-    console.log('Toggling edit form for ingredient:', ingredient);
     this.editingTempIngredient = ingredient;
     this.editingTempIngredientsIndex = index;
   }
