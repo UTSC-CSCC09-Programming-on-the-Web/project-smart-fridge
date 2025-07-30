@@ -19,7 +19,7 @@ const notifyFridgeUpdateEvent = (
   io.to(`fridge:${fridgeId}`).emit("fridgeUpdated", {
     userId,
     fridgeId,
-    type,
+    type: "info",
     source: "fridge",
     operation,
     ...optional,
