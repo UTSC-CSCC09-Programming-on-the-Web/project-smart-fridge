@@ -39,7 +39,6 @@ export class IngredientInputPageComponent {
   }
 
   ngOnInit(): void {
-    console.log('Ingredient Input Page initialized');
     let cvTaskCurrentCount = 0;
     let cvTaskTotalCount = 0;
     this.socketService.fromSocketEvent<any>('cvTaskProgress').subscribe({
