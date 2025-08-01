@@ -15,12 +15,12 @@ https://smartfridge.dev
 ## Description:
 Smart Fridge is an AI-powered web application that helps users manage fridge ingredients and generate personalized recipes based on what’s available and close to expiring.
 
-Users can upload images of grocery receipts or handwritten shopping lists — the system leverages AI image recognition (CV) and large language models (LLM) to automatically extract and populate ingredients into the fridge. Manual entry of single ingredients is also supported.
+Users can upload images of grocery receipts or any online shopping records — the system leverages AI image recognition (CV) and large language models (LLM) to automatically extract and populate ingredients into the fridge. Manual entry of single ingredients is also supported.
 
 The platform supports multi-user collaboration, where multiple users can share and manage the same fridge in real time. In addition, a single user can create/join and manage multiple fridges, making it ideal for families, roommates, or shared kitchens.
 
 ### Key Features
-- Receipt/Shopping List Parsing: Upload images of receipts or shopping lists to extract ingredients list automatically using CV + LLM pipeline.
+- Receipt/Shopping List Parsing: Upload images of receipts or shopping records to extract ingredients list automatically using CV + LLM pipeline.
 - Multi-user Fridge Sharing: Multiple users can collaborate on the same fridge in real time.
 - Multiple Fridge Support: A single user can join and manage multiple fridges.
 - Real-time Notifications:  Built with Socket.io, all fridge members receive real-time updates on ingredient changes, fridge locks, and more. Each user also receives personal notifications when tasks are completed.
