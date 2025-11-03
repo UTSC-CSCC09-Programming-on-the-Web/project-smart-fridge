@@ -7,7 +7,8 @@ Smart Fridge
 | Jieying Gong  | jieying.gong@mail.utoronto.ca | gongjiey   |
 
 ## LIVE DEMO link:
-https://youtu.be/aD4QDl9B0wI
+Introduction of Smart Fridge
+--> https://youtu.be/hpd7jKAd9XQ
 
 ## Web URL
 https://smartfridge.dev
